@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Mail, Phone, MapPin, Linkedin, ArrowRight } from 'lucide-react';
+// Importa los nuevos iconos
+import { Mail, Phone, MapPin, Linkedin, Instagram, MessageSquare, ArrowRight } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -30,7 +31,7 @@ export default function Footer() {
           
           <div className="lg:col-span-4">
             <div className="mb-6">
-              {/* Logo de la empresa (TAMAÑO AUMENTADO) */}
+              {/* Logo de la empresa */}
               <Image 
                 src="/G2.png" 
                 alt="Geimser Logo" 
@@ -42,6 +43,7 @@ export default function Footer() {
             <p className="text-sm leading-relaxed mb-6">
               Conectamos tecnología, talento y resultados para impulsar tu negocio hacia el futuro digital.
             </p>
+            {/* Contenedor de iconos sociales */}
             <div className="flex space-x-3">
               <a
                 href="#" // Reemplaza con tu URL de LinkedIn
@@ -49,6 +51,26 @@ export default function Footer() {
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
+              </a>
+              {/* Icono de Instagram agregado */}
+              <a
+                href="https://www.instagram.com/geimser_chile/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              {/* Icono de WhatsApp agregado */}
+              <a
+                href="https://wa.me/56974159166"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300"
+                aria-label="WhatsApp"
+              >
+                <MessageSquare className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -109,7 +131,7 @@ export default function Footer() {
 
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm">
           <div className="flex items-center mb-4 md:mb-0">
-            {/* Logo en Copyright (TAMAÑO AUMENTADO) */}
+            {/* Logo en Copyright */}
             <Image 
               src="/G2.png" 
               alt="Geimser Icon"

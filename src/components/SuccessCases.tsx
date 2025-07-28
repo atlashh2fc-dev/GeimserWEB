@@ -3,11 +3,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { TrendingUp, Users, Award, BarChart3, Target, Zap, Quote, Building, ArrowRight } from 'lucide-react';
+import { TrendingUp, Users, Award, BarChart3, Target, Zap, Quote, Building, ArrowRight, Minus, Plus } from 'lucide-react';
 
-// --- Sub-componente para las métricas con barras animadas ---
-const MetricBar = ({ label, before, after, isPercentage = false }: { label: string, before: number, after: number, isPercentage?: boolean }) => {
-    const max = isPercentage ? 100 : Math.max(before, after) * 1.2;
+// --- (CORREGIDO) Sub-componente para las métricas con el diseño original ---
+const MetricBar = ({ label, before, after, isPercentage = false, unit = '' }: { label: string, before: number, after: number, isPercentage?: boolean, unit?: string }) => {
+    // **LA CORRECCIÓN ESTÁ AQUÍ**
+    // Se ajusta la escala máxima para acomodar valores > 100% y evitar el desbordamiento.
+    const max = isPercentage ? Math.max(100, before, after) : Math.max(before, after, 1) * 1.2;
+
     const beforeWidth = (before / max) * 100;
     const afterWidth = (after / max) * 100;
 
@@ -15,15 +18,17 @@ const MetricBar = ({ label, before, after, isPercentage = false }: { label: stri
         <div>
             <div className="flex justify-between items-center text-sm mb-1.5">
                 <span className="text-gray-300">{label}</span>
-                <span className="font-semibold text-white">{after}{isPercentage && '%'}</span>
+                <span className="font-semibold text-white">{after.toLocaleString()}{unit}{isPercentage && '%'}</span>
             </div>
             <div className="w-full bg-gray-700/50 rounded-full h-4 relative p-1">
-                <div className="absolute top-1 left-1 h-2 bg-gray-500 rounded-full" style={{ width: `calc(${beforeWidth}% - 0.5rem)` }} />
+                {/* Barra gris de 'antes' */}
+                { before > 0 && <div className="absolute top-1 left-1 h-2 bg-gray-500 rounded-full" style={{ width: `calc(${beforeWidth}% - 0.5rem)` }} /> }
+                {/* Barra cian animada de 'después' */}
                 <motion.div
                     className="absolute top-1 left-1 h-2 bg-cyan-400 rounded-full"
-                    initial={{ width: `calc(${beforeWidth}% - 0.5rem)` }}
+                    initial={{ width: `calc(${before > 0 ? beforeWidth : 0}% - 0.5rem)` }}
                     whileInView={{ width: `calc(${afterWidth}% - 0.5rem)` }}
-                    transition={{ duration: 1.5, ease: 'easeOut' }}
+                    transition={{ duration: 1.2, ease: 'easeOut' }}
                     viewport={{ once: true }}
                 />
             </div>
@@ -31,32 +36,62 @@ const MetricBar = ({ label, before, after, isPercentage = false }: { label: stri
     );
 };
 
+// --- Sub-componente para los resultados clave ---
+const ResultCard = ({ value, label, isPercentage = true }: { value: number, label: string, isPercentage?: boolean }) => {
+    const isPositive = value >= 0;
+    return (
+        <div className="text-center p-4 bg-white/5 rounded-lg">
+            <div className={`text-3xl font-bold flex items-center justify-center ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+                {isPositive ? <Plus className="w-6 h-6 mr-1" /> : <Minus className="w-6 h-6 mr-1" />}
+                {Math.abs(value)}
+                {isPercentage && <span className="text-2xl">%</span>}
+            </div>
+            <div className="text-xs text-gray-400 mt-1">{label}</div>
+        </div>
+    );
+};
 
-// --- DATOS ---
+
+// --- DATOS ACTUALIZADOS DEL DOCUMENTO PDF ---
 const successCases = [
     {
-      company: "Banco Nacional", industry: "Servicios Financieros",
-      challenge: "Reducir tiempos de espera y mejorar la satisfacción del cliente en atención telefónica.",
-      solution: "Implementación de sistema omnicanal con IA y automatización inteligente para priorizar y resolver consultas de forma eficiente.",
-      results: { satisfaction: 45, responseTime: -60, efficiency: 80, cost: -35 },
-      testimonial: { text: "Geimser transformó nuestra operación. Los resultados superaron las expectativas y el ROI fue evidente desde el primer mes.", author: "María González", position: "Directora de Experiencia Cliente" },
-      metrics: [ { label: "Satisfacción Cliente", before: 65, after: 94, isPercentage: true }, { label: "Tiempo Promedio Respuesta (seg)", before: 480, after: 180 }, { label: "Llamadas Procesadas/día (miles)", before: 5, after: 12 } ]
+      company: "Servicios Financieros",
+      industry: "Optimización y CX",
+      challenge: "Mejorar la satisfacción y reducir los tiempos de respuesta en consultas financieras complejas.",
+      solution: "Implementamos un CX Journey completo con CRM, IA y chatbots, además de monitoreo en tiempo real de las interacciones para asegurar la calidad y el cumplimiento.",
+      results: { satisfaction: 15, responseTime: -40, efficiency: 30, cost: -25 },
+      testimonial: { text: "La capacidad de Geimser para optimizar nuestros procesos más complejos fue sobresaliente. Vimos un aumento en la productividad y en el NPS de forma casi inmediata.", author: "Directora de Experiencia Cliente", position: "Cliente del Sector Financiero" },
+      metrics: [
+          { label: "Productividad de Agentes", before: 100, after: 130, isPercentage: true },
+          { label: "Tiempo de Resolución", before: 10, after: 6, unit: ' min' },
+          { label: "Puntaje NPS (Net Promoter Score)", before: 40, after: 46 },
+      ]
     },
     {
-      company: "RetailMax", industry: "Retail y eCommerce",
-      challenge: "Gestionar el masivo aumento de consultas durante temporadas altas y Black Friday sin sacrificar la calidad del servicio.",
-      solution: "Despliegue de una plataforma cloud elástica con chatbots transaccionales y optimización de la fuerza de trabajo.",
-      results: { satisfaction: 38, responseTime: -55, efficiency: 120, cost: -28 },
-      testimonial: { text: "Manejamos 300% más consultas sin contratar personal adicional. La tecnología de Geimser fue la clave de nuestro éxito.", author: "Carlos Mendoza", position: "Gerente de Operaciones" },
-      metrics: [ { label: "Resolución Primer Contacto", before: 45, after: 78, isPercentage: true }, { label: "Consultas Simultáneas Máx.", before: 200, after: 800 }, { label: "Disponibilidad del Sistema", before: 95, after: 99.9, isPercentage: true } ]
+      company: "Contact Center",
+      industry: "Ventas y Soporte",
+      challenge: "Aumentar las conversiones en campañas de ventas outbound y gestionar un volumen escalable de 500 a más de 5,000 llamadas.",
+      solution: "Se diseñó una estrategia omnicanal con scripts de venta personalizados para la venta de intangibles, un programa de capacitación intensiva y monitoreo diario de los KPIs.",
+      results: { satisfaction: 25, responseTime: -20, efficiency: 25, cost: -18 },
+      testimonial: { text: "Su estrategia omnicanal nos permitió no solo manejar un mayor volumen, sino también mejorar nuestras conversiones de venta de intangibles de manera notable.", author: "Jefe de Ventas y Operaciones", position: "Cliente del Sector Retail" },
+      metrics: [
+          { label: "Tasa de Conversión (Ventas Outbound)", before: 8, after: 10, isPercentage: true },
+          { label: "Tiempo de Espera Inbound", before: 180, after: 144, unit: ' seg' },
+          { label: "Capacidad de llamadas gestionadas", before: 500, after: 5000 },
+      ]
     },
     {
-      company: "TelecomPlus", industry: "Telecomunicaciones",
-      challenge: "Integrar múltiples canales de atención (redes, chat, voz) y reducir la alta tasa de escalamientos técnicos.",
-      solution: "Solución omnicanal con base de conocimiento unificada e IA predictiva para asistir a los agentes en tiempo real.",
-      results: { satisfaction: 52, responseTime: -70, efficiency: 95, cost: -42 },
-      testimonial: { text: "La integración fue perfecta. Nuestros agentes ahora tienen toda la información en una sola pantalla y los clientes están más satisfechos.", author: "Ana Rodríguez", position: "VP Customer Experience" },
-      metrics: [ { label: "Tasa de Escalamiento Técnico", before: 35, after: 12, isPercentage: true }, { label: "NPS Score", before: 32, after: 67 }, { label: "Canales Integrados", before: 3, after: 8 } ]
+      company: "Gestión Educativa",
+      industry: "Admisión y Atención",
+      challenge: "Manejar la alta demanda estacional durante los procesos de admisión y matrícula, garantizando una atención estudiantil rápida, eficiente y de calidad.",
+      solution: "Se desplegó una infraestructura con escalabilidad rápida para habilitar 300 posiciones en tiempo récord y se implementó una gestión omnicanal con flujos optimizados para priorizar solicitudes críticas y auditorías de calidad continuas.",
+      results: { satisfaction: 40, responseTime: -40, efficiency: 100, cost: -35 },
+      testimonial: { text: "En el período más crítico del año, Geimser nos proporcionó la escalabilidad y eficiencia necesarias para gestionar un volumen de interacciones sin precedentes (+2M de llamadas), superando todas nuestras metas.", author: "Director de Admisiones", position: "Cliente del Sector Educativo" },
+      metrics: [
+          { label: "Llamadas Gestionadas (en 4 días)", before: 100000, after: 2000000 },
+          { label: "Reducción en Tiempos de Espera", before: 100, after: 60, isPercentage: true },
+          { label: "Nuevas Posiciones Desplegadas", before: 0, after: 300 },
+      ]
     }
 ];
 
@@ -80,7 +115,7 @@ export default function SuccessCases() {
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial="hidden"
           whileInView="visible"
@@ -129,19 +164,25 @@ export default function SuccessCases() {
                     transition={{ duration: 0.5, ease: 'easeInOut' }}
                     className="grid lg:grid-cols-12 gap-8 items-start"
                 >
-                    {/* Columna Izquierda: Contexto */}
+                    {/* Columna Izquierda: Contexto y Resultados Clave */}
                     <div className="lg:col-span-5 space-y-6">
                         <div className="p-6 rounded-xl bg-white/5">
                             <h4 className="font-bold text-white mb-3 flex items-center"><Target className="w-5 h-5 mr-2 text-red-400/80"/>Desafío</h4>
-                            <p className="text-gray-400 text-sm leading-relaxed">{activeCaseData.challenge}</p>
+                            <p className="text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCaseData.challenge }}></p>
                         </div>
                         <div className="p-6 rounded-xl bg-white/5">
                             <h4 className="font-bold text-white mb-3 flex items-center"><Zap className="w-5 h-5 mr-2 text-green-400/80"/>Nuestra Solución</h4>
-                            <p className="text-gray-400 text-sm leading-relaxed">{activeCaseData.solution}</p>
+                            <p className="text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCaseData.solution }}></p>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <ResultCard value={activeCaseData.results.satisfaction} label="Satisfacción" />
+                            <ResultCard value={activeCaseData.results.responseTime} label="Tiempo Respuesta" />
+                            <ResultCard value={activeCaseData.results.efficiency} label="Eficiencia" />
+                            <ResultCard value={activeCaseData.results.cost} label="Reducción Costos" />
                         </div>
                     </div>
 
-                    {/* Columna Derecha: Resultados */}
+                    {/* Columna Derecha: Métricas de Impacto */}
                     <div className="lg:col-span-7 p-6 rounded-xl bg-white/5">
                         <h4 className="font-bold text-white mb-6 flex items-center"><BarChart3 className="w-5 h-5 mr-2 text-cyan-400"/>Métricas de Impacto</h4>
                         <div className="space-y-5">
