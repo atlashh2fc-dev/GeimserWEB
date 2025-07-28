@@ -1,9 +1,9 @@
-
 'use client';
 
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { MapPin, Users, Building, Globe, Award, Star, CheckCircle, Banknote, Waypoints, Briefcase } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { MapPin, Users, Building, Globe, Award, Star, CheckCircle } from 'lucide-react';
 
 // --- DATOS ---
 const santiagoOffice = {
@@ -23,25 +23,25 @@ const santiagoOffice = {
         icon: Building,
         points: ["Oficinas modernas diseñadas para la colaboración", "Entorno empresarial seguro y consolidado", "Cercanía a servicios clave"] 
       }
-    ],
-    mapNodes: [
-        { icon: Waypoints, label: "Metro Bellas Artes" },
-        { icon: Banknote, label: "Centro Financiero" },
-        { icon: Briefcase, label: "Partners & Clientes" },
-        { icon: Globe, label: "Conectividad Vial" },
     ]
 };
 
 const globalStats = [
-    { icon: Building, label: "Sedes", value: "3" },
+    { icon: Building, label: "Sede Central", value: "1" },
     { icon: Users, label: "Colaboradores", value: "275+" },
     { icon: Globe, label: "Operaciones", value: "Global" },
     { icon: Award, label: "Certificaciones", value: "15+" },
 ];
 
+// --- Carga dinámica del nuevo mapa de MapLibre ---
+const MapLibreMap = dynamic(() => import('./MapLibreMap'), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-gray-900 animate-pulse"></div>,
+});
+
+
 // --- Componente Principal ---
 export default function Offices() {
-
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
@@ -49,7 +49,7 @@ export default function Offices() {
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } }
+    visible: { opacity: 1, y: 0 }
   };
 
   return (
@@ -75,7 +75,6 @@ export default function Offices() {
 
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
             
-            {/* --- Columna Izquierda: Detalles de la Oficina --- */}
             <motion.div 
               className="lg:col-span-6"
               initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} viewport={{ once: true }}
@@ -109,52 +108,14 @@ export default function Offices() {
               </div>
             </motion.div >
 
-            {/* --- Columna Derecha: NUEVA VISUALIZACIÓN: Basada en Grid CSS (más robusta) --- */}
-            <div className="lg:col-span-6 flex items-center justify-center min-h-[450px]">
-                <motion.div
-                  className="w-full max-w-md h-[450px] grid grid-cols-3 grid-rows-3 gap-4 items-center justify-items-center"
-                  initial="hidden" whileInView="visible" variants={{
-                      visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } }
-                  }}
-                  viewport={{ once: true, amount: 0.5 }}
-                >
-                    {/* Nodos Satélite en la parrilla */}
-                    <motion.div variants={itemVariants} className="col-start-2 row-start-1 text-center">
-                       <div className="p-3 rounded-full bg-gray-800/80 border border-white/10"><Waypoints className="w-6 h-6 text-cyan-400 mx-auto" /></div>
-                       <p className="text-xs text-white whitespace-nowrap mt-2">Metro Bellas Artes</p>
-                    </motion.div>
-
-                    <motion.div variants={itemVariants} className="col-start-3 row-start-2 text-center">
-                       <div className="p-3 rounded-full bg-gray-800/80 border border-white/10"><Banknote className="w-6 h-6 text-cyan-400 mx-auto" /></div>
-                       <p className="text-xs text-white whitespace-nowrap mt-2">Centro Financiero</p>
-                    </motion.div>
-
-                    <motion.div variants={itemVariants} className="col-start-2 row-start-3 text-center">
-                       <div className="p-3 rounded-full bg-gray-800/80 border border-white/10"><Briefcase className="w-6 h-6 text-cyan-400 mx-auto" /></div>
-                       <p className="text-xs text-white whitespace-nowrap mt-2">Partners & Clientes</p>
-                    </motion.div>
-
-                    <motion.div variants={itemVariants} className="col-start-1 row-start-2 text-center">
-                       <div className="p-3 rounded-full bg-gray-800/80 border border-white/10"><Globe className="w-6 h-6 text-cyan-400 mx-auto" /></div>
-                       <p className="text-xs text-white whitespace-nowrap mt-2">Conectividad Vial</p>
-                    </motion.div>
-
-                    {/* Nodo Central */}
-                    <motion.div 
-                        className="col-start-2 row-start-2 text-center flex flex-col items-center justify-center"
-                        initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }}
-                    >
-                        <div className="relative w-28 h-28 flex items-center justify-center">
-                            <div className="absolute w-full h-full rounded-full bg-cyan-500/20 animate-ping delay-500"></div>
-                            <div className="w-5 h-5 rounded-full bg-cyan-400 border-2 border-white shadow-2xl shadow-cyan-500"></div>
-                        </div>
-                        <p className="mt-2 font-bold text-white text-lg">Geimser HQ</p>
-                    </motion.div>
-                </motion.div>
-            </div>
+            <motion.div 
+              className="lg:col-span-6 rounded-2xl overflow-hidden min-h-[450px] lg:h-full border border-white/10"
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: 'easeOut' }} viewport={{ once: true }}
+            >
+              <MapLibreMap />
+            </motion.div>
         </div>
         
-        {/* --- Estadísticas Globales --- */}
         <div className="mt-24">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {globalStats.map(stat => (

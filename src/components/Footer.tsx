@@ -1,8 +1,8 @@
-
 'use client';
 
 import React from 'react';
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { Mail, Phone, MapPin, Linkedin, ArrowRight } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -17,14 +17,7 @@ export default function Footer() {
 
   const legalLinks = [
     { label: "Política de Privacidad", href: "#" },
-    { label: "Términos de Servicio", href: "#" },
-    { label: "Política de Cookies", href: "#" }
-  ];
-
-  const socialLinks = [
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Facebook, href: "#", label: "Facebook" }
+    { label: "Términos de Servicio", href: "#" }
   ];
 
   return (
@@ -35,32 +28,31 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* Columna Izquierda: Logo, Descripción y Redes */}
           <div className="lg:col-span-4">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Geimser
-            </h3>
+            <div className="mb-6">
+              {/* Logo de la empresa (TAMAÑO AUMENTADO) */}
+              <Image 
+                src="/G2.png" 
+                alt="Geimser Logo" 
+                width={210} 
+                height={60} 
+                className="w-48 h-auto"
+              />
+            </div>
             <p className="text-sm leading-relaxed mb-6">
               Conectamos tecnología, talento y resultados para impulsar tu negocio hacia el futuro digital.
             </p>
             <div className="flex space-x-3">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                );
-              })}
+              <a
+                href="#" // Reemplaza con tu URL de LinkedIn
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
-          {/* Columna Central: Enlaces Rápidos y Contacto */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-8">
             <div>
               <h4 className="font-semibold text-white mb-4">Navegación</h4>
@@ -76,22 +68,21 @@ export default function Footer() {
               <h4 className="font-semibold text-white mb-4">Contacto</h4>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
-                  <MapPin className="w-4 h-4 mr-3 mt-0.5 text-gray-500 flex-shrink-0" />
-                  <span>Av. Providencia 1234, Santiago, Chile</span>
+                  <MapPin className="w-4 h-4 mr-3 mt-1 text-gray-500 flex-shrink-0" />
+                  <span>Merced 838, Santiago Centro, Chile</span>
                 </li>
                 <li className="flex items-start">
-                  <Mail className="w-4 h-4 mr-3 mt-0.5 text-gray-500 flex-shrink-0" />
-                  <a href="mailto:contacto@geimser.cl" className="hover:text-cyan-400">contacto@geimser.cl</a>
+                  <Mail className="w-4 h-4 mr-3 mt-1 text-gray-500 flex-shrink-0" />
+                  <a href="mailto:contactanos@geimser.cl" className="hover:text-cyan-400">contactanos@geimser.cl</a>
                 </li>
                 <li className="flex items-start">
-                  <Phone className="w-4 h-4 mr-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <Phone className="w-4 h-4 mr-3 mt-1 text-gray-500 flex-shrink-0" />
                   <a href="tel:+56223456789" className="hover:text-cyan-400">+56 2 2345 6789</a>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Columna Derecha: Newsletter */}
           <div className="lg:col-span-4">
             <h4 className="font-semibold text-white mb-4">Mantente Actualizado</h4>
             <p className="text-sm mb-4">
@@ -116,11 +107,18 @@ export default function Footer() {
 
         </div>
 
-        {/* Barra Inferior: Copyright y Enlaces Legales */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm">
-          <p className="mb-4 md:mb-0">
-            &copy; {currentYear} Geimser. Todos los derechos reservados.
-          </p>
+          <div className="flex items-center mb-4 md:mb-0">
+            {/* Logo en Copyright (TAMAÑO AUMENTADO) */}
+            <Image 
+              src="/G2.png" 
+              alt="Geimser Icon"
+              width={24}
+              height={24}
+              className="h-6 w-auto mr-3 opacity-50"
+            />
+            <p>&copy; {currentYear} Geimser. Todos los derechos reservados.</p>
+          </div>
           <div className="flex space-x-6">
             {legalLinks.map((link) => (
               <a key={link.label} href={link.href} className="hover:text-cyan-400 transition-colors duration-300">
