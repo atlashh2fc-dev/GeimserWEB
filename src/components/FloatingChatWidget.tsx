@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AssistantModal } from './AssistantModal';
+import AssistantModal from './AssistantModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
