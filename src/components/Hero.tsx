@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
-
   const [activeVideo, setActiveVideo] = useState(1);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
@@ -79,7 +78,7 @@ export default function Hero() {
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl"
             >
-              La Evolución de la <span className="text-blue-500">Interacción</span> Humana y Digital.
+              La Evolución de la <span className="text-[#00B8F1]">Interacción</span> Humana y Digital.
             </motion.h1>
 
             <p
@@ -95,7 +94,7 @@ export default function Hero() {
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
               }`}
             >
-              <button className="group relative px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg overflow-hidden transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:scale-105">
+              <button className="group relative px-6 py-3 bg-[#00B8F1] text-black font-semibold rounded-lg overflow-hidden transition-all duration-300 shadow-lg hover:shadow-cyan-400/30 transform hover:scale-105">
                 <span className="relative z-10 flex items-center">
                   Agendar Demostración
                   <ChevronRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
@@ -119,9 +118,9 @@ export default function Hero() {
               const Icon = stat.icon;
               return (
                 <div key={index} className="group relative p-4 text-center rounded-xl bg-white/5 hover:bg-white/10 transition-colors duration-300">
-                  <div className="absolute inset-0 rounded-xl p-px bg-white/10 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-transparent transition-all duration-300" />
+                  <div className="absolute inset-0 rounded-xl p-px bg-white/10 group-hover:bg-gradient-to-br group-hover:from-[#00B8F1] group-hover:to-transparent transition-all duration-300" />
                   <div className="relative z-10">
-                    <Icon className="w-8 h-8 mx-auto mb-2 text-blue-500 transition-transform duration-300 group-hover:scale-110" />
+                    <Icon className="w-8 h-8 mx-auto mb-2 text-[#00B8F1] transition-transform duration-300 group-hover:scale-110" />
                     <p className="text-xl sm:text-2xl font-bold text-white">{stat.number}</p>
                     <p className="text-xs sm:text-sm text-gray-400">{stat.label}</p>
                   </div>
@@ -132,6 +131,7 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* --- ANIMATED BACKGROUND GRID --- */}
       <style jsx>{`
         .animated-grid {
           width: 100%;
