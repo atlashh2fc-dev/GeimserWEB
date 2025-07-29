@@ -1,0 +1,202 @@
+/* navbar-animations.css - Estilos adicionales para el Navbar 2025 */
+
+/* Animaciones de entrada para elementos del navbar */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+}
+
+/* Clases de utilidad para animaciones */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Efectos de hover mejorados */
+.nav-link-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.nav-link-hover:hover::before {
+  left: 100%;
+}
+
+/* Efecto de cristal para el navbar */
+.glass-effect {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradiente animado para botones */
+.gradient-button {
+  background: linear-gradient(45deg, #22c55e, #16a34a, #15803d);
+  background-size: 300% 300%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Efecto de partículas para hover */
+.particle-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.particle-effect:hover::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* Transiciones suaves para el logo */
+.logo-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-container:hover {
+  filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+}
+
+/* Efectos de micro-interacciones */
+.micro-interaction {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.micro-interaction:hover {
+  transform: translateY(-1px);
+}
+
+.micro-interaction:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* Indicador de scroll activo */
+.scroll-indicator {
+  position: relative;
+}
+
+.scroll-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.scroll-indicator.active::before {
+  transform: scaleX(1);
+}
+
+/* Responsive animations */
+@media (max-width: 768px) {
+  .animate-fade-in-up {
+    animation-duration: 0.4s;
+  }
+  
+  .animate-slide-in-right {
+    animation-duration: 0.3s;
+  }
+}
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
