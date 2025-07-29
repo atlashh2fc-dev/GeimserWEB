@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion'; // Importa Variants
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { 
   Users, 
   Target, 
@@ -10,7 +10,15 @@ import {
   BarChart3, 
   Settings,
   CheckCircle,
-  Briefcase
+  Briefcase,
+  Landmark, // Finanzas y Banca
+  Phone, // Telecomunicaciones
+  ShoppingCart, // Retail
+  HeartPulse, // Salud
+  GraduationCap, // Educación
+  Shield, // Seguros
+  Gem, // Minería
+  Wrench // Servicios Generales y Utilities
 } from 'lucide-react';
 
 // --- DATOS ---
@@ -41,7 +49,17 @@ const specializations = [
   }
 ];
 
-const industries = ["Finanzas y Banca", "Telecomunicaciones", "Retail y eCommerce", "Salud y Farma", "Educación", "Seguros y Reaseguros"];
+// --- DATOS DE INDUSTRIAS MEJORADOS CON ICONOS ---
+const industries = [
+  { name: "Finanzas y Banca", icon: Landmark },
+  { name: "Telecomunicaciones", icon: Phone },
+  { name: "Retail y eCommerce", icon: ShoppingCart },
+  { name: "Salud y Farma", icon: HeartPulse },
+  { name: "Educación", icon: GraduationCap },
+  { name: "Seguros y Reaseguros", icon: Shield },
+  { name: "Minería", icon: Gem },
+  { name: "Servicios y Utilities", icon: Wrench },
+];
 
 const whyUsItems = [
     { icon: Lightbulb, title: "Innovación Pragmática", description: "Tecnología de vanguardia aplicada para resolver desafíos de negocio reales." },
@@ -53,7 +71,6 @@ const whyUsItems = [
 export default function About() {
   const [activeSpec, setActiveSpec] = useState(0);
 
-  // Añade el tipo 'Variants' a las constantes
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,12 +83,24 @@ export default function About() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
+  
+  const industryListVariants: Variants = {
+    visible: {
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const industryItemVariants: Variants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   const activeSpecialization = specializations[activeSpec];
 
   return (
     <section className="py-24 sm:py-32 px-6 bg-[#0B0F19] text-gray-300 relative overflow-hidden">
-      {/* Fondo con gradiente sutil y grid */}
       <div className="absolute inset-0 z-0 opacity-40">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,192,255,0.15),rgba(255,255,255,0))]"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
@@ -82,7 +111,8 @@ export default function About() {
         <motion.div 
           className="grid md:grid-cols-12 gap-8 mb-24 md:mb-32"
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
         >
           <div className="md:col-span-8">
@@ -112,7 +142,6 @@ export default function About() {
         <div className="mb-24 md:mb-32">
           <h3 className="text-3xl font-bold text-white text-center mb-12">Nuestras Áreas de <span className="text-cyan-400">Expertise</span></h3>
           <div className="grid lg:grid-cols-12 gap-8 min-h-[450px]">
-            {/* Columna Izquierda: Títulos */}
             <div className="lg:col-span-4">
               <div className="flex flex-col gap-2">
                 {specializations.map((spec, index) => (
@@ -134,7 +163,6 @@ export default function About() {
               </div>
             </div>
             
-            {/* Columna Derecha: Contenido */}
             <div className="lg:col-span-8 p-8 rounded-2xl bg-gradient-to-br from-gray-900/50 to-gray-800/20 border border-white/10 relative overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -161,22 +189,38 @@ export default function About() {
         </div>
 
         {/* --- Industrias y Por Qué Confiar --- */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-                 <h3 className="text-3xl font-bold text-white mb-6">Un Socio Estratégico para <span className="text-cyan-400">Múltiples Industrias</span></h3>
+        <motion.div 
+          className="grid lg:grid-cols-2 gap-16 items-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={containerVariants}
+        >
+            <motion.div variants={itemVariants}>
+                 <h3 className="text-3xl font-bold text-white mb-6">Un Socio para <span className="text-cyan-400">Toda Industria</span></h3>
                  <p className="text-gray-400 leading-relaxed mb-8">
-                     Nuestra metodología flexible y probada nos permite adaptarnos a las complejidades y regulaciones de diversos sectores, entregando resultados consistentes.
+                     Nuestra metodología flexible nos permite adaptarnos a las complejidades de diversos sectores, desde la alta tecnología hasta operaciones críticas en terreno, entregando siempre resultados consistentes.
                  </p>
-                 <div className="flex flex-wrap gap-3">
-                    {industries.map((industry) => (
-                        <div key={industry} className="flex items-center px-4 py-2 bg-gray-700/30 rounded-full border border-gray-600/50 text-sm">
-                           <Briefcase className="w-4 h-4 mr-2 text-gray-500"/>
-                           {industry}
-                        </div>
-                    ))}
-                 </div>
-            </div>
-            <div className="grid grid-cols-1 gap-6">
+                 <motion.div 
+                    className="flex flex-wrap gap-3"
+                    variants={industryListVariants}
+                 >
+                    {industries.map((industry) => {
+                        const Icon = industry.icon;
+                        return (
+                            <motion.div 
+                                key={industry.name} 
+                                className="flex items-center px-4 py-2 bg-gray-700/30 rounded-full border border-gray-600/50 text-sm"
+                                variants={industryItemVariants}
+                            >
+                               <Icon className="w-4 h-4 mr-2.5 text-cyan-400/70"/>
+                               <span className="text-gray-300">{industry.name}</span>
+                            </motion.div>
+                        )
+                    })}
+                 </motion.div>
+            </motion.div>
+            <motion.div variants={itemVariants} className="grid grid-cols-1 gap-6">
                 {whyUsItems.map((item, index) => {
                     const Icon = item.icon;
                     return (
@@ -189,8 +233,8 @@ export default function About() {
                         </div>
                     )
                 })}
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
       </div>
     </section>
   );
