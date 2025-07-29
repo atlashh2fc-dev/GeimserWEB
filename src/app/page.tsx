@@ -1,7 +1,6 @@
-// app/page.tsx
 'use client';
 
-import React from 'react'; // Importamos React para usar FC
+import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -11,6 +10,7 @@ import Offices from '@/components/Offices';
 import SuccessCases from '@/components/SuccessCases';
 import Benefits from '@/components/Benefits';
 import ImplementationSteps from '@/components/ImplementationSteps';
+import PartnersSection from '@/components/PartnersSection';
 import Footer from '@/components/Footer';
 
 const HomePage: React.FC = () => {
@@ -25,6 +25,7 @@ const HomePage: React.FC = () => {
       <div id="benefits"><Benefits /></div>
       <div id="implementation"><ImplementationSteps /></div>
       <div id="offices"><Offices /></div>
+      <div id="partners"><PartnersSection /></div>
       <div id="contact"><Footer /></div>
     </main>
   );
