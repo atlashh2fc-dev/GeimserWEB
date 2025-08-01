@@ -348,10 +348,17 @@ export default function Solutions() {
                   <p className="text-gray-400 mb-8 leading-relaxed">
                       Hablemos de tus desafíos. Nuestro equipo de expertos puede diseñar una prueba de concepto o una demostración adaptada a tus necesidades.
                   </p>
-                  <button className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-900/50">
+                  {/* --- INICIO DEL CAMBIO --- */}
+                  <a 
+                    href="https://wa.me/56974159166"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-900/50"
+                  >
                       Solicitar una Demostración
                       <ArrowRight className="w-5 h-5 ml-2" />
-                  </button>
+                  </a>
+                  {/* --- FIN DEL CAMBIO --- */}
               </div>
           </div>
         </div>

@@ -28,7 +28,7 @@ const Navbar: FC = () => {
   }, []);
 
   const handleContactClick = () => {
-    const phone = '+56974159466';
+    const phone = '+56974159166'; // ← número actualizado
     const msg = 'Hola, me interesa conocer más sobre sus soluciones tecnológicas.';
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
   };

@@ -177,9 +177,16 @@ export default function Benefits() {
                 <p className="text-gray-400 leading-relaxed mb-6">
                   Más que un proveedor, somos un aliado comprometido con tu crecimiento, basado en la innovación, experiencia y un soporte incondicional.
                 </p>
-                <button className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-lg transition-colors duration-300">
+                {/* --- INICIO DEL CAMBIO --- */}
+                <a
+                  href="https://wa.me/56974159166"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-lg transition-colors duration-300"
+                >
                   Comienza tu Transformación
-                </button>
+                </a>
+                {/* --- FIN DEL CAMBIO --- */}
               </div>
               <div className="lg:col-span-7 grid grid-cols-1 gap-6">
                 {whyChooseUs.map((item) => (

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -293,14 +294,19 @@ export default function PartnersEcosystem() {
           viewport={{ once: true, amount: 0.3 }} 
           variants={containerVariants}
         >
-          <motion.div 
+          {/* --- INICIO DEL CAMBIO --- */}
+          <motion.a 
+            href="https://wa.me/56974159166"
+            target="_blank"
+            rel="noopener noreferrer"
             variants={itemVariants}
-            className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-xl text-[#0B1426] font-semibold shadow-2xl shadow-cyan-400/25 hover:shadow-cyan-400/40 transition-all duration-300 group"
+            className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-xl text-[#0B1426] font-semibold shadow-2xl shadow-cyan-400/25 hover:shadow-cyan-400/40 transition-all duration-300 group cursor-pointer"
           >
             <Network className="w-5 h-5" />
             <span>Descubre cómo nuestro ecosistema potencia tu negocio</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </motion.div>
+          </motion.a>
+          {/* --- FIN DEL CAMBIO --- */}
         </motion.div>
       </div>
     </section>
