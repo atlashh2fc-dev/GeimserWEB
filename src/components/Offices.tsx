@@ -53,7 +53,7 @@ export default function Offices() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[#0B0F19] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse_at_center,white,transparent_60%)] opacity-30"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -65,10 +65,10 @@ export default function Offices() {
             <MapPin className="w-4 h-4 mr-2" />
             Nuestra Sede Central
           </motion.div>
-          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">
+          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
             Un Espacio Privilegiado a <span className="text-cyan-400">Medida</span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestro centro de operaciones en el corazón de Santiago está diseñado para la innovación, la colaboración y el crecimiento.
           </motion.p>
         </motion.div>
@@ -80,7 +80,7 @@ export default function Offices() {
               initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} viewport={{ once: true }}
             >
               <div className="p-8 rounded-2xl bg-white/5 border border-white/10 h-full">
-                  <h3 className="text-2xl font-bold text-white mb-2">{santiagoOffice.city}: Sede Central</h3>
+                  <h3 className="text-2xl font-bold mb-2">{santiagoOffice.city}: Sede Central</h3>
                   <p className="text-md text-cyan-400 font-semibold mb-6">{santiagoOffice.address}</p>
                   <p className="text-gray-300 mb-8 leading-relaxed">{santiagoOffice.mainDescription}</p>
                   
@@ -89,7 +89,7 @@ export default function Offices() {
                           const Icon = highlight.icon;
                           return (
                           <div key={highlight.title}>
-                              <h4 className="font-bold text-white mb-3 text-lg flex items-center">
+                              <h4 className="font-bold mb-3 text-lg flex items-center">
                                   <Icon className="w-5 h-5 mr-3 text-cyan-400" />
                                   {highlight.title}
                               </h4>
@@ -97,7 +97,7 @@ export default function Offices() {
                                   {highlight.points.map(point => (
                                       <li key={point} className="flex items-start">
                                         <CheckCircle className="w-4 h-4 mr-3 mt-1 text-green-400/80 flex-shrink-0" />
-                                        <span className="text-gray-400">{point}</span>
+                                        <span className="text-muted">{point}</span>
                                       </li>
                                   ))}
                               </ul>
@@ -124,7 +124,7 @@ export default function Offices() {
                         <stat.icon className="w-5 h-5 text-cyan-400" />
                         <span className="text-gray-300">{stat.label}</span>
                      </div>
-                     <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
+                     <p className="text-3xl font-bold mt-1">{stat.value}</p>
                    </div>
                 ))}
             </div>

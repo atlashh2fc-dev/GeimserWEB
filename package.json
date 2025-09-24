@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
+    "@vercel/speed-insights": "^1.2.0",
     "framer-motion": "^12.23.11",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.532.0",
@@ -33,5 +34,6 @@
     "@types/uuid": "^10.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef"
 }

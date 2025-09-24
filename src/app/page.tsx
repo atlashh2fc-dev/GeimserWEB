@@ -1,5 +1,4 @@
 'use client';
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -15,7 +14,8 @@ import Footer from '@/components/Footer';
 
 const HomePage: React.FC = () => {
   return (
-    <main className="bg-gray-950 text-white">
+    // Sin clases que fijen colores; hereda de variables CSS
+    <main>
       <Navbar />
       <Hero />
       <div id="about"><About /></div>
@@ -30,5 +30,4 @@ const HomePage: React.FC = () => {
     </main>
   );
 }
-
 export default HomePage;

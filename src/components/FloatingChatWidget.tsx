@@ -59,14 +59,14 @@ const FloatingChatWidget: React.FC = () => {
           >
             <div className="relative">
               {/* ✅ CAMBIO: Gradiente de color actualizado, sin morado */}
-              <div className="bg-neutral-800/50 backdrop-blur-2xl border border-white/10 text-white text-sm px-5 py-4 rounded-2xl shadow-2xl">
+              <div className="bg-neutral-800/50 backdrop-blur-2xl border border-white/10 text-sm px-5 py-4 rounded-2xl shadow-2xl">
                 <div className="flex items-start gap-3">
                   <div className="p-2 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-white/10">
                     <TrendingUp className="w-5 h-5 text-cyan-300" />
                   </div>
                   <div>
                     <div className="font-bold text-cyan-200 mb-1">Consulta Estratégica Digital</div>
-                    <div className="text-white/80 leading-relaxed">
+                    <div className="/80 leading-relaxed">
                       Reduce costos <span className="font-semibold text-emerald-300">40%</span> y aumenta productividad <span className="font-semibold text-emerald-300">30%</span>
                     </div>
                     <div className="text-xs text-cyan-300/80 mt-2 flex items-center gap-1">
@@ -134,7 +134,7 @@ const FloatingChatWidget: React.FC = () => {
                   exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <X className="w-7 h-7 text-white drop-shadow-lg" />
+                  <X className="w-7 h-7 drop-shadow-lg" />
                 </motion.div>
               ) : (
                 <motion.div
@@ -146,7 +146,7 @@ const FloatingChatWidget: React.FC = () => {
                   className="relative"
                 >
                   {/* ✅ CAMBIO: Icono actualizado a 'Bot' para una apariencia más moderna y digital */}
-                  <Bot className="w-7 h-7 text-white drop-shadow-lg" />
+                  <Bot className="w-7 h-7 drop-shadow-lg" />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -166,9 +166,9 @@ const FloatingChatWidget: React.FC = () => {
               transition={{ duration: 0.2 }}
               className="absolute right-full top-1/2 -translate-y-1/2 mr-4 hidden md:block pointer-events-none"
             >
-              <div className="bg-neutral-800/60 backdrop-blur-xl border border-white/10 text-white text-sm px-4 py-3 rounded-2xl whitespace-nowrap shadow-2xl">
+              <div className="bg-neutral-800/60 backdrop-blur-xl border border-white/10 text-sm px-4 py-3 rounded-2xl whitespace-nowrap shadow-2xl">
                 <div className="font-bold text-cyan-200">Consultor Digital</div>
-                <div className="text-white/80 text-xs mt-1">GeimserBot 🚀 • disponible 24/7</div>
+                <div className="/80 text-xs mt-1">GeimserBot 🚀 • disponible 24/7</div>
               </div>
             </motion.div>
           )}
@@ -195,7 +195,7 @@ const FloatingChatWidget: React.FC = () => {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="bg-gradient-to-r from-emerald-600/90 to-emerald-700/90 backdrop-blur-2xl border border-emerald-400/20 text-white text-sm px-4 py-3 rounded-2xl shadow-2xl"
+              className="bg-gradient-to-r from-emerald-600/90 to-emerald-700/90 backdrop-blur-2xl border border-emerald-400/20 text-sm px-4 py-3 rounded-2xl shadow-2xl"
             >
               <div className="flex items-center gap-3">
                 <div className="p-1.5 rounded-lg bg-emerald-400/20">

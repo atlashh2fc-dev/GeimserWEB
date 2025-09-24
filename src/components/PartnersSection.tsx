@@ -99,7 +99,7 @@ export default function PartnersEcosystem() {
   };
 
   return (
-    <section className="py-24 px-6 bg-[#0B0F19] text-white relative overflow-hidden">
+    <section className="py-24 px-6 bg-[var(--surface)] relative overflow-hidden">
       {/* Background Elements - Matching Geimser style */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(0,212,255,0.08),transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(0,212,255,0.05),transparent_50%)]"></div>
@@ -123,7 +123,7 @@ export default function PartnersEcosystem() {
           
           <motion.h2 
             variants={itemVariants} 
-            className="text-4xl lg:text-5xl font-bold tracking-tight mb-6 text-white"
+            className="text-4xl lg:text-5xl font-bold tracking-tight mb-6 "
           >
             Un Ecosistema Estratégico de{' '}
             <span className="text-cyan-400">
@@ -214,8 +214,8 @@ export default function PartnersEcosystem() {
                     initial={{ y: partner.position.y < 50 ? -10 : 10, opacity: 0 }}
                     animate={{ y: 0, opacity: isActive ? 1 : 0 }}
                   >
-                    <div className="text-sm font-semibold text-white">{partner.name}</div>
-                    <div className="text-xs text-gray-400">{partner.role}</div>
+                    <div className="text-sm font-semibold ">{partner.name}</div>
+                    <div className="text-xs text-muted">{partner.role}</div>
                   </motion.div>
                 </motion.div>
               );
@@ -255,11 +255,11 @@ export default function PartnersEcosystem() {
                   </div>
                   
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white mb-1">{partner.name}</h3>
-                    <p className="text-sm text-gray-400 font-medium">{partner.role}</p>
+                    <h3 className="text-2xl font-bold mb-1">{partner.name}</h3>
+                    <p className="text-sm text-muted font-medium">{partner.role}</p>
                   </div>
                   
-                  <ArrowRight className={`w-5 h-5 text-gray-400 transition-all duration-300 ${
+                  <ArrowRight className={`w-5 h-5 text-muted transition-all duration-300 ${
                     isActive ? 'translate-x-1 text-cyan-400' : 'group-hover:translate-x-1'
                   }`} />
                 </div>

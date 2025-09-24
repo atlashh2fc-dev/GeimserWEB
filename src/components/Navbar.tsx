@@ -164,9 +164,9 @@ const Navbar: FC = () => {
             <div className="md:hidden">
               <button onClick={() => setIsOpen(!isOpen)} className="hamburger-refined">
                 {isOpen ? (
-                  <X className="w-6 h-6 text-white" />
+                  <X className="w-6 h-6 " />
                 ) : (
-                  <Menu className="w-6 h-6 text-white" />
+                  <Menu className="w-6 h-6 " />
                 )}
               </button>
             </div>

@@ -182,17 +182,17 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
           <div className="p-8">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">{title}</h3>
+                <h3 className="text-2xl lg:text-3xl font-bold mb-2">{title}</h3>
                 <p className="text-cyan-400 font-semibold">{solution.title}</p>
               </div>
-              <button onClick={onClose} className="p-2 rounded-full text-gray-400 hover:bg-gray-700/50 hover:text-white transition-colors">
+              <button onClick={onClose} className="p-2 rounded-full text-muted hover:bg-gray-700/50 hover: transition-colors">
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             <div className="space-y-6">
               <div>
-                <h4 className="text-lg font-semibold text-white mb-4 border-l-4 border-cyan-500 pl-3">Beneficios y Casos de Uso Clave</h4>
+                <h4 className="text-lg font-semibold mb-4 border-l-4 border-cyan-500 pl-3">Beneficios y Casos de Uso Clave</h4>
                 <ul className="space-y-3">
                   {benefits.map((benefit: Benefit, i: number) => {
                     const Icon = benefit.icon;
@@ -213,13 +213,13 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold text-white mb-3 border-l-4 border-cyan-500 pl-3">Tecnologías y Metodologías</h4>
-                <p className="text-gray-400 text-sm bg-gray-800/50 p-3 rounded-lg">{tech}</p>
+                <h4 className="text-lg font-semibold mb-3 border-l-4 border-cyan-500 pl-3">Tecnologías y Metodologías</h4>
+                <p className="text-muted text-sm bg-gray-800/50 p-3 rounded-lg">{tech}</p>
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold text-white mb-3 border-l-4 border-cyan-500 pl-3">KPIs Impactados</h4>
-                <p className="text-gray-400 text-sm bg-gray-800/50 p-3 rounded-lg">{kpis}</p>
+                <h4 className="text-lg font-semibold mb-3 border-l-4 border-cyan-500 pl-3">KPIs Impactados</h4>
+                <p className="text-muted text-sm bg-gray-800/50 p-3 rounded-lg">{kpis}</p>
               </div>
             </div>
           </div>
@@ -258,7 +258,7 @@ export default function Solutions() {
 
   return (
     <>
-      <section className="py-24 sm:py-32 px-6 bg-[#0B0F19] text-gray-300 relative overflow-hidden">
+      <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,192,255,0.1),rgba(255,255,255,0))]"></div>
           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
@@ -276,10 +276,10 @@ export default function Solutions() {
               <Sparkles className="w-4 h-4 mr-2" />
               Nuestras Soluciones
             </motion.div>
-            <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">
+            <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
               Tecnología que Potencia la <span className="text-cyan-400">Experiencia Humana</span>
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
               Desde la automatización inteligente hasta el análisis de datos, nuestras soluciones están diseñadas para integrarse, optimizar y elevar cada punto de contacto con tus clientes.
             </motion.p>
           </motion.div>
@@ -304,11 +304,11 @@ export default function Solutions() {
                           <Icon className="w-8 h-8 text-cyan-400" />
                         </div>
                         
-                        <h3 className="text-xl font-bold text-white mb-3 transition-colors duration-300 group-hover:text-cyan-300">
+                        <h3 className="text-xl font-bold mb-3 transition-colors duration-300 group-hover:text-cyan-300">
                           {solution.title}
                         </h3>
                         
-                        <p className="text-gray-400 mb-6 leading-relaxed flex-grow">
+                        <p className="text-muted mb-6 leading-relaxed flex-grow">
                           {solution.description}
                         </p>
                         
@@ -323,7 +323,7 @@ export default function Solutions() {
                         
                         <button 
                           onClick={() => handleOpenModal(solution)}
-                          className="flex items-center justify-between w-full mt-auto px-4 py-2 bg-gray-500/10 border border-gray-500/30 rounded-lg text-sm font-medium text-gray-300 group-hover:text-white group-hover:border-cyan-500/50 transition-all duration-300"
+                          className="flex items-center justify-between w-full mt-auto px-4 py-2 bg-gray-500/10 border border-gray-500/30 rounded-lg text-sm font-medium text-gray-300 group-hover: group-hover:border-cyan-500/50 transition-all duration-300"
                         >
                           <span>Conocer más</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -342,10 +342,10 @@ export default function Solutions() {
                       <Shield className="w-8 h-8 text-green-400/80" />
                       <Clock className="w-8 h-8 text-blue-400/80" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">
+                  <h3 className="text-2xl font-bold mb-4">
                       ¿Listo para dar el siguiente paso?
                   </h3>
-                  <p className="text-gray-400 mb-8 leading-relaxed">
+                  <p className="text-muted mb-8 leading-relaxed">
                       Hablemos de tus desafíos. Nuestro equipo de expertos puede diseñar una prueba de concepto o una demostración adaptada a tus necesidades.
                   </p>
                   {/* --- INICIO DEL CAMBIO --- */}
@@ -353,7 +353,7 @@ export default function Solutions() {
                     href="https://wa.me/56974159166"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-900/50"
+                    className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-900/50"
                   >
                       Solicitar una Demostración
                       <ArrowRight className="w-5 h-5 ml-2" />

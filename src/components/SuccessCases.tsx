@@ -18,7 +18,7 @@ const MetricBar = ({ label, before, after, isPercentage = false, unit = '' }: { 
         <div>
             <div className="flex justify-between items-center text-sm mb-1.5">
                 <span className="text-gray-300">{label}</span>
-                <span className="font-semibold text-white">{after.toLocaleString()}{unit}{isPercentage && '%'}</span>
+                <span className="font-semibold ">{after.toLocaleString()}{unit}{isPercentage && '%'}</span>
             </div>
             <div className="w-full bg-gray-700/50 rounded-full h-4 relative p-1">
                 {/* Barra gris de 'antes' */}
@@ -46,7 +46,7 @@ const ResultCard = ({ value, label, isPercentage = true }: { value: number, labe
                 {Math.abs(value)}
                 {isPercentage && <span className="text-2xl">%</span>}
             </div>
-            <div className="text-xs text-gray-400 mt-1">{label}</div>
+            <div className="text-xs text-muted mt-1">{label}</div>
         </div>
     );
 };
@@ -111,7 +111,7 @@ export default function SuccessCases() {
   const itemVariants: Variants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[#0B0F19] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -126,10 +126,10 @@ export default function SuccessCases() {
             <Award className="w-4 h-4 mr-2" />
             Casos de Éxito
           </motion.div>
-          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">
+          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
             Resultados que <span className="text-cyan-400">Inspiran Confianza</span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Descubre cómo hemos ayudado a empresas líderes a transformar sus operaciones y alcanzar resultados extraordinarios.
           </motion.p>
         </motion.div>
@@ -148,7 +148,7 @@ export default function SuccessCases() {
                             : 'bg-white/5 border-transparent hover:bg-white/10'
                         }`}
                     >
-                        <Building className="w-5 h-5 mr-3 text-gray-400" />
+                        <Building className="w-5 h-5 mr-3 text-muted" />
                         {case_.company}
                     </button>
                 ))}
@@ -167,12 +167,12 @@ export default function SuccessCases() {
                     {/* Columna Izquierda: Contexto y Resultados Clave */}
                     <div className="lg:col-span-5 space-y-6">
                         <div className="p-6 rounded-xl bg-white/5">
-                            <h4 className="font-bold text-white mb-3 flex items-center"><Target className="w-5 h-5 mr-2 text-red-400/80"/>Desafío</h4>
-                            <p className="text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCaseData.challenge }}></p>
+                            <h4 className="font-bold mb-3 flex items-center"><Target className="w-5 h-5 mr-2 text-red-400/80"/>Desafío</h4>
+                            <p className="text-muted text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCaseData.challenge }}></p>
                         </div>
                         <div className="p-6 rounded-xl bg-white/5">
-                            <h4 className="font-bold text-white mb-3 flex items-center"><Zap className="w-5 h-5 mr-2 text-green-400/80"/>Nuestra Solución</h4>
-                            <p className="text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCaseData.solution }}></p>
+                            <h4 className="font-bold mb-3 flex items-center"><Zap className="w-5 h-5 mr-2 text-green-400/80"/>Nuestra Solución</h4>
+                            <p className="text-muted text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCaseData.solution }}></p>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             <ResultCard value={activeCaseData.results.satisfaction} label="Satisfacción" />
@@ -184,7 +184,7 @@ export default function SuccessCases() {
 
                     {/* Columna Derecha: Métricas de Impacto */}
                     <div className="lg:col-span-7 p-6 rounded-xl bg-white/5">
-                        <h4 className="font-bold text-white mb-6 flex items-center"><BarChart3 className="w-5 h-5 mr-2 text-cyan-400"/>Métricas de Impacto</h4>
+                        <h4 className="font-bold mb-6 flex items-center"><BarChart3 className="w-5 h-5 mr-2 text-cyan-400"/>Métricas de Impacto</h4>
                         <div className="space-y-5">
                             {activeCaseData.metrics.map(m => <MetricBar key={m.label} {...m} />)}
                         </div>
@@ -204,16 +204,16 @@ export default function SuccessCases() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <blockquote className="text-xl lg:text-2xl text-white leading-relaxed lg:leading-relaxed mb-6 italic">
+                    <blockquote className="text-xl lg:text-2xl leading-relaxed lg:leading-relaxed mb-6 italic">
                         "{activeCaseData.testimonial.text}"
                     </blockquote>
                     <div className="flex items-center">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold mr-4 text-xl">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold mr-4 text-xl">
                             {activeCaseData.testimonial.author.charAt(0)}
                         </div>
                         <div>
-                            <p className="text-white font-semibold">{activeCaseData.testimonial.author}</p>
-                            <p className="text-gray-400 text-sm">{activeCaseData.testimonial.position}</p>
+                            <p className=" font-semibold">{activeCaseData.testimonial.author}</p>
+                            <p className="text-muted text-sm">{activeCaseData.testimonial.position}</p>
                         </div>
                     </div>
                 </motion.div>

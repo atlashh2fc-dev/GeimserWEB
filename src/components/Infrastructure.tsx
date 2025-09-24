@@ -56,8 +56,8 @@ const StatBar = ({ label, value, unit, inverse = false }: { label: string, value
     return (
       <div>
         <div className="flex justify-between items-end mb-1">
-          <span className="text-sm text-gray-400">{label}</span>
-          <span className="font-bold text-white">{value}{unit}</span>
+          <span className="text-sm text-muted">{label}</span>
+          <span className="font-bold ">{value}{unit}</span>
         </div>
         <div className="w-full bg-gray-700/50 rounded-full h-1.5">
           <motion.div 
@@ -88,7 +88,7 @@ export default function Infrastructure() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[#0B0F19] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
       {/* Fondo con grid sutil */}
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
       
@@ -105,10 +105,10 @@ export default function Infrastructure() {
             <Server className="w-4 h-4 mr-2" />
             Nuestra Plataforma
           </motion.div>
-          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">
+          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
             Construida para el <span className="text-cyan-400">Rendimiento</span> y la <span className="text-cyan-400">Confianza</span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestra infraestructura no es solo un soporte, es una ventaja competitiva diseñada para ofrecer máxima disponibilidad, seguridad a toda prueba y una escalabilidad sin límites.
           </motion.p>
         </motion.div>
@@ -129,7 +129,7 @@ export default function Infrastructure() {
                 >
                   <div className="flex items-center">
                     <comp.icon className={`w-6 h-6 mr-4 transition-colors flex-shrink-0 ${activeInfra === index ? 'text-cyan-400' : 'text-gray-500 group-hover:text-gray-300'}`} />
-                    <span className={`font-semibold transition-colors text-sm md:text-base ${activeInfra === index ? 'text-white' : 'text-gray-300'}`}>{comp.title.split(' ')[0]}</span>
+                    <span className={`font-semibold transition-colors text-sm md:text-base ${activeInfra === index ? '' : 'text-gray-300'}`}>{comp.title.split(' ')[0]}</span>
                   </div>
                 </button>
               ))}
@@ -147,10 +147,10 @@ export default function Infrastructure() {
                 className="flex flex-col h-full"
               >
                 <div>
-                  <h3 className="text-2xl font-bold text-white mb-3">{activeComponent.title}</h3>
-                  <p className="text-gray-400 mb-8 leading-relaxed">{activeComponent.description}</p>
+                  <h3 className="text-2xl font-bold mb-3">{activeComponent.title}</h3>
+                  <p className="text-muted mb-8 leading-relaxed">{activeComponent.description}</p>
                   
-                  <h4 className="font-semibold text-white mb-4">Capacidades Clave</h4>
+                  <h4 className="font-semibold mb-4">Capacidades Clave</h4>
                   <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3 mb-8">
                     {activeComponent.features.map((feature, i) => (
                       <div key={i} className="flex items-center text-sm">
@@ -192,7 +192,7 @@ export default function Infrastructure() {
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Tech Stack */}
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <h3 className="font-bold text-white mb-4 flex items-center"><Layers className="w-5 h-5 mr-2 text-cyan-400"/>Stack Tecnológico</h3>
+                <h3 className="font-bold mb-4 flex items-center"><Layers className="w-5 h-5 mr-2 text-cyan-400"/>Stack Tecnológico</h3>
                 <div className="flex flex-wrap gap-2">
                   {techStack.map(tech => (
                     <span key={tech} className="px-3 py-1 bg-gray-700/50 text-sm text-gray-300 rounded-md">{tech}</span>
@@ -201,7 +201,7 @@ export default function Infrastructure() {
               </div>
               {/* Certificaciones */}
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <h3 className="font-bold text-white mb-4 flex items-center"><Shield className="w-5 h-5 mr-2 text-green-400"/>Certificaciones</h3>
+                <h3 className="font-bold mb-4 flex items-center"><Shield className="w-5 h-5 mr-2 text-green-400"/>Certificaciones</h3>
                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                     {certifications.map(cert => (
                       <div key={cert} className="flex items-center text-sm">

@@ -43,7 +43,7 @@ export default function Hero() {
   }, [activeVideo]);
 
   return (
-    <section className="relative h-screen bg-black text-white overflow-hidden">
+    <section className="relative h-screen bg-black overflow-hidden">
       {/* --- CAPAS DE FONDO --- */}
       <div className="absolute inset-0 z-0">
         <video
@@ -100,7 +100,7 @@ export default function Hero() {
                   <ChevronRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
               </button>
-              <button className="group relative px-6 py-3 bg-white/5 border border-white/20 text-white/90 font-semibold rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+              <button className="group relative px-6 py-3 bg-white/5 border border-white/20 /90 font-semibold rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                 Explorar Soluciones
               </button>
             </div>
@@ -121,8 +121,8 @@ export default function Hero() {
                   <div className="absolute inset-0 rounded-xl p-px bg-white/10 group-hover:bg-gradient-to-br group-hover:from-[#00B8F1] group-hover:to-transparent transition-all duration-300" />
                   <div className="relative z-10">
                     <Icon className="w-8 h-8 mx-auto mb-2 text-[#00B8F1] transition-transform duration-300 group-hover:scale-110" />
-                    <p className="text-xl sm:text-2xl font-bold text-white">{stat.number}</p>
-                    <p className="text-xs sm:text-sm text-gray-400">{stat.label}</p>
+                    <p className="text-xl sm:text-2xl font-bold ">{stat.number}</p>
+                    <p className="text-xs sm:text-sm text-muted">{stat.label}</p>
                   </div>
                 </div>
               );

@@ -45,7 +45,7 @@ export default function ImplementationSteps() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[#0B0F19] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -60,10 +60,10 @@ export default function ImplementationSteps() {
             <Rocket className="w-4 h-4 mr-2" />
             Nuestro Proceso
           </motion.div>
-          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">
+          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
             Un Roadmap Claro Hacia Tu <span className="text-cyan-400">Transformación</span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestro proceso probado y transparente garantiza una implementación exitosa, minimizando riesgos y maximizando el retorno de tu inversión.
           </motion.p>
         </motion.div>
@@ -101,7 +101,7 @@ export default function ImplementationSteps() {
                         <step.icon className={`w-6 h-6 transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-500'}`} />
                       </motion.div>
                       <div className="ml-6">
-                        <p className={`font-bold transition-colors ${isActive ? 'text-white' : 'text-gray-400'}`}>Paso {index + 1}</p>
+                        <p className={`font-bold transition-colors ${isActive ? '' : 'text-muted'}`}>Paso {index + 1}</p>
                         <p className={`font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-500'}`}>{step.title}</p>
                       </div>
                     </div>
@@ -123,8 +123,8 @@ export default function ImplementationSteps() {
                   <span className="inline-block px-3 py-1 bg-cyan-500/10 text-cyan-400 text-sm rounded-full mb-4">
                     Duración: {activeStepData.duration}
                   </span>
-                  <h3 className="text-3xl font-bold text-white mb-3">{activeStepData.title}</h3>
-                  <p className="text-gray-400 mb-8 leading-relaxed">{activeStepData.description}</p>
+                  <h3 className="text-3xl font-bold mb-3">{activeStepData.title}</h3>
+                  <p className="text-muted mb-8 leading-relaxed">{activeStepData.description}</p>
                   
                   {/* Pestañas para Actividades y Entregables */}
                   <div className="flex border-b border-white/10 mb-6">
@@ -159,13 +159,13 @@ export default function ImplementationSteps() {
         
         {/* Beneficios del Proceso */}
         <div className="mt-24">
-            <h3 className="text-3xl font-bold text-white text-center mb-12">Garantía de Éxito en Cada Proyecto</h3>
+            <h3 className="text-3xl font-bold text-center mb-12">Garantía de Éxito en Cada Proyecto</h3>
             <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {benefits.map(b => (
                     <div key={b.title} className="text-center p-6 rounded-2xl bg-white/5 border border-white/10">
                         <b.icon className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
-                        <h4 className="font-semibold text-white mb-1">{b.title}</h4>
-                        <p className="text-sm text-gray-400">{b.description}</p>
+                        <h4 className="font-semibold mb-1">{b.title}</h4>
+                        <p className="text-sm text-muted">{b.description}</p>
                     </div>
                 ))}
             </div>

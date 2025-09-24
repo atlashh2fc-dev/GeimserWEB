@@ -1,17 +1,12 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import FloatingChatWidget from "@/components/FloatingChatWidget"; // ← IMPORTANTE
+import FloatingChatWidget from "@/components/FloatingChatWidget";
+import { SpeedInsights } from "@vercel/speed-insights/next"; // 👈 Import agregado
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Geimser",
@@ -20,16 +15,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    /**
+     * >>> IMPORTANTE <<<
+     * - force-light: pisa cualquier fondo/texto oscuro a nivel global (override CSS).
+     * - theme-light: usa los tokens claros de globals.css (gris corporativo).
+     * Si quieres volver a oscuro, quita estas clases del <html>.
+     */
+    <html
+      lang="es"
+      className="force-light theme-light"
+      suppressHydrationWarning
+    >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
-        <FloatingChatWidget /> {/* ← Aquí lo montamos */}
+        <FloatingChatWidget />
+        {process.env.NODE_ENV === "production" && <SpeedInsights />} {/* 👈 Solo en prod */}
       </body>
     </html>
   );

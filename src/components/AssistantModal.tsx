@@ -168,7 +168,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
       className="fixed bottom-20 right-6 z-50 w-[420px] max-w-[calc(100vw-2rem)] h-[580px] max-h-[calc(100vh-6rem)]"
     >
       {/* Modal con vidrio templado transparente */}
-      <div className="relative w-full h-full rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl text-white overflow-hidden flex flex-col">
+      <div className="relative w-full h-full rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col">
         
         {/* Efectos de vidrio templado */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/5 rounded-3xl"></div>
@@ -181,8 +181,8 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
               <Zap className="w-6 h-6 text-blue-300" />
             </div>
             <div className="flex-1 min-w-0 space-y-1">
-              <h3 className="font-bold text-lg text-white leading-tight">GeimserBot 🚀</h3>
-              <p className="text-sm text-white/80 leading-tight">Consultor Comercial Digital</p>
+              <h3 className="font-bold text-lg leading-tight">GeimserBot 🚀</h3>
+              <p className="text-sm /80 leading-tight">Consultor Comercial Digital</p>
               <p className="text-xs text-blue-300/90 leading-tight">Especialista en Contact Centers</p>
             </div>
           </div>
@@ -219,12 +219,12 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
               <div
                 className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed backdrop-blur-sm ${
                   message.role === 'user'
-                    ? 'bg-gradient-to-r from-blue-500/80 to-blue-600/80 text-white rounded-br-md shadow-lg border border-blue-400/20'
-                    : 'bg-white/10 text-white rounded-bl-md border border-white/10 shadow-lg'
+                    ? 'bg-gradient-to-r from-blue-500/80 to-blue-600/80  rounded-br-md shadow-lg border border-blue-400/20'
+                    : 'bg-white/10  rounded-bl-md border border-white/10 shadow-lg'
                 }`}
               >
                 <p className="whitespace-pre-wrap">{message.content}</p>
-                <div className={`text-xs mt-2 ${message.role === 'user' ? 'text-blue-100/70' : 'text-white/50'}`}>
+                <div className={`text-xs mt-2 ${message.role === 'user' ? 'text-blue-100/70' : '/50'}`}>
                   {message.timestamp.toLocaleTimeString('es-ES', { 
                     hour: '2-digit', 
                     minute: '2-digit' 
@@ -237,7 +237,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
           {/* Loading indicator mejorado */}
           {loading && (
             <div className="flex justify-start">
-              <div className="bg-white/10 text-white rounded-2xl rounded-bl-md border border-white/10 px-4 py-3 backdrop-blur-sm">
+              <div className="bg-white/10 rounded-2xl rounded-bl-md border border-white/10 px-4 py-3 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Loader2 className="w-5 h-5 animate-spin text-blue-300" />
@@ -264,7 +264,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
                 onKeyDown={handleKeyPress}
                 placeholder="Cuéntame sobre tu operación..."
                 disabled={loading}
-                className="w-full px-4 py-3.5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder-white/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/30 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm transition-all duration-200"
+                className="w-full px-4 py-3.5 rounded-2xl bg-white/10 border border-white/20 placeholder-white/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/30 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm transition-all duration-200"
                 maxLength={500}
               />
             </div>
@@ -283,7 +283,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
           </div>
           
           {/* Contact info footer con mejor diseño */}
-          <div className="flex items-center justify-center gap-6 mt-4 text-xs text-white/60">
+          <div className="flex items-center justify-center gap-6 mt-4 text-xs /60">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
               <Mail className="w-3.5 h-3.5" />
               <span>contacto@geimser.cl</span>
