@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import FloatingChatWidget from "@/components/FloatingChatWidget";
-import { SpeedInsights } from "@vercel/speed-insights/next"; // 👈 Import agregado
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -31,7 +32,12 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
         <FloatingChatWidget />
-        {process.env.NODE_ENV === "production" && <SpeedInsights />} {/* 👈 Solo en prod */}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <SpeedInsights />  {/* 👈 Métricas de performance */}
+            <Analytics />       {/* 👈 Web Analytics */}
+          </>
+        )}
       </body>
     </html>
   );
