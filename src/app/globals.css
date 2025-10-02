@@ -4,18 +4,26 @@
 :root {
   --surface: #0b0f19;
   --surface-2: #0f1424;
+  --surface-3: #161d33;
   --text: #ffffff;
   --text-muted: #cbd5e1;
-  --border: rgba(255,255,255,0.15);
+  --border: rgba(255,255,255,0.12);
+  --accent: #00b8f1;
+  --accent-soft: rgba(0,184,241,0.12);
+  --shadow-soft: 0 18px 36px rgba(8, 15, 35, 0.45);
 }
 
-/* ===== TEMA CLARO (gris corporativo) ===== */
+/* ===== TEMA CLARO (estética limpia inspirada en Apple) ===== */
 html.theme-light {
-  --surface: #f3f5f7;
+  --surface: #f5f7fb;
   --surface-2: #ffffff;
-  --text: #0f172a;
-  --text-muted: #334155;
-  --border: rgba(15,23,42,0.12);
+  --surface-3: #ecf1f9;
+  --text: #101524;
+  --text-muted: #4a596f;
+  --border: rgba(16,21,36,0.08);
+  --accent: #0a84ff;
+  --accent-soft: rgba(10,132,255,0.14);
+  --shadow-soft: 0 26px 45px rgba(15, 23, 42, 0.08);
 }
 
 /* ===== ALTO CONTRASTE ===== */
@@ -47,9 +55,14 @@ html.force-light main {
 
 /* ===== GLOBAL RESET SUAVE ===== */
 body {
-  background: var(--surface);
+  background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,0.9) 0%, rgba(236,241,249,0.65) 45%, transparent 100%),
+              radial-gradient(140% 140% at 100% 0%, rgba(230,238,252,0.8) 0%, transparent 55%),
+              var(--surface);
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* Helpers */
@@ -57,3 +70,50 @@ body {
 .surface    { background: var(--surface); }
 .surface-2  { background: var(--surface-2); }
 .border-c   { border-color: var(--border); }
+
+/* ===== Overrides de clases Tailwind para tema claro ===== */
+html.theme-light .bg-white\/5,
+html.theme-light .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(16, 21, 36, 0.08) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+html.theme-light .border-white\/10,
+html.theme-light .border-white\/20 {
+  border-color: rgba(16, 21, 36, 0.08) !important;
+}
+
+html.theme-light .bg-gray-700\/50,
+html.theme-light .bg-gray-700\/30,
+html.theme-light .bg-gray-800\/50,
+html.theme-light .bg-gray-900\/80,
+html.theme-light .bg-\[\#101625\] {
+  background-color: rgba(245, 247, 251, 0.95) !important;
+  color: var(--text) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+html.theme-light .bg-gray-500\/10 {
+  background-color: rgba(16, 21, 36, 0.05) !important;
+}
+
+html.theme-light .border-gray-500\/30,
+html.theme-light .border-cyan-500\/20,
+html.theme-light .border-cyan-500\/30 {
+  border-color: rgba(10, 132, 255, 0.25) !important;
+}
+
+html.theme-light .bg-cyan-500\/10,
+html.theme-light .bg-cyan-500\/15,
+html.theme-light .bg-cyan-400\/10 {
+  background-color: var(--accent-soft) !important;
+}
+
+html.theme-light .text-muted {
+  color: var(--text-muted) !important;
+}
+
+html.theme-light .text-gray-500 {
+  color: var(--text-muted) !important;
+}

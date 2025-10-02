@@ -36,7 +36,7 @@ const globalStats = [
 // --- Carga dinámica del nuevo mapa de MapLibre ---
 const MapLibreMap = dynamic(() => import('./MapLibreMap'), {
   ssr: false,
-  loading: () => <div className="h-full w-full bg-gray-900 animate-pulse"></div>,
+  loading: () => <div className="h-full w-full bg-slate-200 animate-pulse"></div>,
 });
 
 
@@ -53,7 +53,7 @@ export default function Offices() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse_at_center,white,transparent_60%)] opacity-30"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -61,12 +61,12 @@ export default function Offices() {
           className="text-center mb-16"
           initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={containerVariants}
         >
-          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6">
             <MapPin className="w-4 h-4 mr-2" />
             Nuestra Sede Central
           </motion.div>
           <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            Un Espacio Privilegiado a <span className="text-cyan-400">Medida</span>
+            Un Espacio Privilegiado a <span className="text-[var(--accent)]">Medida</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestro centro de operaciones en el corazón de Santiago está diseñado para la innovación, la colaboración y el crecimiento.
@@ -81,8 +81,8 @@ export default function Offices() {
             >
               <div className="p-8 rounded-2xl bg-white/5 border border-white/10 h-full">
                   <h3 className="text-2xl font-bold mb-2">{santiagoOffice.city}: Sede Central</h3>
-                  <p className="text-md text-cyan-400 font-semibold mb-6">{santiagoOffice.address}</p>
-                  <p className="text-gray-300 mb-8 leading-relaxed">{santiagoOffice.mainDescription}</p>
+                  <p className="text-md text-[var(--accent)] font-semibold mb-6">{santiagoOffice.address}</p>
+                  <p className="text-[var(--text-muted)] mb-8 leading-relaxed">{santiagoOffice.mainDescription}</p>
                   
                   <div className="space-y-6 border-t border-white/10 pt-6">
                       {santiagoOffice.highlights.map((highlight) => {
@@ -90,7 +90,7 @@ export default function Offices() {
                           return (
                           <div key={highlight.title}>
                               <h4 className="font-bold mb-3 text-lg flex items-center">
-                                  <Icon className="w-5 h-5 mr-3 text-cyan-400" />
+                                  <Icon className="w-5 h-5 mr-3 text-[var(--accent)]" />
                                   {highlight.title}
                               </h4>
                               <ul className="space-y-2 pl-8">
@@ -109,7 +109,7 @@ export default function Offices() {
             </motion.div >
 
             <motion.div 
-              className="lg:col-span-6 rounded-2xl overflow-hidden min-h-[450px] lg:h-full border border-white/10"
+              className="lg:col-span-6 rounded-2xl overflow-hidden min-h-[450px] lg:h-full border border-white/10 shadow-[0_24px_48px_rgba(15,23,42,0.1)]"
               initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: 'easeOut' }} viewport={{ once: true }}
             >
               <MapLibreMap />
@@ -121,8 +121,8 @@ export default function Offices() {
                 {globalStats.map(stat => (
                    <div key={stat.label} className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
                      <div className="flex items-center justify-center space-x-2">
-                        <stat.icon className="w-5 h-5 text-cyan-400" />
-                        <span className="text-gray-300">{stat.label}</span>
+                        <stat.icon className="w-5 h-5 text-[var(--accent)]" />
+                        <span className="text-[var(--text-muted)]">{stat.label}</span>
                      </div>
                      <p className="text-3xl font-bold mt-1">{stat.value}</p>
                    </div>

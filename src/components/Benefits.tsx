@@ -160,7 +160,7 @@ export default function Benefits() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -174,14 +174,14 @@ export default function Benefits() {
         >
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6"
+            className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6"
           >
             <Award className="w-4 h-4 mr-2" />
             Resultados Comprobados
           </motion.div>
           <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            Valor que se <span className="text-cyan-400">Mide</span>, Confianza que se{' '}
-            <span className="text-cyan-400">Gana</span>
+            Valor que se <span className="text-[var(--accent)]">Mide</span>, Confianza que se{' '}
+            <span className="text-[var(--accent)]">Gana</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestras soluciones no solo optimizan procesos, sino que generan un impacto medible en las métricas
@@ -194,7 +194,7 @@ export default function Benefits() {
           {mainBenefits.map((benefit) => (
             <div key={benefit.title} className="p-6 rounded-2xl bg-white/5 border border-white/10 text-center">
               <div className="flex justify-center items-center mb-4">
-                <benefit.icon className="w-8 h-8 text-cyan-400" />
+                <benefit.icon className="w-8 h-8 text-[var(--accent)]" />
               </div>
               <div className="text-5xl font-bold">
                 <AnimatedCounter to={benefit.value} suffix={benefit.suffix} />
@@ -216,7 +216,7 @@ export default function Benefits() {
                   key={index}
                   onClick={() => setActiveTab(index)}
                   className={`relative px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium transition-colors duration-300 text-sm md:text-base ${
-                    isActive ? 'text-cyan-400' : 'text-muted hover:text-cyan-400'
+                    isActive ? 'text-[var(--accent)]' : 'text-muted hover:text-[var(--accent)]'
                   }`}
                 >
                   {isActive && (
@@ -248,7 +248,7 @@ export default function Benefits() {
                 {detailedBenefits[activeTab].benefits.map((benefit) => (
                   <div key={benefit} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-300">{benefit}</span>
+                    <span className="text-[var(--text-muted)]">{benefit}</span>
                   </div>
                 ))}
               </motion.div>
@@ -257,7 +257,7 @@ export default function Benefits() {
         </div>
 
         {/* Tu Socio Estratégico */}
-        <div className="p-8 md:p-12 rounded-3xl bg-gradient-to-br from-gray-900 to-[#0F1422] border border-white/10">
+        <div className="p-8 md:p-12 rounded-3xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_28px_55px_rgba(15,23,42,0.12)]">
           <div className="grid lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-5">
               <h3 className="text-3xl font-bold mb-4">Tu Socio Estratégico</h3>
@@ -269,15 +269,15 @@ export default function Benefits() {
                 href="https://wa.me/56974159166"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 font-semibold rounded-lg transition-colors duration-300"
+                className="inline-flex items-center px-6 py-3 bg-[var(--accent)] hover:bg-[#0f6fe6] text-white font-semibold rounded-lg transition-all duration-300 shadow-[0_18px_32px_rgba(10,132,255,0.35)]"
               >
                 Comienza tu Transformación
               </a>
             </div>
             <div className="lg:col-span-7 grid grid-cols-1 gap-6">
               {whyChooseUs.map((item) => (
-                <div key={item.title} className="flex items-start p-4 rounded-lg bg-white/5">
-                  <item.icon className="w-8 h-8 mr-5 mt-1 text-cyan-400 flex-shrink-0" />
+                <div key={item.title} className="flex items-start p-4 rounded-xl bg-white/5">
+                  <item.icon className="w-8 h-8 mr-5 mt-1 text-[var(--accent)] flex-shrink-0" />
                   <div>
                     <h4 className="font-semibold mb-1">{item.title}</h4>
                     <p className="text-muted text-sm leading-relaxed">{item.description}</p>

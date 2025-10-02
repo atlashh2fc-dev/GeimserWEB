@@ -76,9 +76,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 40 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl"
+              className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white"
+              style={{ textShadow: '0 18px 40px rgba(0,0,0,0.65), 0 2px 8px rgba(0,0,0,0.6)' }}
             >
-              La Evolución de la <span className="text-[#00B8F1]">Interacción</span> Humana y Digital.
+              La Evolución de la <span className="text-[#00B8F1]" style={{ textShadow: '0 16px 32px rgba(0,0,0,0.55)' }}>Interacción</span> Humana y Digital.
             </motion.h1>
 
             <p

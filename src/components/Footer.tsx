@@ -62,7 +62,7 @@ export default function Footer() {
             <div className="flex gap-3" aria-label="Redes sociales">
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 hover:text-cyan-400 hover:border-cyan-400/50"
+                className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 hover:text-[var(--accent)] hover:border-cyan-400/50"
                 style={{
                   background: 'var(--surface-2)',
                   borderColor: 'var(--border)',
@@ -76,7 +76,7 @@ export default function Footer() {
                 href="https://www.instagram.com/geimser_chile/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 hover:text-cyan-400 hover:border-cyan-400/50"
+                className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 hover:text-[var(--accent)] hover:border-cyan-400/50"
                 style={{
                   background: 'var(--surface-2)',
                   borderColor: 'var(--border)',
@@ -90,7 +90,7 @@ export default function Footer() {
                 href="https://wa.me/56974159166"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 hover:text-cyan-400 hover:border-cyan-400/50"
+                className="w-9 h-9 rounded-lg flex items-center justify-center border transition-all duration-300 hover:text-[var(--accent)] hover:border-cyan-400/50"
                 style={{
                   background: 'var(--surface-2)',
                   borderColor: 'var(--border)',
@@ -112,7 +112,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm hover:text-cyan-400 transition-colors duration-200"
+                      className="text-sm hover:text-[var(--accent)] transition-colors duration-200"
                     >
                       {link.label}
                     </a>
@@ -131,7 +131,7 @@ export default function Footer() {
                   <Mail className="w-4 h-4 mr-3 mt-1 flex-shrink-0 text-[var(--text-muted)]" />
                   <a
                     href="mailto:contacto@geimser.cl"
-                    className="hover:text-cyan-400 transition-colors"
+                    className="hover:text-[var(--accent)] transition-colors"
                   >
                     contacto@geimser.cl
                   </a>
@@ -140,7 +140,7 @@ export default function Footer() {
                   <Phone className="w-4 h-4 mr-3 mt-1 flex-shrink-0 text-[var(--text-muted)]" />
                   <a
                     href="tel:+56227501799"
-                    className="hover:text-cyan-400 transition-colors"
+                    className="hover:text-[var(--accent)] transition-colors"
                   >
                     +56 2 27501799
                   </a>
@@ -173,7 +173,7 @@ export default function Footer() {
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-r-md transition-colors duration-200"
+                  className="px-4 py-2 bg-[var(--accent)] hover:bg-[#0f6fe6] rounded-r-md transition-colors duration-200 text-white"
                   aria-label="Suscribirse al newsletter"
                 >
                   <ArrowRight className="w-5 h-5" />
@@ -202,7 +202,7 @@ export default function Footer() {
                   Empresa comprometida con la inclusión y el talento femenino
                 </p>
                 <p className="text-xs text-[var(--text-muted)] mt-1 flex items-center gap-1">
-                  <Shield className="w-3.5 h-3.5 text-cyan-400" />
+                  <Shield className="w-3.5 h-3.5 text-[var(--accent)]" />
                   Política de diversidad y oportunidades equitativas
                 </p>
               </div>
@@ -230,7 +230,7 @@ export default function Footer() {
               <a
                 key={link.label}
                 href={link.href}
-                className="hover:text-cyan-400 transition-colors"
+                className="hover:text-[var(--accent)] transition-colors"
               >
                 {link.label}
               </a>

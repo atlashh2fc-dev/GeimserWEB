@@ -100,9 +100,9 @@ export default function About() {
   const activeSpecialization = specializations[activeSpec];
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-40">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,192,255,0.15),rgba(255,255,255,0))]"></div>
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-60">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_75%_at_30%_-20%,rgba(10,132,255,0.15),rgba(255,255,255,0))]"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       </div>
       
@@ -116,7 +116,7 @@ export default function About() {
           variants={containerVariants}
         >
           <div className="md:col-span-8">
-            <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+            <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-[var(--accent-soft)] border border-[color:rgba(10,132,255,0.25)] text-[var(--accent)] text-sm font-medium mb-6">
               <Users className="w-4 h-4 mr-2" />
               Conoce a Geimser
             </motion.div>
@@ -128,8 +128,8 @@ export default function About() {
             </motion.p>
           </div>
           <motion.div variants={itemVariants} className="md:col-span-4 flex items-center justify-center">
-            <div className="w-full p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm text-center">
-              <Target className="w-10 h-10 mx-auto mb-4 text-cyan-400" />
+            <div className="w-full p-6 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_20px_45px_rgba(15,23,42,0.08)] text-center">
+              <Target className="w-10 h-10 mx-auto mb-4 text-[var(--accent)]" />
               <h3 className="text-xl font-bold mb-2">Nuestra Misión</h3>
               <p className="text-muted leading-relaxed text-sm">
                 Convertir desafíos complejos en oportunidades de crecimiento sostenible para nuestros clientes.
@@ -140,7 +140,7 @@ export default function About() {
 
         {/* --- Panel de Especializaciones --- */}
         <div className="mb-24 md:mb-32">
-          <h3 className="text-3xl font-bold text-center mb-12">Nuestras Áreas de <span className="text-cyan-400">Expertise</span></h3>
+          <h3 className="text-3xl font-bold text-center mb-12">Nuestras Áreas de <span className="text-[var(--accent)]">Expertise</span></h3>
           <div className="grid lg:grid-cols-12 gap-8 min-h-[450px]">
             <div className="lg:col-span-4">
               <div className="flex flex-col gap-2">
@@ -148,22 +148,22 @@ export default function About() {
                   <button
                     key={index}
                     onClick={() => setActiveSpec(index)}
-                    className={`group w-full p-4 rounded-lg text-left transition-all duration-300 border ${
+                    className={`group w-full p-4 rounded-xl text-left transition-all duration-300 border ${
                       activeSpec === index 
-                        ? 'bg-cyan-500/10 border-cyan-500/30' 
-                        : 'bg-white/5 border-transparent hover:bg-white/10'
+                        ? 'bg-white shadow-[0_22px_46px_rgba(15,23,42,0.12)] border-[color:rgba(10,132,255,0.25)]' 
+                        : 'bg-white/80 border-transparent hover:border-[color:rgba(10,132,255,0.2)] hover:bg-white hover:shadow-md'
                     }`}
                   >
                     <div className="flex items-center">
-                      <spec.icon className={`w-6 h-6 mr-4 transition-colors ${activeSpec === index ? 'text-cyan-400' : 'text-gray-500 group-hover:text-gray-300'}`} />
-                      <span className={`font-semibold transition-colors ${activeSpec === index ? '' : 'text-gray-300'}`}>{spec.title}</span>
+                      <spec.icon className={`w-6 h-6 mr-4 transition-colors ${activeSpec === index ? 'text-[var(--accent)]' : 'text-slate-400 group-hover:text-[var(--text)]'}`} />
+                      <span className={`font-semibold transition-colors ${activeSpec === index ? 'text-[var(--text)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text)]'}`}>{spec.title}</span>
                     </div>
                   </button>
                 ))}
               </div>
             </div>
             
-            <div className="lg:col-span-8 p-8 rounded-2xl bg-gradient-to-br from-gray-900/50 to-gray-800/20 border border-white/10 relative overflow-hidden">
+            <div className="lg:col-span-8 p-8 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_26px_45px_rgba(15,23,42,0.08)] relative overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSpec}
@@ -176,8 +176,8 @@ export default function About() {
                   <p className="text-muted mb-6 leading-relaxed">{activeSpecialization.description}</p>
                   <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
                     {activeSpecialization.features.map((feature, i) => (
-                      <div key={i} className="flex items-center text-sm">
-                        <CheckCircle className="w-4 h-4 mr-3 text-cyan-500 flex-shrink-0" />
+                      <div key={i} className="flex items-center text-sm text-[var(--text-muted)]">
+                        <CheckCircle className="w-4 h-4 mr-3 text-[var(--accent)] flex-shrink-0" />
                         <span>{feature}</span>
                       </div>
                     ))}
@@ -197,7 +197,7 @@ export default function About() {
           variants={containerVariants}
         >
             <motion.div variants={itemVariants}>
-                 <h3 className="text-3xl font-bold mb-6">Un Socio para <span className="text-cyan-400">Toda Industria</span></h3>
+                 <h3 className="text-3xl font-bold mb-6">Un Socio para <span className="text-[var(--accent)]">Toda Industria</span></h3>
                  <p className="text-muted leading-relaxed mb-8">
                      Nuestra metodología flexible nos permite adaptarnos a las complejidades de diversos sectores, desde la alta tecnología hasta operaciones críticas en terreno, entregando siempre resultados consistentes.
                  </p>
@@ -210,11 +210,11 @@ export default function About() {
                         return (
                             <motion.div 
                                 key={industry.name} 
-                                className="flex items-center px-4 py-2 bg-gray-700/30 rounded-full border border-gray-600/50 text-sm"
+                                className="flex items-center px-4 py-2 bg-white/90 rounded-full border border-[color:rgba(16,21,36,0.08)] shadow-[0_12px_28px_rgba(15,23,42,0.08)] text-sm"
                                 variants={industryItemVariants}
                             >
-                               <Icon className="w-4 h-4 mr-2.5 text-cyan-400/70"/>
-                               <span className="text-gray-300">{industry.name}</span>
+                               <Icon className="w-4 h-4 mr-2.5 text-[var(--accent)]"/>
+                               <span className="text-[var(--text-muted)]">{industry.name}</span>
                             </motion.div>
                         )
                     })}
@@ -224,10 +224,10 @@ export default function About() {
                 {whyUsItems.map((item, index) => {
                     const Icon = item.icon;
                     return (
-                        <div key={index} className="flex items-start p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300">
-                             <Icon className="w-8 h-8 mr-5 mt-1 text-cyan-400 flex-shrink-0"/>
+                        <div key={index} className="flex items-start p-4 rounded-xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_20px_42px_rgba(15,23,42,0.08)] transition-shadow duration-300 hover:shadow-[0_26px_55px_rgba(15,23,42,0.12)]">
+                             <Icon className="w-8 h-8 mr-5 mt-1 text-[var(--accent)] flex-shrink-0"/>
                              <div>
-                                <h4 className="font-semibold mb-1">{item.title}</h4>
+                                <h4 className="font-semibold text-[var(--text)] mb-1">{item.title}</h4>
                                 <p className="text-muted text-sm leading-relaxed">{item.description}</p>
                              </div>
                         </div>

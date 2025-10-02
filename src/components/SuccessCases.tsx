@@ -17,7 +17,7 @@ const MetricBar = ({ label, before, after, isPercentage = false, unit = '' }: { 
     return (
         <div>
             <div className="flex justify-between items-center text-sm mb-1.5">
-                <span className="text-gray-300">{label}</span>
+                <span className="text-[var(--text-muted)]">{label}</span>
                 <span className="font-semibold ">{after.toLocaleString()}{unit}{isPercentage && '%'}</span>
             </div>
             <div className="w-full bg-gray-700/50 rounded-full h-4 relative p-1">
@@ -111,7 +111,7 @@ export default function SuccessCases() {
   const itemVariants: Variants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -122,12 +122,12 @@ export default function SuccessCases() {
           viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
         >
-          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6">
             <Award className="w-4 h-4 mr-2" />
             Casos de Éxito
           </motion.div>
           <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            Resultados que <span className="text-cyan-400">Inspiran Confianza</span>
+            Resultados que <span className="text-[var(--accent)]">Inspiran Confianza</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Descubre cómo hemos ayudado a empresas líderes a transformar sus operaciones y alcanzar resultados extraordinarios.
@@ -135,7 +135,7 @@ export default function SuccessCases() {
         </motion.div>
 
         {/* --- Selector de Casos y Panel de Detalles --- */}
-        <div className="relative p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/50 border border-white/10">
+        <div className="relative p-8 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_26px_45px_rgba(15,23,42,0.1)]">
             {/* Selector */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
                 {successCases.map((case_, index) => (
@@ -184,7 +184,7 @@ export default function SuccessCases() {
 
                     {/* Columna Derecha: Métricas de Impacto */}
                     <div className="lg:col-span-7 p-6 rounded-xl bg-white/5">
-                        <h4 className="font-bold mb-6 flex items-center"><BarChart3 className="w-5 h-5 mr-2 text-cyan-400"/>Métricas de Impacto</h4>
+                        <h4 className="font-bold mb-6 flex items-center"><BarChart3 className="w-5 h-5 mr-2 text-[var(--accent)]"/>Métricas de Impacto</h4>
                         <div className="space-y-5">
                             {activeCaseData.metrics.map(m => <MetricBar key={m.label} {...m} />)}
                         </div>
@@ -195,7 +195,7 @@ export default function SuccessCases() {
 
         {/* Testimonio Destacado */}
         <div className="mt-12 p-8 md:p-12 rounded-2xl bg-white/5 border border-white/10">
-            <Quote className="w-10 h-10 text-cyan-400 mb-6 opacity-50" />
+            <Quote className="w-10 h-10 text-[var(--accent)] mb-6 opacity-50" />
             <AnimatePresence mode="wait">
                 <motion.div
                     key={activeCase}

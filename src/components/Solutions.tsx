@@ -177,22 +177,22 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
           exit={{ scale: 0.9, opacity: 0, y: 50 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-3xl bg-[#101625] border border-cyan-500/20 rounded-2xl shadow-2xl shadow-cyan-900/30 text-gray-300 overflow-hidden"
+          className="relative w-full max-w-3xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] rounded-2xl shadow-[0_32px_65px_rgba(15,23,42,0.18)] text-[var(--text)] overflow-hidden"
         >
           <div className="p-8">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h3 className="text-2xl lg:text-3xl font-bold mb-2">{title}</h3>
-                <p className="text-cyan-400 font-semibold">{solution.title}</p>
+                <p className="text-[var(--accent)] font-semibold">{solution.title}</p>
               </div>
-              <button onClick={onClose} className="p-2 rounded-full text-muted hover:bg-gray-700/50 hover: transition-colors">
+              <button onClick={onClose} className="p-2 rounded-full text-muted hover:bg-white/70 transition-colors">
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             <div className="space-y-6">
               <div>
-                <h4 className="text-lg font-semibold mb-4 border-l-4 border-cyan-500 pl-3">Beneficios y Casos de Uso Clave</h4>
+                <h4 className="text-lg font-semibold mb-4 border-l-4 border-[color:rgba(10,132,255,0.35)] pl-3">Beneficios y Casos de Uso Clave</h4>
                 <ul className="space-y-3">
                   {benefits.map((benefit: Benefit, i: number) => {
                     const Icon = benefit.icon;
@@ -204,7 +204,7 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
                         transition={{ delay: 0.2 + i * 0.1 }}
                         className="flex items-start"
                       >
-                        <Icon className="w-5 h-5 mr-4 mt-1 text-cyan-400 flex-shrink-0" />
+                        <Icon className="w-5 h-5 mr-4 mt-1 text-[var(--accent)] flex-shrink-0" />
                         <span>{benefit.text}</span>
                       </motion.li>
                     );
@@ -213,17 +213,17 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold mb-3 border-l-4 border-cyan-500 pl-3">Tecnologías y Metodologías</h4>
-                <p className="text-muted text-sm bg-gray-800/50 p-3 rounded-lg">{tech}</p>
+                <h4 className="text-lg font-semibold mb-3 border-l-4 border-[color:rgba(10,132,255,0.35)] pl-3">Tecnologías y Metodologías</h4>
+                <p className="text-muted text-sm bg-white/70 p-3 rounded-lg border border-[color:rgba(16,21,36,0.08)]">{tech}</p>
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold mb-3 border-l-4 border-cyan-500 pl-3">KPIs Impactados</h4>
-                <p className="text-muted text-sm bg-gray-800/50 p-3 rounded-lg">{kpis}</p>
+                <h4 className="text-lg font-semibold mb-3 border-l-4 border-[color:rgba(10,132,255,0.35)] pl-3">KPIs Impactados</h4>
+                <p className="text-muted text-sm bg-white/70 p-3 rounded-lg border border-[color:rgba(16,21,36,0.08)]">{kpis}</p>
               </div>
             </div>
           </div>
-          <div className="h-1 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
+          <div className="h-1 bg-gradient-to-r from-[var(--accent)] to-blue-500"></div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -258,7 +258,7 @@ export default function Solutions() {
 
   return (
     <>
-      <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
+      <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,192,255,0.1),rgba(255,255,255,0))]"></div>
           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
@@ -272,12 +272,12 @@ export default function Solutions() {
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
           >
-            <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+            <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4 mr-2" />
               Nuestras Soluciones
             </motion.div>
             <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-              Tecnología que Potencia la <span className="text-cyan-400">Experiencia Humana</span>
+              Tecnología que Potencia la <span className="text-[var(--accent)]">Experiencia Humana</span>
             </motion.h2>
             <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
               Desde la automatización inteligente hasta el análisis de datos, nuestras soluciones están diseñadas para integrarse, optimizar y elevar cada punto de contacto con tus clientes.
@@ -292,19 +292,19 @@ export default function Solutions() {
                 <div key={index} className="group relative">
                   <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-600 opacity-0 group-hover:opacity-80 transition-opacity duration-300" />
                   
-                  <div className="relative h-full rounded-2xl p-6 bg-[#0F1422] overflow-hidden">
+                  <div className="relative h-full rounded-2xl p-6 bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_24px_48px_rgba(15,23,42,0.08)] overflow-hidden">
                       <div 
-                        className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out opacity-20 group-hover:opacity-30"
+                        className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out opacity-10 group-hover:opacity-20"
                         style={{ backgroundImage: `url('${solution.bgImage}')` }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0F1422] via-[#0F1422]/80 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
                     
                       <div className="relative h-full flex flex-col z-10">
-                        <div className="p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 w-max mb-6">
-                          <Icon className="w-8 h-8 text-cyan-400" />
+                        <div className="p-3 rounded-lg bg-white/80 border border-[color:rgba(16,21,36,0.08)] w-max mb-6 shadow-sm">
+                          <Icon className="w-8 h-8 text-[var(--accent)]" />
                         </div>
                         
-                        <h3 className="text-xl font-bold mb-3 transition-colors duration-300 group-hover:text-cyan-300">
+                        <h3 className="text-xl font-bold mb-3 transition-colors duration-300 group-hover:text-[var(--accent)]">
                           {solution.title}
                         </h3>
                         
@@ -323,7 +323,7 @@ export default function Solutions() {
                         
                         <button 
                           onClick={() => handleOpenModal(solution)}
-                          className="flex items-center justify-between w-full mt-auto px-4 py-2 bg-gray-500/10 border border-gray-500/30 rounded-lg text-sm font-medium text-gray-300 group-hover: group-hover:border-cyan-500/50 transition-all duration-300"
+                          className="flex items-center justify-between w-full mt-auto px-4 py-2 bg-gray-500/10 border border-gray-500/30 rounded-lg text-sm font-medium text-[var(--text-muted)] group-hover: group-hover:border-cyan-500/50 transition-all duration-300"
                         >
                           <span>Conocer más</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -336,7 +336,7 @@ export default function Solutions() {
           </div>
 
           <div className="text-center">
-              <div className="max-w-3xl mx-auto p-8 rounded-2xl bg-gradient-to-r from-gray-800/50 to-gray-900/30 border border-white/10">
+              <div className="max-w-3xl mx-auto p-8 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_24px_48px_rgba(15,23,42,0.1)]">
                   <div className="flex items-center justify-center space-x-4 mb-6">
                       <Zap className="w-8 h-8 text-yellow-400/80" />
                       <Shield className="w-8 h-8 text-green-400/80" />
@@ -353,7 +353,7 @@ export default function Solutions() {
                     href="https://wa.me/56974159166"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-900/50"
+                    className="inline-flex items-center px-6 py-3 bg-[var(--accent)] hover:bg-[#0f6fe6] text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-[0_18px_32px_rgba(10,132,255,0.35)]"
                   >
                       Solicitar una Demostración
                       <ArrowRight className="w-5 h-5 ml-2" />

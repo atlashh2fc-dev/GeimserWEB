@@ -115,7 +115,7 @@ export default function PartnersEcosystem() {
         >
           <motion.div 
             variants={itemVariants} 
-            className="inline-flex items-center px-4 py-2 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 text-sm font-medium mb-8"
+            className="inline-flex items-center px-4 py-2 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-[var(--accent)] text-sm font-medium mb-8"
           >
             <Globe className="w-4 h-4 mr-2" />
             Conoce a Geimser
@@ -126,14 +126,14 @@ export default function PartnersEcosystem() {
             className="text-4xl lg:text-5xl font-bold tracking-tight mb-6 "
           >
             Un Ecosistema Estratégico de{' '}
-            <span className="text-cyan-400">
+            <span className="text-[var(--accent)]">
               Partners Globales
             </span>
           </motion.h2>
           
           <motion.p 
             variants={itemVariants} 
-            className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed"
+            className="text-xl text-[var(--text-muted)] max-w-4xl mx-auto leading-relaxed"
           >
             Nuestra fortaleza se basa en alianzas estratégicas con líderes de la industria, 
             garantizando soluciones robustas, escalables y siempre a la vanguardia tecnológica.
@@ -149,7 +149,7 @@ export default function PartnersEcosystem() {
           variants={containerVariants}
         >
           {/* Interactive Network Map */}
-          <div className="relative h-96 bg-[#1A2332]/50 rounded-2xl border border-cyan-400/10 backdrop-blur-sm overflow-hidden">
+          <div className="relative h-96 bg-[var(--surface-2)] rounded-2xl border border-[color:rgba(16,21,36,0.08)] shadow-[0_28px_55px_rgba(15,23,42,0.12)] overflow-hidden">
             {/* SVG Connections */}
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               {connections.map((connection, index) => {
@@ -198,8 +198,8 @@ export default function PartnersEcosystem() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <div className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${partner.color} p-0.5 shadow-2xl`}>
-                    <div className="w-full h-full bg-[#0B1426] rounded-[10px] flex items-center justify-center">
-                      <IconComponent className="w-7 h-7 text-cyan-400" />
+                    <div className="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                      <IconComponent className="w-7 h-7 text-[var(--accent)]" />
                     </div>
                     
                     {/* Pulse Effect */}
@@ -208,7 +208,7 @@ export default function PartnersEcosystem() {
                   
                   {/* Tooltip */}
                   <motion.div
-                    className={`absolute left-1/2 transform -translate-x-1/2 px-3 py-2 bg-[#1A2332] rounded-lg border border-cyan-400/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 ${
+                    className={`absolute left-1/2 transform -translate-x-1/2 px-3 py-2 bg-[var(--surface-2)] rounded-lg border border-[color:rgba(16,21,36,0.08)] shadow-[0_14px_32px_rgba(15,23,42,0.12)] opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 ${
                       partner.position.y < 50 ? 'top-full mt-3' : 'bottom-full mb-3'
                     }`}
                     initial={{ y: partner.position.y < 50 ? -10 : 10, opacity: 0 }}
@@ -239,18 +239,18 @@ export default function PartnersEcosystem() {
               <motion.div
                 key={partner.id}
                 variants={itemVariants}
-                className={`group relative rounded-2xl p-8 bg-[#1A2332]/50 border transition-all duration-500 ${
+                className={`group relative rounded-2xl p-8 bg-[var(--surface-2)] border transition-all duration-500 ${
                   isActive 
-                    ? 'border-cyan-400/50 shadow-2xl shadow-cyan-400/10' 
-                    : 'border-cyan-400/10 hover:border-cyan-400/20'
+                    ? 'border-[color:rgba(10,132,255,0.35)] shadow-[0_28px_55px_rgba(15,23,42,0.12)]' 
+                    : 'border-[color:rgba(16,21,36,0.08)] hover:border-[color:rgba(10,132,255,0.2)] hover:shadow-[0_20px_40px_rgba(15,23,42,0.1)]'
                 }`}
                 onMouseEnter={() => setActivePartner(partner.id)}
                 onMouseLeave={() => setActivePartner(null)}
               >
                 <div className="flex items-start gap-4 mb-6">
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${partner.color} p-0.5 flex-shrink-0`}>
-                    <div className="w-full h-full bg-[#0B1426] rounded-[10px] flex items-center justify-center">
-                      <IconComponent className="w-6 h-6 text-cyan-400" />
+                    <div className="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                      <IconComponent className="w-6 h-6 text-[var(--accent)]" />
                     </div>
                   </div>
                   
@@ -260,11 +260,11 @@ export default function PartnersEcosystem() {
                   </div>
                   
                   <ArrowRight className={`w-5 h-5 text-muted transition-all duration-300 ${
-                    isActive ? 'translate-x-1 text-cyan-400' : 'group-hover:translate-x-1'
+                    isActive ? 'translate-x-1 text-[var(--accent)]' : 'group-hover:translate-x-1'
                   }`} />
                 </div>
                 
-                <p className="text-gray-300 leading-relaxed mb-6">
+                <p className="text-[var(--text-muted)] leading-relaxed mb-6">
                   {partner.description}
                 </p>
                 
@@ -272,7 +272,7 @@ export default function PartnersEcosystem() {
                   {partner.capabilities.map((capability, index) => (
                     <span 
                       key={capability}
-                      className="px-3 py-1.5 bg-cyan-400/10 text-xs text-cyan-300 rounded-lg border border-cyan-400/20 font-medium"
+                      className="px-3 py-1.5 bg-[var(--accent-soft)] text-xs text-[var(--accent)] rounded-lg border border-[color:rgba(10,132,255,0.25)] font-medium"
                     >
                       {capability}
                     </span>

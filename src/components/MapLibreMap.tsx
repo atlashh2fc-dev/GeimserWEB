@@ -35,7 +35,7 @@ const mapStyle = {
 
 export default function MapLibreMap() {
   return (
-    <div className="h-full w-full" style={{filter: 'grayscale(0.8) invert(1) brightness(0.9) contrast(0.9)'}}>
+    <div className="h-full w-full" style={{ filter: 'saturate(0.75) brightness(1.05) contrast(0.92)' }}>
         <Map
           initialViewState={{
             longitude: santiagoCoordinates.longitude,
@@ -53,9 +53,9 @@ export default function MapLibreMap() {
                 latitude={santiagoCoordinates.latitude}
                 anchor="bottom"
             >
-                <div className="relative flex flex-col items-center" style={{filter: 'invert(1)'}}>
-                    <div className="absolute w-12 h-12 rounded-full bg-cyan-500/20 animate-ping"></div>
-                    <MapPin className="w-10 h-10 text-cyan-400 fill-cyan-400/30" strokeWidth={1.5}/>
+                <div className="relative flex flex-col items-center">
+                    <div className="absolute w-12 h-12 rounded-full bg-[var(--accent-soft)] animate-ping"></div>
+                    <MapPin className="w-10 h-10 text-[var(--accent)] fill-cyan-400/30" strokeWidth={1.5}/>
                 </div>
             </Marker>
         </Map>

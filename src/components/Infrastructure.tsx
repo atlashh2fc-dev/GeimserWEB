@@ -88,7 +88,7 @@ export default function Infrastructure() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
       {/* Fondo con grid sutil */}
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
       
@@ -101,12 +101,12 @@ export default function Infrastructure() {
           viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
         >
-          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6">
             <Server className="w-4 h-4 mr-2" />
             Nuestra Plataforma
           </motion.div>
           <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            Construida para el <span className="text-cyan-400">Rendimiento</span> y la <span className="text-cyan-400">Confianza</span>
+            Construida para el <span className="text-[var(--accent)]">Rendimiento</span> y la <span className="text-[var(--accent)]">Confianza</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestra infraestructura no es solo un soporte, es una ventaja competitiva diseñada para ofrecer máxima disponibilidad, seguridad a toda prueba y una escalabilidad sin límites.
@@ -128,15 +128,15 @@ export default function Infrastructure() {
                   }`}
                 >
                   <div className="flex items-center">
-                    <comp.icon className={`w-6 h-6 mr-4 transition-colors flex-shrink-0 ${activeInfra === index ? 'text-cyan-400' : 'text-gray-500 group-hover:text-gray-300'}`} />
-                    <span className={`font-semibold transition-colors text-sm md:text-base ${activeInfra === index ? '' : 'text-gray-300'}`}>{comp.title.split(' ')[0]}</span>
+                    <comp.icon className={`w-6 h-6 mr-4 transition-colors flex-shrink-0 ${activeInfra === index ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text)]'}`} />
+                    <span className={`font-semibold transition-colors text-sm md:text-base ${activeInfra === index ? '' : 'text-[var(--text-muted)]'}`}>{comp.title.split(' ')[0]}</span>
                   </div>
                 </button>
               ))}
             </div>
           </div>
           
-          <div className="lg:col-span-9 p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/50 border border-white/10 relative overflow-hidden">
+          <div className="lg:col-span-9 p-8 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_26px_45px_rgba(15,23,42,0.1)] relative overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeInfra}
@@ -184,7 +184,7 @@ export default function Infrastructure() {
                 <div className="absolute inset-0 rounded-full border-2 border-cyan-500/30 animate-spin-slow"></div>
                 <div className="absolute inset-4 rounded-full border border-cyan-500/20 animate-spin-slow-reverse"></div>
                 <div className="absolute inset-8 rounded-full bg-cyan-500/10 blur-xl"></div>
-                <Globe className="w-24 h-24 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-cyan-400"/>
+                <Globe className="w-24 h-24 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--accent)]"/>
               </div>
             </motion.div>
 
@@ -192,10 +192,10 @@ export default function Infrastructure() {
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Tech Stack */}
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <h3 className="font-bold mb-4 flex items-center"><Layers className="w-5 h-5 mr-2 text-cyan-400"/>Stack Tecnológico</h3>
+                <h3 className="font-bold mb-4 flex items-center"><Layers className="w-5 h-5 mr-2 text-[var(--accent)]"/>Stack Tecnológico</h3>
                 <div className="flex flex-wrap gap-2">
                   {techStack.map(tech => (
-                    <span key={tech} className="px-3 py-1 bg-gray-700/50 text-sm text-gray-300 rounded-md">{tech}</span>
+                    <span key={tech} className="px-3 py-1 bg-gray-700/50 text-sm text-[var(--text-muted)] rounded-md">{tech}</span>
                   ))}
                 </div>
               </div>

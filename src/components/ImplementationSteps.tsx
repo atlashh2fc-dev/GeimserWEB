@@ -45,7 +45,7 @@ export default function ImplementationSteps() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-gray-300 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse,white,transparent_70%)] opacity-30"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -56,12 +56,12 @@ export default function ImplementationSteps() {
           viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
         >
-          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+          <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6">
             <Rocket className="w-4 h-4 mr-2" />
             Nuestro Proceso
           </motion.div>
           <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            Un Roadmap Claro Hacia Tu <span className="text-cyan-400">Transformación</span>
+            Un Roadmap Claro Hacia Tu <span className="text-[var(--accent)]">Transformación</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
             Nuestro proceso probado y transparente garantiza una implementación exitosa, minimizando riesgos y maximizando el retorno de tu inversión.
@@ -98,11 +98,11 @@ export default function ImplementationSteps() {
                         }}
                         transition={{ duration: 0.3 }}
                       >
-                        <step.icon className={`w-6 h-6 transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-500'}`} />
+                        <step.icon className={`w-6 h-6 transition-colors ${isActive ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`} />
                       </motion.div>
                       <div className="ml-6">
                         <p className={`font-bold transition-colors ${isActive ? '' : 'text-muted'}`}>Paso {index + 1}</p>
-                        <p className={`font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-500'}`}>{step.title}</p>
+                        <p className={`font-semibold transition-colors ${isActive ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`}>{step.title}</p>
                       </div>
                     </div>
                   );
@@ -111,7 +111,7 @@ export default function ImplementationSteps() {
           </div>
           
           {/* Columna Derecha: Detalles del Paso */}
-          <div className="lg:col-span-8 p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/50 border border-white/10 relative overflow-hidden">
+          <div className="lg:col-span-8 p-8 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_26px_45px_rgba(15,23,42,0.1)] relative overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeStep}
@@ -120,7 +120,7 @@ export default function ImplementationSteps() {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
               >
-                  <span className="inline-block px-3 py-1 bg-cyan-500/10 text-cyan-400 text-sm rounded-full mb-4">
+                  <span className="inline-block px-3 py-1 bg-cyan-500/10 text-[var(--accent)] text-sm rounded-full mb-4">
                     Duración: {activeStepData.duration}
                   </span>
                   <h3 className="text-3xl font-bold mb-3">{activeStepData.title}</h3>
@@ -128,8 +128,8 @@ export default function ImplementationSteps() {
                   
                   {/* Pestañas para Actividades y Entregables */}
                   <div className="flex border-b border-white/10 mb-6">
-                      <button onClick={() => setActiveDetailTab('activities')} className={`px-4 py-2 font-medium text-sm transition-colors ${activeDetailTab === 'activities' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-gray-500 hover:text-gray-300'}`}>Actividades Clave</button>
-                      <button onClick={() => setActiveDetailTab('deliverables')} className={`px-4 py-2 font-medium text-sm transition-colors ${activeDetailTab === 'deliverables' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-gray-500 hover:text-gray-300'}`}>Entregables</button>
+                      <button onClick={() => setActiveDetailTab('activities')} className={`px-4 py-2 font-medium text-sm transition-colors ${activeDetailTab === 'activities' ? 'text-[var(--accent)] border-b-2 border-cyan-400' : 'text-[var(--text-muted)] hover:text-[var(--text)]'}`}>Actividades Clave</button>
+                      <button onClick={() => setActiveDetailTab('deliverables')} className={`px-4 py-2 font-medium text-sm transition-colors ${activeDetailTab === 'deliverables' ? 'text-[var(--accent)] border-b-2 border-cyan-400' : 'text-[var(--text-muted)] hover:text-[var(--text)]'}`}>Entregables</button>
                   </div>
                   
                   <AnimatePresence mode="wait">
@@ -145,7 +145,7 @@ export default function ImplementationSteps() {
                           <div key={i} className="flex items-start text-sm">
                             {activeDetailTab === 'activities' 
                               ? <CheckCircle className="w-4 h-4 mr-3 text-green-400 mt-0.5 flex-shrink-0" />
-                              : <ArrowRight className="w-4 h-4 mr-3 text-cyan-400 mt-0.5 flex-shrink-0" />
+                              : <ArrowRight className="w-4 h-4 mr-3 text-[var(--accent)] mt-0.5 flex-shrink-0" />
                             }
                             <span>{item}</span>
                           </div>
@@ -163,7 +163,7 @@ export default function ImplementationSteps() {
             <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {benefits.map(b => (
                     <div key={b.title} className="text-center p-6 rounded-2xl bg-white/5 border border-white/10">
-                        <b.icon className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
+                        <b.icon className="w-10 h-10 text-[var(--accent)] mx-auto mb-4" />
                         <h4 className="font-semibold mb-1">{b.title}</h4>
                         <p className="text-sm text-muted">{b.description}</p>
                     </div>
