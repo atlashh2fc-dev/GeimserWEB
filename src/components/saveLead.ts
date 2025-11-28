@@ -1,9 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Configuración de Supabase
+// Configuración de Supabase (opcional)
+const hasSupabaseConfig = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 );
 
 export interface LeadData {
@@ -38,17 +42,25 @@ export async function saveLead(data: LeadData): Promise<void> {
       url_origen: typeof window !== 'undefined' ? window.location.href : null,
     };
 
-    const { data: result, error } = await supabase
-      .from('leads_comerciales')
-      .insert([leadToSave])
-      .select();
+    // Guardado en Supabase (si está configurado)
+    if (hasSupabaseConfig) {
+      try {
+        const { data: result, error } = await supabase
+          .from('leads_comerciales')
+          .insert([leadToSave])
+          .select();
 
-    if (error) {
-      console.error('❌ Error al guardar lead en Supabase:', error.message);
-      throw new Error(`Error de base de datos: ${error.message}`);
+        if (error) {
+          console.warn('⚠️ Error al guardar lead en Supabase:', error.message);
+        } else {
+          console.log('✅ Lead guardado exitosamente en Supabase:', result);
+        }
+      } catch (dbError) {
+        console.warn('⚠️ Error de red al guardar lead en Supabase:', dbError);
+      }
+    } else {
+      console.warn('⚠️ Supabase no está configurado, se omite guardado en base de datos');
     }
-
-    console.log('✅ Lead guardado exitosamente:', result);
 
     // Opcional: Enviar notificación adicional (webhook, email, etc.)
     const leadForNotification = {
@@ -60,7 +72,7 @@ export async function saveLead(data: LeadData): Promise<void> {
   } catch (error) {
     console.error('❌ Error al guardar lead:', error);
     
-    // Fallback: guardar en localStorage si falla Supabase
+    // Fallback: guardar en localStorage si falla cualquier parte del proceso
     try {
       const fallbackLeads = JSON.parse(localStorage.getItem('fallback_leads') || '[]');
       fallbackLeads.push({
@@ -73,8 +85,6 @@ export async function saveLead(data: LeadData): Promise<void> {
     } catch (fallbackError) {
       console.error('❌ Error en fallback:', fallbackError);
     }
-    
-    throw error;
   }
 }
 
