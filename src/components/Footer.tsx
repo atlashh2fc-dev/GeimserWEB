@@ -223,7 +223,12 @@ export default function Footer() {
               height={24}
               className="h-6 w-auto mr-3 brightness-125"
             />
-            <p>&copy; {currentYear} Geimser. Todos los derechos reservados.</p>
+            <p>
+              &copy; {currentYear} Geimser. Todos los derechos reservados.
+              <span className="ml-2 text-[11px] text-[var(--text-muted)] tracking-wide">
+                Ignite. Execute. Scale.
+              </span>
+            </p>
           </div>
           <div className="flex items-center gap-6">
             {legalLinks.map((link) => (
