@@ -49,9 +49,13 @@ export async function saveLead(data: LeadData): Promise<void> {
     }
 
     console.log('✅ Lead guardado exitosamente:', result);
-    
+
     // Opcional: Enviar notificación adicional (webhook, email, etc.)
-    await notifyNewLead(leadToSave);
+    const leadForNotification = {
+      ...leadToSave,
+      conversacion_completa: (data as any).conversacion_completa || null,
+    };
+    await notifyNewLead(leadForNotification);
     
   } catch (error) {
     console.error('❌ Error al guardar lead:', error);
@@ -82,6 +86,7 @@ async function notifyNewLead(leadData: any): Promise<void> {
     // - Enviar email de notificación
     // - Integrar con CRM
     
+    // Webhook opcional (por ejemplo Slack/Discord)
     if (process.env.NEXT_PUBLIC_WEBHOOK_URL) {
       await fetch(process.env.NEXT_PUBLIC_WEBHOOK_URL, {
         method: 'POST',
@@ -93,6 +98,19 @@ async function notifyNewLead(leadData: any): Promise<void> {
           lead: leadData,
         }),
       });
+    }
+
+    // Envío de email a contacto@geimser.cl
+    try {
+      await fetch('/api/lead-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(leadData),
+      });
+    } catch (emailError) {
+      console.warn('⚠️ Error al llamar a /api/lead-email:', emailError);
     }
   } catch (error) {
     console.warn('⚠️ Error al enviar notificación de nuevo lead:', error);
