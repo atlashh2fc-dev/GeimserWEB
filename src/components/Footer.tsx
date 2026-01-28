@@ -139,10 +139,10 @@ export default function Footer() {
                 <li className="flex items-start">
                   <Phone className="w-4 h-4 mr-3 mt-1 flex-shrink-0 text-[var(--text-muted)]" />
                   <a
-                    href="tel:+56227501799"
+                    href="tel:+56227121164"
                     className="hover:text-[var(--accent)] transition-colors"
                   >
-                    +56 2 27501799
+                    +56 2 27121164
                   </a>
                 </li>
               </ul>
