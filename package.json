@@ -16,7 +16,7 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.532.0",
     "maplibre-gl": "^5.6.1",
-    "next": "15.4.4",
+    "next": "15.5.10",
     "nodemailer": "^6.9.16",
     "openai": "^5.10.2",
     "react": "19.1.0",

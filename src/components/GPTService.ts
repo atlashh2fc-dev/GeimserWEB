@@ -1,3 +1,5 @@
+import { extractLeadFromMessages } from '@/lib/leadExtraction';
+
 export interface BotResponse {
   answer: string;
   leadCompleted: boolean;
@@ -83,16 +85,9 @@ export async function obtenerRespuestaGPT(messages: Message[]): Promise<BotRespo
 
     const answer = data.content;
 
-    // 6. Análisis de lead (detección de información de contacto)
-    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-    const phoneRegex = /(\+?[0-9]{1,4}[-.\s]?)?(\(?[0-9]{1,4}\)?[-.\s]?)?[0-9]{1,4}[-.\s]?[0-9]{1,9}/g;
-    
-    const emailMatches = answer.match(emailRegex);
-    const phoneMatches = answer.match(phoneRegex);
-    
-    const hasEmail = emailMatches && emailMatches.length > 0;
-    const hasPhone = phoneMatches && phoneMatches.length > 0;
-    const hasContactInfo = hasEmail || hasPhone;
+    // 6. Análisis de lead (solo desde mensajes del usuario, no desde la respuesta del bot)
+    const leadInfo = extractLeadFromMessages(messages);
+    const hasContactInfo = Boolean(leadInfo.correo || leadInfo.telefono);
 
     // 7. Extraer último mensaje del usuario para contexto
     const lastUserMessage = messages
@@ -102,8 +97,8 @@ export async function obtenerRespuestaGPT(messages: Message[]): Promise<BotRespo
     // 8. Construir datos del lead
     const leadData = {
       nombre: 'Usuario del chat',
-      correo: hasEmail ? emailMatches![0] : undefined,
-      telefono: hasPhone ? phoneMatches![0] : undefined,
+      correo: leadInfo.correo,
+      telefono: leadInfo.telefono,
       mensaje: lastUserMessage,
       tipo_interes: 'Consulta desde chat widget'
     };
@@ -111,8 +106,8 @@ export async function obtenerRespuestaGPT(messages: Message[]): Promise<BotRespo
     console.log('✅ [GPT SERVICE] Procesamiento completado:', {
       answerLength: answer.length,
       leadCompleted: hasContactInfo,
-      hasEmail,
-      hasPhone,
+      hasEmail: Boolean(leadInfo.correo),
+      hasPhone: Boolean(leadInfo.telefono),
       leadData: leadData
     });
 

@@ -1,6 +1,7 @@
 // src/app/api/chat/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { extractLeadFromMessages } from '@/lib/leadExtraction';
 
 // Configuración de OpenAI
 const openai = new OpenAI({
@@ -90,6 +91,16 @@ Cada respuesta debe terminar con una pregunta específica, propuesta de valor, i
 
 Ejemplo: "Basado en lo que me cuentas, podríamos reducir tus costos operativos al menos 30%. ¿Te interesaría una llamada de 30 minutos esta semana para revisar tu operación? ¿Cuál sería tu email corporativo?"`;
 
+const LEAD_CAPTURE_ENFORCER = (missingFields: string[]) => `INSTRUCCIÓN CRÍTICA (LEADS):
+- NO inventes datos de contacto.
+- Si falta información de contacto, debes pedirla en ESTA respuesta.
+- Pide SOLO los campos faltantes, en una sola pregunta clara (sin párrafos largos).
+
+Campos faltantes: ${missingFields.join(', ')}.
+
+Formato recomendado:
+"Para coordinar el contacto, ¿me compartes ${missingFields.join(', ')}?"`;
+
 export async function POST(request: NextRequest) {
   console.log('🚀 [API GEIMSER] Nueva consulta comercial recibida');
   
@@ -117,11 +128,44 @@ export async function POST(request: NextRequest) {
     }
 
     // Preparar mensajes con el prompt profesional de Geimser
+    const leadInfo = extractLeadFromMessages(
+      body.messages.map((m: any) => ({
+        role: String(m?.role || ''),
+        content: String(m?.content || ''),
+      })),
+    );
+    const missingLeadFields: string[] = [];
+    if (!leadInfo.correo) missingLeadFields.push('email corporativo');
+    if (!leadInfo.telefono) missingLeadFields.push('teléfono / WhatsApp');
+
+    const userTurns = body.messages.filter((m: any) => m.role === 'user').length;
+    const userText = body.messages
+      .filter((m: any) => m.role === 'user')
+      .map((m: any) => String(m.content || ''))
+      .join('\n')
+      .toLowerCase();
+
+    const showsCommercialIntent =
+      /(cotiz|precio|demo|reuni[oó]n|llamad|contact|asesor|propuesta|plan|implement|contratar)/i.test(
+        userText,
+      );
+
+    const shouldRequestLeadNow =
+      missingLeadFields.length > 0 && (showsCommercialIntent || userTurns >= 2);
+
     const messages = [
       {
         role: 'system',
         content: GEIMSER_SYSTEM_PROMPT
       },
+      ...(shouldRequestLeadNow
+        ? [
+            {
+              role: 'system',
+              content: LEAD_CAPTURE_ENFORCER(missingLeadFields),
+            },
+          ]
+        : []),
       ...body.messages.map((msg: any) => ({
         role: msg.role,
         content: msg.content
