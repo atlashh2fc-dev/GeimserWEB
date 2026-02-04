@@ -1,19 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Usamos las variables de entorno del servidor.
-// Idealmente usar SUPABASE_SERVICE_ROLE_KEY si RLS bloquea al cliente anónimo.
-// Si no hay service key, se usa la anon key (que debería funcionar si las policies están bien).
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function POST(request: NextRequest) {
+    // 1. Logs de depuración para diagnóstico "de raíz"
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    console.log('🔧 [API SAVE LEAD] Verificando configuración...');
+    console.log('   - URL:', supabaseUrl ? 'Definida ✅' : 'FALTANTE ❌');
+    console.log('   - Service Key:', supabaseServiceKey ? 'Definida ✅' : 'Faltante (usando fallback)');
+    console.log('   - Anon Key:', supabaseAnonKey ? 'Definida ✅' : 'FALTANTE ❌');
+
+    if (!supabaseUrl || (!supabaseServiceKey && !supabaseAnonKey)) {
+        console.error('❌ [API SAVE LEAD] Error CRÍTICO de configuración: Faltan variables de entorno.');
+        return NextResponse.json(
+            { error: 'Error de configuración del servidor (Variables de entorno faltantes)' },
+            { status: 500 }
+        );
+    }
+
+    // 2. Inicializar cliente con la mejor llave disponible
+    // Preferimos Service Role para saltar RLS, si no, Anon Key.
+    const targetKey = supabaseServiceKey || supabaseAnonKey || '';
+
     try {
+        const supabase = createClient(supabaseUrl, targetKey, {
+            auth: {
+                persistSession: false,
+                autoRefreshToken: false,
+                detectSessionInUrl: false
+            }
+        });
+
         const body = await request.json();
         const { id, ...data } = body;
 
+        console.log('📦 [API SAVE LEAD] Recibiendo datos:', {
+            tieneId: !!id,
+            nombre: data.nombre,
+            correo: data.correo
+        });
         if (!data.mensaje && !data.correo) {
             return NextResponse.json(
                 { error: 'Faltan datos mínimos (mensaje o correo)' },
