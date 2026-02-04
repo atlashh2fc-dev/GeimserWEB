@@ -136,4 +136,4 @@ export function clearFallbackLeads(): void {
     console.warn('⚠️ Error al limpiar fallback leads:', error);
   }
 }
-```
+
