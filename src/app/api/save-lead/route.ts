@@ -7,20 +7,37 @@ export async function POST(request: NextRequest) {
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    console.log('🔧 [API SAVE LEAD] Verificando configuración...');
-    console.log('   - URL:', supabaseUrl ? 'Definida ✅' : 'FALTANTE ❌');
-    console.log('   - Service Key:', supabaseServiceKey ? 'Definida ✅' : 'Faltante (usando fallback)');
-    console.log('   - Anon Key:', supabaseAnonKey ? 'Definida ✅' : 'FALTANTE ❌');
+    // Diagnósticos
+    const diagnostics = {
+        urlDefined: !!supabaseUrl,
+        urlPrefix: supabaseUrl ? supabaseUrl.substring(0, 8) : 'N/A',
+        serviceKeyDefined: !!supabaseServiceKey,
+        anonKeyDefined: !!supabaseAnonKey,
+        urlValid: false,
+        pingSuccess: false
+    };
+
+    console.log('🔧 [API SAVE LEAD] Diagnósticos:', diagnostics);
 
     if (!supabaseUrl || (!supabaseServiceKey && !supabaseAnonKey)) {
-        console.error('❌ [API SAVE LEAD] Error CRÍTICO de configuración: Faltan variables de entorno.');
         return NextResponse.json(
-            { error: 'Error de configuración del servidor (Variables de entorno faltantes)' },
+            { error: 'Error de configuración: Faltan variables', diagnostics },
             { status: 500 }
         );
     }
 
-    // 2. Inicializar cliente con la mejor llave disponible
+    // Validación básica de URL
+    try {
+        new URL(supabaseUrl);
+        diagnostics.urlValid = true;
+    } catch (e) {
+        return NextResponse.json(
+            { error: 'URL de Supabase inválida', diagnostics },
+            { status: 500 }
+        );
+    }
+
+    // 2. Inicializar cliente
     // Preferimos Service Role para saltar RLS, si no, Anon Key.
     const targetKey = supabaseServiceKey || supabaseAnonKey || '';
 
@@ -32,6 +49,22 @@ export async function POST(request: NextRequest) {
                 detectSessionInUrl: false
             }
         });
+
+        // Test de conectividad simple
+        try {
+            await fetch(supabaseUrl, { method: 'HEAD' });
+            diagnostics.pingSuccess = true;
+        } catch (pingError: any) {
+            console.error('❌ [API SAVE LEAD] Error de conectividad con Supabase:', pingError.message);
+            return NextResponse.json(
+                {
+                    error: 'Error de conexión con Supabase (DNS/Red)',
+                    details: pingError.message,
+                    diagnostics
+                },
+                { status: 502 }
+            );
+        }
 
         const body = await request.json();
         const { id, ...data } = body;
@@ -95,7 +128,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
             {
                 error: error.message || 'Error interno del servidor',
-                details: error.details || error.hint || 'No details'
+                details: error.details || error.hint || 'No details',
+                diagnostics
             },
             { status: 500 }
         );
