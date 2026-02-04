@@ -40,6 +40,7 @@ export async function saveLead(data: LeadData): Promise<void> {
       // Campos adicionales para tracking
       user_agent: typeof window !== 'undefined' ? window.navigator.userAgent : null,
       url_origen: typeof window !== 'undefined' ? window.location.href : null,
+      conversacion_completa: (data as any).conversacion_completa || null,
     };
 
     // Guardado en Supabase (si está configurado)
