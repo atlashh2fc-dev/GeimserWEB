@@ -19,7 +19,7 @@ export interface LeadData {
   tipo_interes: string;
 }
 
-export async function saveLead(data: LeadData): Promise<void> {
+export async function saveLead(data: LeadData): Promise<any> {
   try {
     // Validar que al menos tengamos información mínima
     if (!data.mensaje && !data.correo) {
@@ -46,19 +46,42 @@ export async function saveLead(data: LeadData): Promise<void> {
     // Guardado en Supabase (si está configurado)
     if (hasSupabaseConfig) {
       try {
-        const { data: result, error } = await supabase
-          .from('leads_comerciales')
-          .insert([leadToSave])
-          .select();
+        let result;
+        let error;
+
+        // Si tenemos un ID, intentamos actualizar
+        if ((data as any).id) {
+          const { data: updateResult, error: updateError } = await supabase
+            .from('leads_comerciales')
+            .update(leadToSave)
+            .eq('id', (data as any).id)
+            .select();
+          result = updateResult;
+          error = updateError;
+        } else {
+          // Si no, insertamos nuevo
+          const { data: insertResult, error: insertError } = await supabase
+            .from('leads_comerciales')
+            .insert([leadToSave])
+            .select();
+          result = insertResult;
+          error = insertError;
+        }
 
         if (error) {
           console.warn('⚠️ Error al guardar lead en Supabase:', error.message);
+          return null;
         } else {
           console.log('✅ Lead guardado exitosamente en Supabase:', result);
+          return result?.[0]?.id || null;
         }
       } catch (dbError) {
         console.warn('⚠️ Error de red al guardar lead en Supabase:', dbError);
+        return null; // Retornamos null para indicar fallo pero no romper flujo
       }
+    } else {
+      console.warn('⚠️ Supabase no está configurado, se omite guardado en base de datos');
+      return null;
     } else {
       console.warn('⚠️ Supabase no está configurado, se omite guardado en base de datos');
     }
@@ -69,10 +92,10 @@ export async function saveLead(data: LeadData): Promise<void> {
       conversacion_completa: (data as any).conversacion_completa || null,
     };
     await notifyNewLead(leadForNotification);
-    
+
   } catch (error) {
     console.error('❌ Error al guardar lead:', error);
-    
+
     // Fallback: guardar en localStorage si falla cualquier parte del proceso
     try {
       const fallbackLeads = JSON.parse(localStorage.getItem('fallback_leads') || '[]');
@@ -96,7 +119,7 @@ async function notifyNewLead(leadData: any): Promise<void> {
     // - Enviar webhook a Slack/Discord
     // - Enviar email de notificación
     // - Integrar con CRM
-    
+
     // Webhook opcional (por ejemplo Slack/Discord)
     if (process.env.NEXT_PUBLIC_WEBHOOK_URL) {
       await fetch(process.env.NEXT_PUBLIC_WEBHOOK_URL, {

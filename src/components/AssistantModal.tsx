@@ -21,9 +21,9 @@ interface Message {
 
 export default function AssistantModal({ isOpen, onClose }: AssistantModalProps) {
   const [messages, setMessages] = useState<Message[]>([
-    { 
-      id: uuidv4(), 
-      role: 'assistant', 
+    {
+      id: uuidv4(),
+      role: 'assistant',
       content: '¡Hola! 👋 Soy GeimserBot de Geimser360. Ayudo a empresas a optimizar su atención al cliente y reducir costos operativos hasta un 40%. ¿Qué desafío tienes en tu operación de contact center o atención al cliente?',
       timestamp: new Date()
     }
@@ -80,7 +80,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
       }));
 
       console.log('🤖 [GEIMSER MODAL] Consultando con GeimserBot...');
-      
+
       // Obtener respuesta del consultor
       const { answer, leadCompleted, leadData } = await obtenerRespuestaGPT(gptMessages);
 
@@ -100,50 +100,59 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
 
       setMessages(prev => [...prev, botMessage]);
 
-      // Procesar lead si está completo
-      if (leadCompleted && (leadData.correo || leadData.telefono)) {
-        try {
-          console.log('💎 [GEIMSER MODAL] Lead calificado detectado:', leadData);
-          
-          // Enriquecer datos del lead
-          const enrichedLeadData = {
-            ...leadData,
-            fuente: 'Chat Widget Geimser360',
-            tipo_interes: 'Consulta Contact Center/Outsourcing',
-            conversacion_completa: updatedMessages.map(m => `${m.role}: ${m.content}`).join('\n---\n')
-          };
+      // INTENTO DE GUARDADO ROBUSTO (LOOSE LEADS)
+      // Guardamos SIEMPRE que haya interacción, actualizando el registro si ya existe
+      try {
+        // Enriquecer datos del lead
+        const currentLeadData = {
+          ...leadData,
+          fuente: 'Chat Widget Geimser360',
+          tipo_interes: leadData.tipo_interes || 'Consulta General',
+          conversacion_completa: updatedMessages.map(m => `${m.role}: ${m.content}`).join('\n---\n'),
+          // Si ya tenemos un ID capturado en esta sesión, lo enviamos para actualizar
+          id: (window as any).__currentLeadId || undefined
+        };
 
-          await saveLead(enrichedLeadData);
+        // Guardamos (o actualizamos)
+        const savedId = await saveLead(currentLeadData);
+
+        // Si nos devuelve un ID, lo guardamos en la sesión
+        if (savedId) {
+          (window as any).__currentLeadId = savedId;
+          console.log('💾 Sesión de chat sincronizada con ID:', savedId);
+        }
+
+        // Si es LEAD CALIFICADO COMPLETO (tiene datos de contacto), marcamos visualmente
+        if (leadCompleted && (leadData.correo || leadData.telefono) && !leadCaptured) {
+          console.log('💎 [GEIMSER MODAL] Lead calificado completo detectado!');
           setLeadCaptured(true);
-          
-          console.log('✅ [GEIMSER MODAL] Lead guardado exitosamente');
-          
-          // Mensaje de confirmación interno (no visible al usuario)
+
+          // Mensaje de confirmación interno
           setTimeout(() => {
             const confirmMessage: Message = {
               id: uuidv4(),
               role: 'assistant',
-              content: '🎯 Perfecto, he registrado tu información. Nuestro director comercial se contactará contigo en las próximas 2 horas para coordinar una reunión estratégica. ¡Prepárate para optimizar tu operación!',
+              content: '🎯 Perfecto, he registrado tu información de contacto. Nuestro equipo revisará esta conversación y te contactará a la brevedad.',
               timestamp: new Date()
             };
             setMessages(prev => [...prev, confirmMessage]);
           }, 1000);
-          
-        } catch (leadError) {
-          console.error('❌ [GEIMSER MODAL] Error al guardar lead:', leadError);
         }
+
+      } catch (saveError) {
+        console.warn('⚠️ Error al intentar guardar loose lead:', saveError);
       }
 
     } catch (error) {
       console.error('❌ [GEIMSER MODAL] Error en consulta:', error);
-      
+
       const errorMessage: Message = {
         id: uuidv4(),
         role: 'assistant',
         content: 'Disculpa, hubo un problema técnico. Puedes contactarnos directamente a contacto@geimser.cl o al teléfono que aparece en nuestro sitio. ¡Estaremos encantados de ayudarte!',
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setLoading(false);
@@ -169,11 +178,11 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
     >
       {/* Modal con vidrio templado transparente */}
       <div className="relative w-full h-full rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col">
-        
+
         {/* Efectos de vidrio templado */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/5 rounded-3xl"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5 rounded-3xl"></div>
-        
+
         {/* Header con MUCHO más espacio vertical */}
         <div className="relative flex items-center justify-between px-6 py-8 border-b border-white/10 bg-white/5 backdrop-blur-sm">
           <div className="flex items-center gap-4 flex-1">
@@ -186,10 +195,10 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
               <p className="text-xs text-blue-300/90 leading-tight">Especialista en Contact Centers</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3 flex-col">
             {leadCaptured && (
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 className="flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-400/20 px-3 py-1.5 rounded-full backdrop-blur-sm"
@@ -198,9 +207,9 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
                 <span className="text-xs text-emerald-300 font-medium">Lead Capturado</span>
               </motion.div>
             )}
-            
-            <button 
-              onClick={onClose} 
+
+            <button
+              onClick={onClose}
               className="p-3 rounded-xl hover:bg-white/10 transition-all duration-200 border border-white/5 hover:border-white/20"
               aria-label="Cerrar chat"
             >
@@ -217,23 +226,22 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
               className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed backdrop-blur-sm ${
-                  message.role === 'user'
+                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed backdrop-blur-sm ${message.role === 'user'
                     ? 'bg-gradient-to-r from-blue-500/80 to-blue-600/80  rounded-br-md shadow-lg border border-blue-400/20'
                     : 'bg-white/10  rounded-bl-md border border-white/10 shadow-lg'
-                }`}
+                  }`}
               >
                 <p className="whitespace-pre-wrap">{message.content}</p>
                 <div className={`text-xs mt-2 ${message.role === 'user' ? 'text-blue-100/70' : '/50'}`}>
-                  {message.timestamp.toLocaleTimeString('es-ES', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                  {message.timestamp.toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit'
                   })}
                 </div>
               </div>
             </div>
           ))}
-          
+
           {/* Loading indicator mejorado */}
           {loading && (
             <div className="flex justify-start">
@@ -248,7 +256,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
 
@@ -281,7 +289,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
               )}
             </button>
           </div>
-          
+
           {/* Contact info footer con mejor diseño */}
           <div className="flex items-center justify-center gap-6 mt-4 text-xs /60">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
