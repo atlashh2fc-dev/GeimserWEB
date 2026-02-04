@@ -31,8 +31,6 @@ export async function POST(request: NextRequest) {
             fuente: data.fuente || 'Chat Widget Geimser',
             estado: data.estado || 'pendiente',
             fecha_creacion: new Date().toISOString(),
-            user_agent: request.headers.get('user-agent'),
-            url_origen: request.headers.get('referer'),
             conversacion_completa: data.conversacion_completa
         };
 
@@ -40,7 +38,6 @@ export async function POST(request: NextRequest) {
 
         // Si viene un ID, intentamos actualizar
         if (id) {
-            // Verificar si existe primero (opcional, pero upsert es mejor)
             const { data: updateData, error: updateError } = await supabase
                 .from('leads_comerciales')
                 .update(leadToSave)
@@ -69,7 +66,10 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
         console.error('❌ [API SAVE LEAD] Error:', error);
         return NextResponse.json(
-            { error: error.message || 'Error interno del servidor' },
+            {
+                error: error.message || 'Error interno del servidor',
+                details: error.details || error.hint || 'No details'
+            },
             { status: 500 }
         );
     }
