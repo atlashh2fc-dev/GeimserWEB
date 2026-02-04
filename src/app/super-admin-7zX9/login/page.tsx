@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Lock, Loader2, ShieldCheck } from 'lucide-react';
+import { Lock, Loader2, ShieldCheck, User } from 'lucide-react';
 import { setCookie } from 'cookies-next';
 
 export default function HiddenLoginPage() {
@@ -32,49 +32,50 @@ export default function HiddenLoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900 via-black to-black opacity-80" />
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-50" />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="relative z-10 w-full max-w-md"
             >
-                <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+                <div className="bg-white border border-gray-100 rounded-3xl p-10 shadow-xl">
                     <div className="flex flex-col items-center mb-8">
-                        <div className="p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
-                            <ShieldCheck className="w-8 h-8 text-neutral-400" />
+                        <div className="p-4 bg-blue-50 rounded-2xl mb-4 shadow-sm">
+                            <ShieldCheck className="w-8 h-8 text-blue-600" />
                         </div>
-                        <h1 className="text-xl font-medium text-white tracking-wide">Acceso Restringido</h1>
-                        <p className="text-sm text-neutral-500 mt-2">Introduce tus credenciales de administrador</p>
+                        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Acceso Geimser</h1>
+                        <p className="text-sm text-gray-500 mt-2">Panel Administrativo</p>
                     </div>
 
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-5">
                         <div>
-                            <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5 ml-1">Usuario</label>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-700 focus:outline-none focus:border-white/30 transition-colors"
-                                placeholder="Usuario..."
-                            />
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 ml-1">Usuario</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 pl-11 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                                    placeholder="ID de Usuario"
+                                />
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs uppercase tracking-wider text-neutral-500 mb-1.5 ml-1">Contraseña</label>
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 ml-1">Contraseña</label>
                             <div className="relative">
                                 <input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-700 focus:outline-none focus:border-white/30 transition-colors"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 pl-11 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
                                     placeholder="••••••••"
                                 />
-                                <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-600" />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             </div>
                         </div>
 
@@ -82,7 +83,7 @@ export default function HiddenLoginPage() {
                             <motion.div
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
-                                className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/20 rounded-lg py-2"
+                                className="text-red-600 text-sm text-center bg-red-50 border border-red-100 rounded-xl py-3 px-4"
                             >
                                 {error}
                             </motion.div>
@@ -91,21 +92,21 @@ export default function HiddenLoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-white text-black font-medium py-3.5 rounded-xl hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
+                            className="w-full bg-blue-600 text-white font-semibold py-4 rounded-xl hover:bg-blue-700 transition-all disabled:opacity-70 disabled:cursor-not-allowed mt-4 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
                         >
                             {loading ? (
                                 <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <Loader2 className="w-5 h-5 animate-spin" />
                                     <span>Verificando...</span>
                                 </>
                             ) : (
-                                <span>Ingresar al Sistema</span>
+                                <span>Iniciar Sesión</span>
                             )}
                         </button>
                     </form>
                 </div>
 
-                <div className="text-center mt-6 text-neutral-600 text-xs">
+                <div className="text-center mt-8 text-gray-400 text-xs font-medium">
                     Sistema de Monitoreo Geimser 360 &copy; 2026
                 </div>
             </motion.div>
