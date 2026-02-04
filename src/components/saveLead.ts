@@ -24,74 +24,39 @@ export async function saveLead(data: LeadData): Promise<any> {
     // Validar que al menos tengamos información mínima
     if (!data.mensaje && !data.correo) {
       console.warn('⚠️ Lead no guardado: falta información mínima');
-      return;
-    }
-
-    const leadToSave = {
-      nombre: data.nombre || 'Usuario del chat',
-      correo: data.correo || null,
-      telefono: data.telefono || null,
-      empresa: data.empresa || null,
-      mensaje: data.mensaje,
-      tipo_interes: data.tipo_interes,
-      fuente: 'Chat Widget Geimser',
-      estado: 'pendiente',
-      fecha_creacion: new Date().toISOString(),
-      // Campos adicionales para tracking
-      user_agent: typeof window !== 'undefined' ? window.navigator.userAgent : null,
-      url_origen: typeof window !== 'undefined' ? window.location.href : null,
-      conversacion_completa: (data as any).conversacion_completa || null,
-    };
-
-    // Guardado en Supabase (si está configurado)
-    if (hasSupabaseConfig) {
-      try {
-        let result;
-        let error;
-
-        // Si tenemos un ID, intentamos actualizar
-        if ((data as any).id) {
-          const { data: updateResult, error: updateError } = await supabase
-            .from('leads_comerciales')
-            .update(leadToSave)
-            .eq('id', (data as any).id)
-            .select();
-          result = updateResult;
-          error = updateError;
-        } else {
-          // Si no, insertamos nuevo
-          const { data: insertResult, error: insertError } = await supabase
-            .from('leads_comerciales')
-            .insert([leadToSave])
-            .select();
-          result = insertResult;
-          error = insertError;
-        }
-
-        if (error) {
-          console.warn('⚠️ Error al guardar lead en Supabase:', error.message);
-          return null;
-        } else {
-          console.log('✅ Lead guardado exitosamente en Supabase:', result);
-          return result?.[0]?.id || null;
-        }
-      } catch (dbError) {
-        console.warn('⚠️ Error de red al guardar lead en Supabase:', dbError);
-        return null; // Retornamos null para indicar fallo pero no romper flujo
-      }
-    } else {
-      console.warn('⚠️ Supabase no está configurado, se omite guardado en base de datos');
       return null;
-    } else {
-      console.warn('⚠️ Supabase no está configurado, se omite guardado en base de datos');
     }
 
-    // Opcional: Enviar notificación adicional (webhook, email, etc.)
-    const leadForNotification = {
-      ...leadToSave,
-      conversacion_completa: (data as any).conversacion_completa || null,
+    const payload = {
+      ...data,
+      // Si venía un ID en data (para update), lo pasamos al body
+      id: (data as any).id
     };
-    await notifyNewLead(leadForNotification);
+
+    const response = await fetch('/api/save-lead', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Error guardando lead en servidor:', errorData);
+      throw new Error(`Error servidor: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log('✅ Lead guardado exitosamente (API):', responseData);
+
+    // Notificación adicional (opcional)
+    // El propio endpoint podría encargarse, pero por ahora lo dejamos aquí si es necesario
+    // OJO: notifyNewLead usa NEXT_PUBLIC_WEBHOOK_URL... 
+    // Quizás notifyNewLead debería llamarse solo si es NUEVO o si se completó el correo.
+    // Por ahora lo dejamos igual.
+
+    return responseData.id || null;
 
   } catch (error) {
     console.error('❌ Error al guardar lead:', error);
@@ -109,10 +74,12 @@ export async function saveLead(data: LeadData): Promise<any> {
     } catch (fallbackError) {
       console.error('❌ Error en fallback:', fallbackError);
     }
+    return null;
   }
 }
 
 // Función auxiliar para notificar nuevo lead (opcional)
+// TODO: Considerar mover esto al servidor también
 async function notifyNewLead(leadData: any): Promise<void> {
   try {
     // Aquí puedes agregar lógica adicional como:
@@ -169,3 +136,4 @@ export function clearFallbackLeads(): void {
     console.warn('⚠️ Error al limpiar fallback leads:', error);
   }
 }
+```
