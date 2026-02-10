@@ -3,12 +3,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { 
-  MessageSquare, 
-  Bot, 
-  BarChart3, 
-  Users, 
-  MessageCircle, 
+import {
+  MessageSquare,
+  Users,
   Code,
   ArrowRight,
   Sparkles,
@@ -20,29 +17,40 @@ import {
   TrendingUp,
   Target,
   Layers,
-  LucideIcon // Importar LucideIcon para tipado
+  Layout,
+  Globe,
+  Smartphone,
+  Headphones,
+  Search,
+  Award,
+  LucideIcon
 } from 'lucide-react';
 
 // --- DEFINICIONES DE TIPOS (TYPESCRIPT) ---
 interface Benefit {
   icon: LucideIcon;
+  title: string;
   text: string;
 }
 
-interface ModalContent {
-  title: string;
-  benefits: Benefit[];
-  tech: string;
-  kpis: string;
+interface ModalTabContent {
+  services: string[];
+  methodology: { step: string; description: string }[];
+  impact: { metric: string; value: string; description: string }[];
 }
 
 interface Solution {
+  id: string;
   icon: LucideIcon;
   title: string;
   description: string;
   keyPoints: string[];
   bgImage: string;
-  modalContent: ModalContent;
+  modalContent: {
+    description: string;
+    benefits: Benefit[];
+    tabs: ModalTabContent;
+  };
 }
 
 interface SolutionModalProps {
@@ -50,117 +58,130 @@ interface SolutionModalProps {
   onClose: () => void;
 }
 
-// --- DATOS ENRIQUECIDOS CON INFORMACIÓN PARA EL MODAL ---
+// Icono auxiliar para 'Scaling' que no estaba importado, usando TrendingUp como fallback visual si no existe
+const Scaling = TrendingUp;
+
+// --- DATOS ROBUSTOS PARA VERTICALES DE NEGOCIO ---
 const solutions: Solution[] = [
-    {
-      icon: MessageSquare,
-      title: "Gestión de Interacción Omnicanal",
-      description: "Centralizamos todas las conversaciones con tus clientes —WhatsApp, email, web y redes sociales— en una plataforma unificada e inteligente.",
-      keyPoints: ["Plataforma Unificada", "Reducción de Tiempos de Respuesta", "Experiencia de Cliente Coherente", "Analítica Cross-Channel"],
-      bgImage: "/assets/images/customer-service.jpg",
-      modalContent: {
-        title: "Profundizando en la Omnicanalidad",
-        benefits: [
-          { icon: Target, text: "Visión 360° del Cliente: Unifica el historial de interacciones para que tus agentes tengan el contexto completo, sin importar el canal." },
-          { icon: TrendingUp, text: "Incremento de la Tasa de Resolución en el Primer Contacto (FCR): Al tener toda la información a mano, los agentes resuelven problemas más rápido y eficientemente." },
-          { icon: Layers, text: "Enrutamiento Inteligente Basado en Habilidades (Skill-Based Routing): Dirige automáticamente cada consulta al agente mejor preparado para resolverla, mejorando la calidad y velocidad del servicio." }
+  {
+    id: 'cx',
+    icon: MessageSquare,
+    title: "Experiencia de Cliente (CX)",
+    description: "Creamos conexiones reales. Gestionamos cada conversación con tus clientes para que se sientan escuchados y atendidos, sin importar el canal.",
+    keyPoints: ["Atención Omnicanal", "Soporte 24/7", "Resolución Rápida", "Calidez Humana"],
+    bgImage: "/assets/images/customer-service.jpg",
+    modalContent: {
+      description: "Transformamos tu centro de contacto en un centro de experiencia. No solo respondemos llamadas o mensajes; diseñamos viajes de cliente fluidos que aumentan la lealtad y el valor de vida del cliente.",
+      benefits: [
+        { icon: Target, title: "Omnicanalidad Real", text: "WhatsApp, redes sociales, teléfono o web. Tus clientes eligen el canal, nosotros mantenemos el contexto." },
+        { icon: TrendingUp, title: "Eficiencia Operativa", text: "Reducimos tiempos de espera y aumentamos la resolución al primer contacto mediante enrutamiento inteligente." },
+        { icon: Layers, title: "Trato Personalizado", text: "Cada interacción es una oportunidad. Utilizamos datos para dar un trato único a cada cliente." }
+      ],
+      tabs: {
+        services: [
+          "Atención al Cliente Inbound/Outbound",
+          "Soporte Técnico Especializado",
+          "Gestión de Ventas y Retención",
+          "Moderación de Contenidos y Redes Sociales",
+          "Encuestas de Satisfacción (NPS/CSAT)"
         ],
-        tech: "Plataformas ACD/UFA, Integración con APIs de redes sociales, WebRTC, CRM.",
-        kpis: "Reducción del Tiempo Medio Operativo (AHT), Aumento del First Contact Resolution (FCR), Mejora del Customer Satisfaction (CSAT)."
-      }
-    },
-    {
-      icon: Bot,
-      title: "Automatización con IA Conversacional",
-      description: "Implementamos asistentes virtuales y chatbots que resuelven consultas 24/7, aprendiendo y mejorando con cada interacción.",
-      keyPoints: ["Disponibilidad 24/7", "Procesamiento de Lenguaje Natural (NLP)", "Integración Nativa con CRM", "Escalamiento Automático de Consultas"],
-      bgImage: "/assets/images/ai-technology.jpg",
-      modalContent: {
-        title: "IA que Transforma Conversaciones",
-        benefits: [
-          { icon: Target, text: "Autoservicio Guiado: Permite a los clientes resolver dudas frecuentes y realizar transacciones simples por sí mismos, liberando a tus agentes para tareas de mayor valor." },
-          { icon: TrendingUp, text: "Calificación y Captura de Leads: Los bots pueden calificar prospectos en tiempo real y recopilar datos clave, nutriendo tu embudo de ventas automáticamente." },
-          { icon: Layers, text: "Transferencia Contextual al Agente: Cuando una consulta requiere intervención humana, el bot transfiere la conversación junto con todo el historial y contexto recopilado." }
+        methodology: [
+          { step: "Diagnóstico", description: "Analizamos tus canales actuales y puntos de dolor." },
+          { step: "Diseño", description: "Creamos scripts y flujos de atención a medida." },
+          { step: "Implementación", description: "Despliegue rápido con formación intensiva de agentes." },
+          { step: "Optimización", description: "Mejora continua basada en analítica de interacciones." }
         ],
-        tech: "Motores de NLU/NLP, Machine Learning, Speech-to-Text (STT), Text-to-Speech (TTS).",
-        kpis: "Tasa de Deflexión de Casos, Tasa de Contención del Bot, Reducción de Costos por Interacción."
-      }
-    },
-    {
-      icon: BarChart3,
-      title: "Inteligencia de Negocios y Analítica",
-      description: "Transformamos datos de interacciones en insights accionables para optimizar tus estrategias y la toma de decisiones.",
-      keyPoints: ["Dashboards en Tiempo Real", "Análisis de Sentimiento", "Identificación de Tendencias", "Optimización Basada en Datos"],
-      bgImage: "/assets/images/data-center-blue.jpg",
-      modalContent: {
-        title: "Decisiones Basadas en Datos",
-        benefits: [
-          { icon: Target, text: "Análisis de Causa Raíz: Identifica los motivos reales detrás de las consultas recurrentes, permitiéndote solucionar problemas de fondo y no solo los síntomas." },
-          { icon: TrendingUp, text: "Voz del Cliente (VoC): Analiza transcripciones y chats para entender el sentimiento, las frustraciones y las expectativas de tus clientes a gran escala." },
-          { icon: Layers, text: "Monitoreo de Calidad Automatizado: Utiliza IA para analizar el 100% de las interacciones (no solo una muestra) y asegurar el cumplimiento de guiones y protocolos de calidad." }
-        ],
-        tech: "Speech & Text Analytics, Business Intelligence (BI), Data Warehousing, Procesamiento de Big Data.",
-        kpis: "Mejora del Net Promoter Score (NPS), Reducción de la Tasa de Abandono (Churn), Optimización de Procesos."
-      }
-    },
-    {
-      icon: Users,
-      title: "Optimización de la Fuerza de Trabajo",
-      description: "Herramientas avanzadas para la planificación, monitoreo y análisis de rendimiento de tus equipos de contact center.",
-      keyPoints: ["Planificación Inteligente de Turnos", "Monitoreo de Productividad", "Reducción de Costos Operativos", "Mejora del Clima Laboral"],
-      bgImage: "/assets/images/modern-office.jpg",
-      modalContent: {
-        title: "Maximizando el Potencial Humano",
-        benefits: [
-          { icon: Target, text: "Pronósticos de Demanda (Forecasting): Predice con precisión los volúmenes de interacciones para evitar tanto el exceso como la falta de personal." },
-          { icon: TrendingUp, text: "Gestión de Adherencia en Tiempo Real: Asegura que los agentes cumplan con sus horarios planificados, optimizando la cobertura y reduciendo tiempos de espera." },
-          { icon: Layers, text: "Gamificación y Coaching: Implementa mecánicas de juego y herramientas de coaching personalizadas basadas en el rendimiento para motivar y desarrollar a tu equipo." }
-        ],
-        tech: "Workforce Management (WFM) Software, Performance Analytics, Gamification Platforms.",
-        kpis: "Precisión del Forecast, Nivel de Adherencia, Reducción del Absentismo, Employee Satisfaction (ESAT)."
-      }
-    },
-    {
-      icon: MessageCircle,
-      title: "Asistentes Virtuales Avanzados",
-      description: "Soluciones conversacionales que van más allá de las respuestas simples, gestionando tareas complejas y personalizando la atención.",
-      keyPoints: ["Personalización a Gran Escala", "Aprendizaje Automático Continuo", "Reducción de Carga Operativa", "Mejora del CSAT"],
-      bgImage: "/assets/images/digital-transformation.jpg",
-      modalContent: {
-        title: "Asistentes que Resuelven",
-        benefits: [
-          { icon: Target, text: "Automatización de Procesos Robóticos (RPA): El asistente puede ejecutar tareas en sistemas legados, como actualizar un CRM o consultar un estado de pedido, sin necesidad de APIs." },
-          { icon: TrendingUp, text: "Gestión Proactiva: Inicia conversaciones para confirmar citas, notificar sobre envíos o realizar encuestas de satisfacción, mejorando la experiencia del cliente." },
-          { icon: Layers, text: "Voicebots con Biometría de Voz: Autentica a los usuarios de forma segura y natural a través de su voz, agilizando procesos sensibles como transacciones financieras." }
-        ],
-        tech: "RPA, Biometría de Voz, Motores de Diálogo Avanzados, Integración con bases de conocimiento.",
-        kpis: "Tasa de Éxito en Tareas Complejas, Reducción del Tiempo de Autenticación, Aumento de la Interacción Proactiva."
-      }
-    },
-    {
-      icon: Code,
-      title: "Desarrollo y Personalización de CRM",
-      description: "Creamos soluciones tecnológicas y adaptamos tu CRM para que se ajuste perfectamente a los flujos de trabajo de tu negocio.",
-      keyPoints: ["Desarrollo a la Medida", "Integración Transparente con APIs", "Flujos de Trabajo Optimizados", "Escalabilidad Garantizada"],
-      bgImage: "/assets/images/team-hero.jpg",
-      modalContent: {
-        title: "Un CRM Hecho para Ti",
-        benefits: [
-          { icon: Target, text: "Automatización de Flujos de Trabajo Específicos: Diseñamos reglas y procesos automáticos que reflejan exactamente cómo opera tu negocio, eliminando tareas manuales." },
-          { icon: TrendingUp,text: "Consolidación de Herramientas: Integramos aplicaciones de terceros directamente en la interfaz del CRM para que tus agentes no tengan que cambiar de pantalla constantemente." },
-          { icon: Layers, text: "Escalabilidad y Mantenimiento Evolutivo: Construimos soluciones robustas que crecen contigo y ofrecemos soporte para adaptarlas a futuras necesidades del negocio." }
-        ],
-        tech: "Desarrollo sobre plataformas líderes (Salesforce, HubSpot, etc.), Arquitectura de Microservicios, APIs REST/GraphQL.",
-        kpis: "Reducción del Tiempo de Formación (Onboarding), Aumento de la Adopción del CRM, Mejora en la Productividad de Ventas/Servicio."
+        impact: [
+          { metric: "+25%", value: "CSAT", description: "Mejora promedio en satisfacción." },
+          { metric: "-30%", value: "AHT", description: "Reducción en tiempo operativo." },
+          { metric: "90%", value: "FCR", description: "Resolución al primer contacto." }
+        ]
       }
     }
+  },
+  {
+    id: 'tech',
+    icon: Code,
+    title: "Tecnología y Soluciones Digitales",
+    description: "Herramientas que impulsan tu negocio. Desarrollamos webs, apps y sistemas a medida que facilitan tu trabajo y el de tu equipo.",
+    keyPoints: ["Desarrollo Web y Apps", "Automatización Simple", "CRM a Tu Medida", "Innovación Práctica"],
+    bgImage: "/assets/images/digital-transformation.jpg",
+    modalContent: {
+      description: "La tecnología no debe ser una barrera, sino un acelerador. Creamos ecosistemas digitales que automatizan lo rutinario y potencian lo estratégico, adaptándonos 100% a tu lógica de negocio.",
+      benefits: [
+        { icon: Layout, title: "Webs de Alto Impacto", text: "Sitios rápidos, seguros y diseñados para convertir visitantes en clientes." },
+        { icon: Zap, title: "Automatización", text: "Liberamos a tu equipo de tareas repetitivas mediante bots y flujos de trabajo inteligentes." },
+        { icon: Smartphone, title: "Movilidad Total", text: "Apps nativas y progresivas para llevar tu negocio al bolsillo de tus usuarios." }
+      ],
+      tabs: {
+        services: [
+          "Desarrollo Web Full Stack (React, Next.js)",
+          "Aplicaciones Móviles (iOS/Android)",
+          "Implementación y Personalización de CRM",
+          "Integración de APIs y Sistemas Legados",
+          "Automatización de Procesos (RPA)"
+        ],
+        methodology: [
+          { step: "Discovery", description: "Entendemos a fondo tus requerimientos y objetivos." },
+          { step: "Agile Dev", description: "Sprints cortos con entregables funcionales cada semana." },
+          { step: "QA Riguroso", description: "Pruebas exhaustivas de rendimiento y seguridad." },
+          { step: "Despliegue", description: "Puesta en producción sin interrupciones." }
+        ],
+        impact: [
+          { metric: "100%", value: "Digital", description: "Procesos manuales digitalizados." },
+          { metric: "x2", value: "Conversión", description: "Aumento en leads cualificados." },
+          { metric: "-40%", value: "Costos", description: "Reducción en costos operativos." }
+        ]
+      }
+    }
+  },
+  {
+    id: 'bpo',
+    icon: Users,
+    title: "Talento y Gestión de Personas",
+    description: "El equipo que necesitas, cuando lo necesitas. Te apoyamos con talento especializado y gestionamos tus procesos de RRHH.",
+    keyPoints: ["Perfiles Especializados", "Flexibilidad Operativa", "Gestión de RRHH", "Apoyo Estratégico"],
+    bgImage: "/assets/images/modern-office.jpg",
+    modalContent: {
+      description: "El talento es el motor de cualquier empresa. Te ayudamos a encontrar, gestionar y retener a los mejores profesionales, absorbiendo la carga administrativa para que tú te enfoques en crecer.",
+      benefits: [
+        { icon: Award, title: "Expertos Listos", text: "Accede a una base de talento pre-calificado en tecnología y operaciones." },
+        { icon: Scaling, title: "Escalabilidad", text: "Aumenta o reduce tu equipo según la demanda de tus proyectos." },
+        { icon: Shield, title: "Cumplimiento Total", text: "Nos encargamos de todo el marco legal y laboral." }
+      ],
+      tabs: {
+        services: [
+          "Staffing de TI y Perfiles Digitales",
+          "Outsourcing de Procesos de Negocio (BPO)",
+          "Reclutamiento y Selección Especializada",
+          "Gestión de Nómina y Administración",
+          "Evaluaciones de Desempeño y Clima"
+        ],
+        methodology: [
+          { step: "Perfilamiento", description: "Definimos las competencias clave del rol." },
+          { step: "Sourcing", description: "Búsqueda activa en nuestra red de talento." },
+          { step: "Filtro Técnico", description: "Evaluaciones técnicas y psicométricas." },
+          { step: "Onboarding", description: "Acompañamiento en la integración al equipo." }
+        ],
+        impact: [
+          { metric: "<48h", value: "SLA", description: "Tiempo promedio de presentación de candidatos." },
+          { metric: "95%", value: "Retención", description: "Tasa de permanencia del talento." },
+          { metric: "Zero", value: "Riesgo", description: "Contingencia laboral asumida por nosotros." }
+        ]
+      }
+    }
+  }
 ];
 
-// --- Componente Modal ---
+
+
+// --- Componente Modal Robusto ---
 const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
+  const [activeTab, setActiveTab] = useState<'services' | 'methodology' | 'impact'>('services');
+
   if (!solution) return null;
 
-  const { title, benefits, tech, kpis } = solution.modalContent;
+  const { modalContent } = solution;
 
   return (
     <AnimatePresence>
@@ -169,61 +190,165 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 50 }}
+          initial={{ scale: 0.95, opacity: 0, y: 30 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 50 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          exit={{ scale: 0.95, opacity: 0, y: 30 }}
+          transition={{ type: "spring", stiffness: 350, damping: 30 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-3xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] rounded-2xl shadow-[0_32px_65px_rgba(15,23,42,0.18)] text-[var(--text)] overflow-hidden"
+          className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         >
-          <div className="p-8">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h3 className="text-2xl lg:text-3xl font-bold mb-2">{title}</h3>
-                <p className="text-[var(--accent)] font-semibold">{solution.title}</p>
-              </div>
-              <button onClick={onClose} className="p-2 rounded-full text-muted hover:bg-white/70 transition-colors">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
+          {/* Header del Modal */}
+          <div className="relative h-48 sm:h-64 bg-slate-900 overflow-hidden shrink-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-60"
+              style={{ backgroundImage: `url('${solution.bgImage}')` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
 
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-lg font-semibold mb-4 border-l-4 border-[color:rgba(10,132,255,0.35)] pl-3">Beneficios y Casos de Uso Clave</h4>
-                <ul className="space-y-3">
-                  {benefits.map((benefit: Benefit, i: number) => {
-                    const Icon = benefit.icon;
-                    return (
-                      <motion.li 
-                        key={i}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 + i * 0.1 }}
-                        className="flex items-start"
-                      >
-                        <Icon className="w-5 h-5 mr-4 mt-1 text-[var(--accent)] flex-shrink-0" />
-                        <span>{benefit.text}</span>
-                      </motion.li>
-                    );
-                  })}
-                </ul>
-              </div>
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-all z-20"
+            >
+              <X className="w-6 h-6" />
+            </button>
 
-              <div>
-                <h4 className="text-lg font-semibold mb-3 border-l-4 border-[color:rgba(10,132,255,0.35)] pl-3">Tecnologías y Metodologías</h4>
-                <p className="text-muted text-sm bg-white/70 p-3 rounded-lg border border-[color:rgba(16,21,36,0.08)]">{tech}</p>
+            <div className="absolute bottom-0 left-0 p-8 z-10">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-cyan-500 rounded-lg shadow-lg shadow-cyan-500/30">
+                  <solution.icon className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-cyan-400 font-bold uppercase tracking-wider text-xs">Vertical de Negocio</span>
               </div>
-
-              <div>
-                <h4 className="text-lg font-semibold mb-3 border-l-4 border-[color:rgba(10,132,255,0.35)] pl-3">KPIs Impactados</h4>
-                <p className="text-muted text-sm bg-white/70 p-3 rounded-lg border border-[color:rgba(16,21,36,0.08)]">{kpis}</p>
-              </div>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">{solution.title}</h3>
+              <p className="text-gray-300 max-w-2xl text-lg hidden sm:block">{solution.description}</p>
             </div>
           </div>
-          <div className="h-1 bg-gradient-to-r from-[var(--accent)] to-blue-500"></div>
+
+          {/* Cuerpo del Modal con Tabs */}
+          <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col md:flex-row">
+
+            {/* Sidebar / Tabs (Desktop) */}
+            <div className="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-gray-200 p-4 md:p-6 shrink-0">
+              <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible no-scrollbar">
+                <button
+                  onClick={() => setActiveTab('services')}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all whitespace-nowrap ${activeTab === 'services' ? 'bg-cyan-50 text-cyan-600 font-semibold shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}
+                >
+                  <Layers className="w-5 h-5" />
+                  Servicios
+                </button>
+                <button
+                  onClick={() => setActiveTab('methodology')}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all whitespace-nowrap ${activeTab === 'methodology' ? 'bg-cyan-50 text-cyan-600 font-semibold shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}
+                >
+                  <Search className="w-5 h-5" />
+                  Cómo Trabajamos
+                </button>
+                <button
+                  onClick={() => setActiveTab('impact')}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all whitespace-nowrap ${activeTab === 'impact' ? 'bg-cyan-50 text-cyan-600 font-semibold shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}
+                >
+                  <TrendingUp className="w-5 h-5" />
+                  Impacto & KPIs
+                </button>
+              </nav>
+
+              <div className="mt-8 hidden md:block">
+                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Beneficios Clave</h4>
+                <div className="space-y-4">
+                  {modalContent.benefits.map((benefit, i) => (
+                    <div key={i} className="flex gap-3">
+                      <div className="mt-1 shrink-0 text-cyan-500">
+                        <benefit.icon className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-800">{benefit.title}</p>
+                        <p className="text-xs text-gray-500 leading-relaxed">{benefit.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Contenido Dinámico */}
+            <div className="flex-1 p-6 md:p-10">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {activeTab === 'services' && (
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6">Nuestros Servicios</h4>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {modalContent.tabs.services.map((service, idx) => (
+                        <div key={idx} className="flex items-center p-4 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                          <div className="w-10 h-10 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center mr-4 shrink-0">
+                            <CheckCircle className="w-5 h-5" />
+                          </div>
+                          <span className="font-medium text-gray-700">{service}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                      <p className="text-blue-800 text-sm font-medium flex gap-2">
+                        <Sparkles className="w-5 h-5" />
+                        ¿No encuentras lo que buscas? Personalizamos cada solución a la medida de tu desafío.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'methodology' && (
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6">Nuestra Metodología</h4>
+                    <div className="space-y-6">
+                      {modalContent.tabs.methodology.map((step, idx) => (
+                        <div key={idx} className="relative pl-8 border-l-2 border-gray-200 last:border-l-0 pb-6 last:pb-0">
+                          <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-cyan-500 ring-4 ring-white"></div>
+                          <h5 className="text-lg font-bold text-gray-900 mb-1">{step.step}</h5>
+                          <p className="text-gray-600">{step.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'impact' && (
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6">Impacto Generado</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      {modalContent.tabs.impact.map((kpi, idx) => (
+                        <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                          <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 mb-2">
+                            {kpi.metric}
+                          </div>
+                          <div className="text-sm font-bold text-gray-800 uppercase tracking-wide mb-2">{kpi.value}</div>
+                          <p className="text-xs text-gray-500">{kpi.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Footer del Modal */}
+          <div className="p-4 md:p-6 bg-white border-t border-gray-100 flex justify-end shrink-0">
+            <button
+              onClick={() => window.open('https://wa.me/56974159166', '_blank')}
+              className="bg-black text-white px-8 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors flex items-center shadow-lg shadow-black/20"
+            >
+              Solicitar Asesoría
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </button>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -247,119 +372,140 @@ export default function Solutions() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
     }
   };
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 100, damping: 15 }
+    },
+    hover: {
+      y: -10,
+      scale: 1.02,
+      transition: { type: "spring", stiffness: 400, damping: 10 }
+    }
   };
 
   return (
     <>
-      <section className="py-24 sm:py-32 px-6 bg-[var(--surface)] text-[var(--text)] relative overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-40">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,192,255,0.1),rgba(255,255,255,0))]"></div>
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      <section className="py-24 sm:py-32 px-6 bg-white relative overflow-hidden">
+        {/* Fondo sutil para mantener limpieza visual */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-gray-50/50 to-transparent"></div>
+          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-blue-100/20 rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div 
-            className="text-center mb-20"
+          <motion.div
+            className="text-center mb-24"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
           >
-            <motion.div variants={itemVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[var(--accent)] text-sm font-medium mb-6">
+            <motion.div variants={cardVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-cyan-600 text-sm font-bold mb-6 shadow-sm">
               <Sparkles className="w-4 h-4 mr-2" />
-              Nuestras Soluciones
+              Nuestras Verticales
             </motion.div>
-            <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-              Tecnología que Potencia la <span className="text-[var(--accent)]">Experiencia Humana</span>
+            <motion.h2 variants={cardVariants} className="text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 mb-6">
+              Soluciones Integrales para <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">Tu Negocio</span>
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-lg text-muted max-w-3xl mx-auto leading-relaxed">
-              Desde la automatización inteligente hasta el análisis de datos, nuestras soluciones están diseñadas para integrarse, optimizar y elevar cada punto de contacto con tus clientes.
+            <motion.p variants={cardVariants} className="text-xl text-gray-500 max-w-3xl mx-auto leading-relaxed">
+              Simplificamos lo complejo. Unimos tecnología, personas y estrategia para ayudarte a crecer de forma sólida y sostenible.
             </motion.p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
-            {solutions.map((solution: Solution, index: number) => {
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {solutions.map((solution: Solution) => {
               const Icon = solution.icon;
-              
+
               return (
-                <div key={index} className="group relative">
-                  <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-600 opacity-0 group-hover:opacity-80 transition-opacity duration-300" />
-                  
-                  <div className="relative h-full rounded-2xl p-6 bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_24px_48px_rgba(15,23,42,0.08)] overflow-hidden">
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out opacity-10 group-hover:opacity-20"
-                        style={{ backgroundImage: `url('${solution.bgImage}')` }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
-                    
-                      <div className="relative h-full flex flex-col z-10">
-                        <div className="p-3 rounded-lg bg-white/80 border border-[color:rgba(16,21,36,0.08)] w-max mb-6 shadow-sm">
-                          <Icon className="w-8 h-8 text-[var(--accent)]" />
-                        </div>
-                        
-                        <h3 className="text-xl font-bold mb-3 transition-colors duration-300 group-hover:text-[var(--accent)]">
-                          {solution.title}
-                        </h3>
-                        
-                        <p className="text-muted mb-6 leading-relaxed flex-grow">
-                          {solution.description}
-                        </p>
-                        
-                        <div className="space-y-2 mb-8">
-                          {solution.keyPoints.slice(0, 3).map((point: string, i: number) => (
-                            <div key={i} className="flex items-center text-sm">
-                              <CheckCircle className="w-4 h-4 mr-3 text-cyan-500/70 flex-shrink-0" />
-                              <span>{point}</span>
-                            </div>
-                          ))}
-                        </div>
-                        
-                        <button 
-                          onClick={() => handleOpenModal(solution)}
-                          className="flex items-center justify-between w-full mt-auto px-4 py-2 bg-gray-500/10 border border-gray-500/30 rounded-lg text-sm font-medium text-[var(--text-muted)] group-hover: group-hover:border-cyan-500/50 transition-all duration-300"
-                        >
-                          <span>Conocer más</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                        </button>
+                <motion.div
+                  key={solution.id}
+                  variants={cardVariants}
+                  whileHover="hover"
+                  className="group relative h-full"
+                  onClick={() => setSelectedSolution(solution)}
+                >
+                  <div className="relative h-full bg-white rounded-3xl p-8 shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer">
+
+                    {/* Efecto de gradiente sutil en el fondo al hacer hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    <div className="relative z-10 flex flex-col h-full">
+                      {/* Icono con estilo Premium */}
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 mb-8 transform group-hover:scale-110 transition-transform duration-300">
+                        <Icon className="w-8 h-8 text-white" />
                       </div>
+
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-cyan-600 transition-colors">
+                        {solution.title}
+                      </h3>
+
+                      <p className="text-gray-500 leading-relaxed mb-8 flex-grow">
+                        {solution.description}
+                      </p>
+
+                      <ul className="space-y-3 mb-8">
+                        {solution.keyPoints.slice(0, 3).map((point, i) => (
+                          <li key={i} className="flex items-center text-sm font-medium text-gray-600">
+                            <CheckCircle className="w-4 h-4 mr-3 text-cyan-500 flex-shrink-0" />
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between text-cyan-600 font-bold text-sm">
+                        <span>Explorar Vertical</span>
+                        <div className="w-8 h-8 rounded-full bg-cyan-50 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all">
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
+          {/* CTA Final */}
           <div className="text-center">
-              <div className="max-w-3xl mx-auto p-8 rounded-2xl bg-[var(--surface-2)] border border-[color:rgba(16,21,36,0.08)] shadow-[0_24px_48px_rgba(15,23,42,0.1)]">
-                  <div className="flex items-center justify-center space-x-4 mb-6">
-                      <Zap className="w-8 h-8 text-yellow-400/80" />
-                      <Shield className="w-8 h-8 text-green-400/80" />
-                      <Clock className="w-8 h-8 text-blue-400/80" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4">
-                      ¿Listo para dar el siguiente paso?
-                  </h3>
-                  <p className="text-muted mb-8 leading-relaxed">
-                      Hablemos de tus desafíos. Nuestro equipo de expertos puede diseñar una prueba de concepto o una demostración adaptada a tus necesidades.
-                  </p>
-                  {/* --- INICIO DEL CAMBIO --- */}
-                  <a 
-                    href="https://wa.me/56974159166"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-6 py-3 bg-[var(--accent)] hover:bg-[#0f6fe6] text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-[0_18px_32px_rgba(10,132,255,0.35)]"
-                  >
-                      Solicitar una Demostración
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                  </a>
-                  {/* --- FIN DEL CAMBIO --- */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-4xl mx-auto p-12 rounded-3xl bg-slate-900 text-white shadow-2xl relative overflow-hidden"
+            >
+              {/* Background accent */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="text-left">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4">¿Listo para escalar tu negocio?</h3>
+                  <p className="text-gray-300 text-lg">Agenda una sesión estratégica gratuita con nuestros expertos.</p>
+                </div>
+                <a
+                  href="https://wa.me/56974159166"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-cyan-50 transition-colors shadow-lg transform hover:scale-105 duration-200"
+                >
+                  Hablar Ahora
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
               </div>
+            </motion.div>
           </div>
         </div>
       </section>
