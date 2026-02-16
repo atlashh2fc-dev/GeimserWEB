@@ -6,6 +6,20 @@ import { getCookie, deleteCookie } from 'cookies-next';
 import { createClient } from '@supabase/supabase-js';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+    ResponsiveContainer,
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    Tooltip,
+    BarChart,
+    Bar,
+    PieChart,
+    Pie,
+    Cell,
+    CartesianGrid,
+} from 'recharts';
+import {
     LogOut,
     Search,
     Calendar,
@@ -19,7 +33,11 @@ import {
     RefreshCw,
     X,
     User,
-    Bot
+    Bot,
+    CheckCircle2,
+    Clock,
+    PhoneCall,
+    Sparkles,
 } from 'lucide-react';
 
 // Supabase config
@@ -42,6 +60,59 @@ interface Lead {
     conversacion_completa?: string;
 }
 
+type RangeDays = 7 | 30 | 90;
+
+const STATUS_OPTIONS = ['pendiente', 'contactado', 'cerrado'] as const;
+
+const STATUS_COLORS: Record<string, string> = {
+    pendiente: '#f59e0b', // amber-500
+    contactado: '#3b82f6', // blue-500
+    cerrado: '#10b981', // emerald-500
+};
+
+function normalizeText(value: string | null | undefined): string {
+    return (value ?? '').toString().trim().toLowerCase();
+}
+
+function hasContact(lead: Lead): boolean {
+    return Boolean(lead.correo || lead.telefono);
+}
+
+function dateKey(date: Date): string {
+    return date.toISOString().slice(0, 10);
+}
+
+function clampNumber(value: number, min: number, max: number): number {
+    return Math.min(max, Math.max(min, value));
+}
+
+function percentChange(current: number, previous: number): number | null {
+    if (previous === 0) return current === 0 ? 0 : null;
+    return ((current - previous) / previous) * 100;
+}
+
+function formatDelta(delta: number | null): { label: string; tone: 'up' | 'down' | 'flat' | 'na' } {
+    if (delta === null) return { label: '—', tone: 'na' };
+    if (Math.abs(delta) < 0.01) return { label: '0%', tone: 'flat' };
+    const rounded = Math.round(delta);
+    if (rounded > 0) return { label: `+${rounded}%`, tone: 'up' };
+    if (rounded < 0) return { label: `${rounded}%`, tone: 'down' };
+    return { label: '0%', tone: 'flat' };
+}
+
+function formatShortDateLabel(key: string): string {
+    try {
+        const d = new Date(`${key}T00:00:00.000Z`);
+        return new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short' }).format(d);
+    } catch {
+        return key;
+    }
+}
+
+function getStatusColor(status: string): string {
+    return STATUS_COLORS[normalizeText(status)] ?? '#64748b'; // slate-500
+}
+
 export default function DashboardPage() {
     const router = useRouter();
     const [leads, setLeads] = useState<Lead[]>([]);
@@ -49,8 +120,18 @@ export default function DashboardPage() {
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+    const [rangeDays, setRangeDays] = useState<RangeDays>(90);
+    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [interestFilter, setInterestFilter] = useState<string>('all');
+    const [sourceFilter, setSourceFilter] = useState<string>('all');
+    const [onlyWithContact, setOnlyWithContact] = useState(false);
+    const [realtimeStatus, setRealtimeStatus] = useState<'connecting' | 'subscribed' | 'error'>('connecting');
+    const [lastRefreshedAt, setLastRefreshedAt] = useState<Date | null>(null);
+    const [updatingLeadId, setUpdatingLeadId] = useState<number | null>(null);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         // Auth check
         const auth = getCookie('geimser_admin_auth');
         if (!auth) {
@@ -87,8 +168,15 @@ export default function DashboardPage() {
                 },
             )
             .subscribe((status) => {
-                if (status !== 'SUBSCRIBED') return;
-                console.log('✅ [DASHBOARD] Realtime suscrito a leads_comerciales');
+                if (status === 'SUBSCRIBED') {
+                    setRealtimeStatus('subscribed');
+                    console.log('✅ [DASHBOARD] Realtime suscrito a leads_comerciales');
+                    return;
+                }
+
+                if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+                    setRealtimeStatus('error');
+                }
             });
 
         return () => {
@@ -111,6 +199,7 @@ export default function DashboardPage() {
 
             if (error) throw error;
             setLeads(data || []);
+            setLastRefreshedAt(new Date());
         } catch (err) {
             console.error('Error fetching leads:', err);
             setError(
@@ -126,11 +215,44 @@ export default function DashboardPage() {
         router.push('/super-admin-7zX9/login');
     };
 
-    const filteredLeads = leads.filter(lead =>
-        lead.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.correo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.empresa?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const now = Date.now();
+    const rangeStart = new Date(now - rangeDays * 24 * 60 * 60 * 1000);
+    const prevRangeStart = new Date(now - rangeDays * 2 * 24 * 60 * 60 * 1000);
+
+    const leadsInRange = leads.filter((l) => new Date(l.created_at) >= rangeStart);
+    const leadsPrevRange = leads.filter((l) => {
+        const d = new Date(l.created_at);
+        return d >= prevRangeStart && d < rangeStart;
+    });
+
+    const availableInterests = Array.from(
+        new Set(leads.map((l) => l.tipo_interes).filter(Boolean)),
+    ).sort((a, b) => a.localeCompare(b));
+
+    const availableSources = Array.from(
+        new Set(leads.map((l) => l.fuente).filter(Boolean)),
+    ).sort((a, b) => a.localeCompare(b));
+
+    const filteredLeads = leadsInRange
+        .filter((lead) => {
+            const term = normalizeText(searchTerm);
+            if (!term) return true;
+            return (
+                normalizeText(lead.nombre).includes(term) ||
+                normalizeText(lead.correo).includes(term) ||
+                normalizeText(lead.telefono).includes(term) ||
+                normalizeText(lead.empresa).includes(term) ||
+                normalizeText(lead.mensaje).includes(term)
+            );
+        })
+        .filter((lead) => (onlyWithContact ? hasContact(lead) : true))
+        .filter((lead) =>
+            statusFilter === 'all'
+                ? true
+                : normalizeText(lead.estado) === normalizeText(statusFilter),
+        )
+        .filter((lead) => (interestFilter === 'all' ? true : lead.tipo_interes === interestFilter))
+        .filter((lead) => (sourceFilter === 'all' ? true : lead.fuente === sourceFilter));
 
     const formatDate = (dateString: string) => {
         try {
@@ -169,6 +291,82 @@ export default function DashboardPage() {
         document.body.appendChild(link);
         link.click();
     };
+
+    const updateLeadStatus = async (leadId: number, newStatus: string) => {
+        const statusNormalized = normalizeText(newStatus);
+        if (!statusNormalized) return;
+
+        setUpdatingLeadId(leadId);
+        try {
+            const { error } = await supabase
+                .from('leads_comerciales')
+                .update({ estado: statusNormalized })
+                .eq('id', leadId);
+
+            if (error) throw error;
+
+            setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, estado: statusNormalized } : l)));
+        } catch (e) {
+            console.error('❌ Error actualizando estado:', e);
+            alert('No se pudo actualizar el estado del lead (revisa permisos/RLS).');
+        } finally {
+            setUpdatingLeadId(null);
+        }
+    };
+
+    const kpiTotal = leadsInRange.length;
+    const kpiPrevTotal = leadsPrevRange.length;
+    const kpiTotalDelta = formatDelta(percentChange(kpiTotal, kpiPrevTotal));
+
+    const kpiQualified = leadsInRange.filter(hasContact).length;
+    const kpiPrevQualified = leadsPrevRange.filter(hasContact).length;
+    const kpiQualifiedDelta = formatDelta(percentChange(kpiQualified, kpiPrevQualified));
+
+    const kpiContacted = leadsInRange.filter((l) => normalizeText(l.estado) === 'contactado').length;
+    const kpiPrevContacted = leadsPrevRange.filter((l) => normalizeText(l.estado) === 'contactado').length;
+    const kpiContactedDelta = formatDelta(percentChange(kpiContacted, kpiPrevContacted));
+
+    const kpiClosed = leadsInRange.filter((l) => normalizeText(l.estado) === 'cerrado').length;
+    const kpiPrevClosed = leadsPrevRange.filter((l) => normalizeText(l.estado) === 'cerrado').length;
+    const kpiClosedDelta = formatDelta(percentChange(kpiClosed, kpiPrevClosed));
+
+    const kpiConversion = kpiTotal > 0 ? (kpiClosed / kpiTotal) * 100 : 0;
+    const kpiPrevConversion = kpiPrevTotal > 0 ? (kpiPrevClosed / kpiPrevTotal) * 100 : 0;
+    const kpiConversionDelta = formatDelta(percentChange(kpiConversion, kpiPrevConversion));
+
+    const dayCounts = new Map<string, number>();
+    for (const lead of leadsInRange) {
+        const key = dateKey(new Date(lead.created_at));
+        dayCounts.set(key, (dayCounts.get(key) ?? 0) + 1);
+    }
+    const trendDaysCount = clampNumber(rangeDays, 7, 90);
+    const trendData: Array<{ day: string; leads: number }> = [];
+    for (let i = trendDaysCount - 1; i >= 0; i--) {
+        const d = new Date(now - i * 24 * 60 * 60 * 1000);
+        const key = dateKey(d);
+        trendData.push({ day: key, leads: dayCounts.get(key) ?? 0 });
+    }
+
+    const statusCounts = leadsInRange.reduce<Record<string, number>>((acc, l) => {
+        const key = normalizeText(l.estado) || 'otros';
+        acc[key] = (acc[key] ?? 0) + 1;
+        return acc;
+    }, {});
+    const statusPie = Object.entries(statusCounts)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value);
+
+    const interestCounts = leadsInRange.reduce<Record<string, number>>((acc, l) => {
+        const key = l.tipo_interes || 'Otros';
+        acc[key] = (acc[key] ?? 0) + 1;
+        return acc;
+    }, {});
+    const topInterests = Object.entries(interestCounts)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 6);
+
+    const latestLeads = [...leadsInRange].slice(0, 6);
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
@@ -221,25 +419,318 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 )}
-                {/* Stats Row - Light Mode */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                {/* Header controls */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+                    <div className="flex items-center gap-3">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-gray-200 shadow-sm">
+                            <div
+                                className={`w-2.5 h-2.5 rounded-full ${
+                                    realtimeStatus === 'subscribed'
+                                        ? 'bg-emerald-500'
+                                        : realtimeStatus === 'error'
+                                          ? 'bg-red-500'
+                                          : 'bg-amber-500'
+                                }`}
+                                title={
+                                    realtimeStatus === 'subscribed'
+                                        ? 'Realtime conectado'
+                                        : realtimeStatus === 'error'
+                                          ? 'Realtime con error'
+                                          : 'Conectando...'
+                                }
+                            />
+                            <span className="text-xs font-medium text-gray-600">
+                                {realtimeStatus === 'subscribed'
+                                    ? 'En vivo'
+                                    : realtimeStatus === 'error'
+                                      ? 'Sin realtime'
+                                      : 'Conectando'}
+                            </span>
+                            {lastRefreshedAt && (
+                                <span className="text-xs text-gray-400">
+                                    • actualizado{' '}
+                                    {lastRefreshedAt.toLocaleTimeString('es-CL', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="inline-flex rounded-xl bg-white border border-gray-200 shadow-sm overflow-hidden">
+                            {([7, 30, 90] as RangeDays[]).map((d) => (
+                                <button
+                                    key={d}
+                                    onClick={() => setRangeDays(d)}
+                                    className={`px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                        rangeDays === d
+                                            ? 'bg-blue-600 text-white'
+                                            : 'text-gray-600 hover:bg-gray-50'
+                                    }`}
+                                >
+                                    {d} días
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="text-xs text-gray-500">
+                        Comparativo vs periodo anterior ({rangeDays} días)
+                    </div>
+                </div>
+
+                {/* KPI Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
                     {[
-                        { label: 'Total Leads', value: leads.length, color: 'text-blue-600', icon: 'from-blue-500/10 to-blue-500/20' },
-                        { label: 'Esta Semana', value: leads.filter(l => new Date(l.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length, color: 'text-emerald-600', icon: 'from-emerald-500/10 to-emerald-500/20' },
-                        { label: 'Con Correo', value: leads.filter(l => l.correo).length, color: 'text-purple-600', icon: 'from-purple-500/10 to-purple-500/20' },
-                        { label: 'Tasa Conversión', value: '12.5%', color: 'text-amber-600', icon: 'from-amber-500/10 to-amber-500/20' },
+                        {
+                            label: 'Leads',
+                            value: kpiTotal,
+                            delta: kpiTotalDelta,
+                            icon: <Sparkles className="w-4 h-4" />,
+                            color: 'text-blue-700',
+                            bg: 'from-blue-500/10 to-blue-500/20',
+                        },
+                        {
+                            label: 'Con contacto',
+                            value: kpiQualified,
+                            delta: kpiQualifiedDelta,
+                            icon: <Mail className="w-4 h-4" />,
+                            color: 'text-purple-700',
+                            bg: 'from-purple-500/10 to-purple-500/20',
+                        },
+                        {
+                            label: 'Contactados',
+                            value: kpiContacted,
+                            delta: kpiContactedDelta,
+                            icon: <PhoneCall className="w-4 h-4" />,
+                            color: 'text-sky-700',
+                            bg: 'from-sky-500/10 to-sky-500/20',
+                        },
+                        {
+                            label: 'Cerrados',
+                            value: kpiClosed,
+                            delta: kpiClosedDelta,
+                            icon: <CheckCircle2 className="w-4 h-4" />,
+                            color: 'text-emerald-700',
+                            bg: 'from-emerald-500/10 to-emerald-500/20',
+                        },
+                        {
+                            label: 'Conversión',
+                            value: `${kpiConversion.toFixed(1)}%`,
+                            delta: kpiConversionDelta,
+                            icon: <Clock className="w-4 h-4" />,
+                            color: 'text-amber-700',
+                            bg: 'from-amber-500/10 to-amber-500/20',
+                        },
                     ].map((stat, i) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1 }}
+                            transition={{ delay: i * 0.06 }}
                             className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
                         >
-                            <p className="text-gray-500 text-sm mb-1">{stat.label}</p>
-                            <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-gray-500 text-sm mb-1">{stat.label}</p>
+                                    <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+                                </div>
+                                <div
+                                    className={`p-2 rounded-xl bg-gradient-to-br ${stat.bg} border border-gray-100 text-gray-700`}
+                                >
+                                    {stat.icon}
+                                </div>
+                            </div>
+                            <div className="mt-3 text-xs">
+                                <span
+                                    className={
+                                        stat.delta.tone === 'up'
+                                            ? 'text-emerald-700 font-semibold'
+                                            : stat.delta.tone === 'down'
+                                              ? 'text-red-700 font-semibold'
+                                              : stat.delta.tone === 'flat'
+                                                ? 'text-gray-600 font-semibold'
+                                                : 'text-gray-400 font-semibold'
+                                    }
+                                >
+                                    {stat.delta.label}
+                                </span>
+                                <span className="text-gray-400"> vs anterior</span>
+                            </div>
                         </motion.div>
                     ))}
+                </div>
+
+                {/* Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 className="font-semibold text-gray-900">Leads por día</h2>
+                                <p className="text-xs text-gray-500">Últimos {rangeDays} días</p>
+                            </div>
+                        </div>
+                        <div className="h-64">
+                            {isMounted ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <LineChart data={trendData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
+                                        <XAxis
+                                            dataKey="day"
+                                            tickFormatter={formatShortDateLabel}
+                                            tick={{ fontSize: 11, fill: '#64748b' }}
+                                            interval={rangeDays === 7 ? 0 : rangeDays === 30 ? 4 : 9}
+                                        />
+                                        <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                                        <Tooltip
+                                            formatter={(v: any) => [v, 'Leads']}
+                                            labelFormatter={(l: any) => `Día: ${l}`}
+                                            contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb' }}
+                                        />
+                                        <Line type="monotone" dataKey="leads" stroke="#2563eb" strokeWidth={2.5} dot={false} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <div className="h-full flex items-center justify-center text-sm text-gray-400">
+                                    Cargando gráfico…
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 className="font-semibold text-gray-900">Pipeline</h2>
+                                <p className="text-xs text-gray-500">Distribución por estado</p>
+                            </div>
+                        </div>
+                        <div className="h-64">
+                            {isMounted ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Tooltip
+                                            formatter={(v: any) => [v, 'Leads']}
+                                            contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb' }}
+                                        />
+                                        <Pie
+                                            data={statusPie}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            innerRadius={55}
+                                            outerRadius={85}
+                                            paddingAngle={2}
+                                        >
+                                            {statusPie.map((entry, idx) => (
+                                                <Cell key={idx} fill={getStatusColor(entry.name)} />
+                                            ))}
+                                        </Pie>
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <div className="h-full flex items-center justify-center text-sm text-gray-400">
+                                    Cargando gráfico…
+                                </div>
+                            )}
+                        </div>
+                        <div className="mt-4 space-y-2">
+                            {statusPie.slice(0, 4).map((s) => (
+                                <div key={s.name} className="flex items-center justify-between text-sm">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-2.5 h-2.5 rounded-full" style={{ background: getStatusColor(s.name) }} />
+                                        <span className="text-gray-700 capitalize">{s.name}</span>
+                                    </div>
+                                    <span className="font-semibold text-gray-900">{s.value}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 className="font-semibold text-gray-900">Top intereses</h2>
+                                <p className="text-xs text-gray-500">En qué están preguntando</p>
+                            </div>
+                        </div>
+                        <div className="h-64">
+                            {isMounted ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={topInterests} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
+                                        <XAxis
+                                            dataKey="name"
+                                            tick={{ fontSize: 11, fill: '#64748b' }}
+                                            interval={0}
+                                            angle={-12}
+                                            height={50}
+                                        />
+                                        <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                                        <Tooltip
+                                            formatter={(v: any) => [v, 'Leads']}
+                                            contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb' }}
+                                        />
+                                        <Bar dataKey="value" fill="#06b6d4" radius={[10, 10, 0, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <div className="h-full flex items-center justify-center text-sm text-gray-400">
+                                    Cargando gráfico…
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 className="font-semibold text-gray-900">Últimas conversaciones</h2>
+                                <p className="text-xs text-gray-500">Acceso rápido</p>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            {latestLeads.length === 0 ? (
+                                <div className="text-sm text-gray-500">Sin datos en el rango seleccionado.</div>
+                            ) : (
+                                latestLeads.map((l) => (
+                                    <button
+                                        key={l.id}
+                                        onClick={() => setSelectedLead(l)}
+                                        className="w-full text-left p-3 rounded-xl border border-gray-200 hover:border-blue-200 hover:bg-blue-50/40 transition-colors"
+                                    >
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="min-w-0">
+                                                <div className="text-sm font-semibold text-gray-900 truncate">
+                                                    {l.empresa || l.nombre || 'Lead'}
+                                                </div>
+                                                <div className="text-xs text-gray-500 truncate">{l.tipo_interes}</div>
+                                            </div>
+                                            <span className="text-[11px] text-gray-400 whitespace-nowrap">
+                                                {formatDate(l.created_at)}
+                                            </span>
+                                        </div>
+                                        <div className="mt-2 flex items-center gap-2">
+                                            <span
+                                                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                                                style={{
+                                                    backgroundColor: `${getStatusColor(l.estado)}1a`,
+                                                    color: getStatusColor(l.estado),
+                                                }}
+                                            >
+                                                <span className="w-1.5 h-1.5 rounded-full" style={{ background: getStatusColor(l.estado) }} />
+                                                {normalizeText(l.estado) || 'pendiente'}
+                                            </span>
+                                            {hasContact(l) && (
+                                                <span className="text-[11px] text-emerald-700 font-semibold">Contacto</span>
+                                            )}
+                                        </div>
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 {/* Toolbar - Light Mode */}
@@ -255,10 +746,57 @@ export default function DashboardPage() {
                         />
                     </div>
 
-                    <div className="flex items-center gap-3 w-full md:w-auto">
-                        <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-                            <Filter className="w-4 h-4 text-gray-500" />
-                            <span>Filtros</span>
+                    <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 shadow-sm"
+                            >
+                                <option value="all">Todos los estados</option>
+                                {STATUS_OPTIONS.map((s) => (
+                                    <option key={s} value={s}>
+                                        {s}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                value={interestFilter}
+                                onChange={(e) => setInterestFilter(e.target.value)}
+                                className="px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 shadow-sm"
+                            >
+                                <option value="all">Todos los intereses</option>
+                                {availableInterests.map((i) => (
+                                    <option key={i} value={i}>
+                                        {i}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                value={sourceFilter}
+                                onChange={(e) => setSourceFilter(e.target.value)}
+                                className="px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 shadow-sm"
+                            >
+                                <option value="all">Todas las fuentes</option>
+                                {availableSources.map((s) => (
+                                    <option key={s} value={s}>
+                                        {s}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <button
+                            onClick={() => setOnlyWithContact((v) => !v)}
+                            className={`flex items-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-medium transition-colors shadow-sm ${
+                                onlyWithContact
+                                    ? 'bg-emerald-600 text-white border-emerald-600'
+                                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                            }`}
+                            title="Mostrar solo leads con correo o teléfono"
+                        >
+                            <Filter className="w-4 h-4" />
+                            <span>Solo con contacto</span>
                         </button>
                         <button
                             onClick={exportCSV}
@@ -278,6 +816,7 @@ export default function DashboardPage() {
                                 <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
                                     <th className="px-6 py-4 font-semibold">Fecha</th>
                                     <th className="px-6 py-4 font-semibold">Lead</th>
+                                    <th className="px-6 py-4 font-semibold">Estado</th>
                                     <th className="px-6 py-4 font-semibold">Contacto</th>
                                     <th className="px-6 py-4 font-semibold">Empresa - Interés</th>
                                     <th className="px-6 py-4 font-semibold text-right">Acciones</th>
@@ -286,7 +825,7 @@ export default function DashboardPage() {
                             <tbody className="divide-y divide-gray-100 text-sm">
                                 {filteredLeads.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                        <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                                             No se encontraron resultados
                                         </td>
                                     </tr>
@@ -301,9 +840,34 @@ export default function DashboardPage() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="font-medium text-gray-900">{lead.nombre || 'Anónimo'}</div>
-                                                <div className="text-xs text-gray-500 mt-0.5 inline-flex items-center gap-1.5">
-                                                    <div className={`w-1.5 h-1.5 rounded-full ${lead.estado === 'pendiente' ? 'bg-amber-400' : 'bg-emerald-400'}`}></div>
-                                                    {lead.estado}
+                                                <div className="text-xs text-gray-500 mt-0.5 max-w-[320px] truncate">
+                                                    {lead.mensaje || '—'}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-2">
+                                                    <span
+                                                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold"
+                                                        style={{
+                                                            backgroundColor: `${getStatusColor(lead.estado)}1a`,
+                                                            color: getStatusColor(lead.estado),
+                                                        }}
+                                                    >
+                                                        {normalizeText(lead.estado) || 'pendiente'}
+                                                    </span>
+                                                    <select
+                                                        value={normalizeText(lead.estado) || 'pendiente'}
+                                                        onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
+                                                        disabled={updatingLeadId === lead.id}
+                                                        className="text-xs bg-white border border-gray-200 rounded-lg px-2 py-1 text-gray-700"
+                                                        title="Actualizar estado"
+                                                    >
+                                                        {STATUS_OPTIONS.map((s) => (
+                                                            <option key={s} value={s}>
+                                                                {s}
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
