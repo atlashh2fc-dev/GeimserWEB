@@ -31,6 +31,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [leadCaptured, setLeadCaptured] = useState(false);
+  const [leadId, setLeadId] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -98,7 +99,8 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
         timestamp: new Date()
       };
 
-      setMessages(prev => [...prev, botMessage]);
+      const finalMessages = [...updatedMessages, botMessage];
+      setMessages(finalMessages);
 
       // INTENTO DE GUARDADO ROBUSTO (LOOSE LEADS)
       // Guardamos SIEMPRE que haya interacción, actualizando el registro si ya existe
@@ -108,9 +110,9 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
           ...leadData,
           fuente: 'Chat Widget Geimser360',
           tipo_interes: leadData.tipo_interes || 'Consulta General',
-          conversacion_completa: updatedMessages.map(m => `${m.role}: ${m.content}`).join('\n---\n'),
-          // Si ya tenemos un ID capturado en esta sesión, lo enviamos para actualizar
-          id: (window as any).__currentLeadId || undefined
+          conversacion_completa: finalMessages.map(m => `${m.role}: ${m.content}`).join('\n---\n'),
+          // Si ya tenemos un ID en esta conversación, lo enviamos para actualizar
+          id: leadId || undefined
         };
 
         // Guardamos (o actualizamos)
@@ -118,7 +120,7 @@ export default function AssistantModal({ isOpen, onClose }: AssistantModalProps)
 
         // Si nos devuelve un ID, lo guardamos en la sesión
         if (savedId) {
-          (window as any).__currentLeadId = savedId;
+          setLeadId(savedId);
           console.log('💾 Sesión de chat sincronizada con ID:', savedId);
         }
 

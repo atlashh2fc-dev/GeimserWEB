@@ -4,11 +4,16 @@ import React, { useState, useEffect } from 'react';
 import AssistantModal from './AssistantModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, X, TrendingUp, Sparkles, Zap } from 'lucide-react'; // Se importa el nuevo icono 'Bot'
+import { usePathname } from 'next/navigation';
 
 const FloatingChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const pathname = usePathname();
+
+  // No mostrar el chatbot en el panel privado
+  if (pathname.startsWith('/super-admin-7zX9')) return null;
 
   // Mostrar tooltip con mensaje de neuromarketing
   useEffect(() => {

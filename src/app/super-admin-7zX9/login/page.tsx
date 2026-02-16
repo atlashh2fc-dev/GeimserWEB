@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Lock, Loader2, ShieldCheck, User } from 'lucide-react';
+import { Eye, EyeOff, Lock, Loader2, ShieldCheck, User } from 'lucide-react';
 import { setCookie } from 'cookies-next';
 
 export default function HiddenLoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const router = useRouter();
@@ -69,13 +70,25 @@ export default function HiddenLoginPage() {
                             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 ml-1">Contraseña</label>
                             <div className="relative">
                                 <input
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 pl-11 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 pl-11 pr-11 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
                                     placeholder="••••••••"
                                 />
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword((v) => !v)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="w-5 h-5" />
+                                    ) : (
+                                        <Eye className="w-5 h-5" />
+                                    )}
+                                </button>
                             </div>
                         </div>
 

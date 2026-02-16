@@ -351,8 +351,9 @@ export default function DashboardPage() {
                             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
                                 {selectedLead.conversacion_completa ? (
                                     selectedLead.conversacion_completa.split('---').map((msg, idx) => {
-                                        const isUser = msg.trim().startsWith('user:');
-                                        const content = msg.replace(/^(user|assistant):/, '').trim();
+                                        const trimmed = msg.trim();
+                                        const isUser = trimmed.startsWith('user:');
+                                        const content = trimmed.replace(/^(user|assistant):/, '').trim();
 
                                         return (
                                             <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
