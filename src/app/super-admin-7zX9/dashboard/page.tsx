@@ -59,6 +59,41 @@ export default function DashboardPage() {
         }
 
         fetchLeads();
+
+        // Realtime: actualizar tabla al vuelo (inserts/updates)
+        const channel = supabase
+            .channel('leads_comerciales_changes')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'leads_comerciales' },
+                (payload: any) => {
+                    const newRow = payload?.new as Lead | undefined;
+                    const oldRow = payload?.old as Lead | undefined;
+
+                    if (payload?.eventType === 'INSERT' && newRow?.id) {
+                        setLeads((prev) => {
+                            if (prev.some((l) => l.id === newRow.id)) return prev;
+                            return [newRow, ...prev];
+                        });
+                    }
+
+                    if (payload?.eventType === 'UPDATE' && newRow?.id) {
+                        setLeads((prev) => prev.map((l) => (l.id === newRow.id ? newRow : l)));
+                    }
+
+                    if (payload?.eventType === 'DELETE' && oldRow?.id) {
+                        setLeads((prev) => prev.filter((l) => l.id !== oldRow.id));
+                    }
+                },
+            )
+            .subscribe((status) => {
+                if (status !== 'SUBSCRIBED') return;
+                console.log('✅ [DASHBOARD] Realtime suscrito a leads_comerciales');
+            });
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
     }, []);
 
     const fetchLeads = async () => {
