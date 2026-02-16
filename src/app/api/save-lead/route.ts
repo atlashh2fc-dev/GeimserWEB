@@ -38,10 +38,36 @@ function getSupabaseDiagnostics() {
 
 export async function GET() {
     const diagnostics = getSupabaseDiagnostics();
+    let ping: { ok: boolean; status?: number; error?: string; cause?: string | null } | null = null;
+
+    if (diagnostics.origin) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 4000);
+        try {
+            const res = await fetch(`${diagnostics.origin}/auth/v1/health`, {
+                method: 'GET',
+                signal: controller.signal,
+            });
+            diagnostics.pingSuccess = res.ok;
+            ping = { ok: res.ok, status: res.status };
+        } catch (e: any) {
+            const cause: any = e?.cause;
+            diagnostics.pingSuccess = false;
+            ping = {
+                ok: false,
+                error: String(e?.message ?? 'fetch failed'),
+                cause: cause?.code || cause?.message || null,
+            };
+        } finally {
+            clearTimeout(timeout);
+        }
+    }
+
     return NextResponse.json({
         ok: true,
         message: 'Diagnóstico de Supabase para /api/save-lead',
         diagnostics,
+        ping,
         hint:
             diagnostics.urlDefined && diagnostics.urlValid && diagnostics.urlLooksLikeSupabaseProjectUrl === false
                 ? 'NEXT_PUBLIC_SUPABASE_URL parece NO ser la "Project URL" de Supabase. Usa la que aparece en Supabase → Settings → API → Project URL (ej: https://<project-ref>.supabase.co).'
