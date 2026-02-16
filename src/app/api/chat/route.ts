@@ -1,6 +1,6 @@
 // src/app/api/chat/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAssistantReply } from '@/lib/ai/generateAssistantReply';
+import { generateAssistantReply, getAiProviderInfo } from '@/lib/ai/generateAssistantReply';
 import { extractLeadFromMessages } from '@/lib/leadExtraction';
 
 const GEIMSER_SYSTEM_PROMPT = `Eres **GeimserBot 🚀**, el consultor comercial digital de Geimser360, la empresa líder en soluciones integrales de contact center, tecnología e innovación en Chile.
@@ -189,7 +189,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           error: 'Servicio temporalmente no disponible. Contacta directamente a contacto@geimser.cl',
-          code: 'QUOTA_EXCEEDED'
+          code: 'QUOTA_EXCEEDED',
+          provider: error.provider ?? null,
+          model: error.model ?? null,
         },
         { status: 503 }
       );
@@ -200,6 +202,8 @@ export async function POST(request: NextRequest) {
         {
           error: 'Configuración del servidor incompleta',
           code: 'MISSING_API_KEY',
+          provider: error.provider ?? null,
+          model: error.model ?? null,
         },
         { status: 500 }
       );
@@ -210,6 +214,8 @@ export async function POST(request: NextRequest) {
         {
           error: 'Error de autenticación del servicio. Contacta al administrador del sitio.',
           code: 'AUTH_ERROR',
+          provider: error.provider ?? null,
+          model: error.model ?? null,
         },
         { status: 500 }
       );
@@ -232,6 +238,7 @@ export async function GET() {
     service: 'Consultor Comercial Digital',
     company: 'Geimser360',
     contact: 'contacto@geimser.cl',
+    ai: getAiProviderInfo(),
     timestamp: new Date().toISOString()
   });
 }

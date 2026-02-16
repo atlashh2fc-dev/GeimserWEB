@@ -31,6 +31,27 @@ function pickProvider(): AiProvider {
   return 'openai';
 }
 
+export function getAiProviderInfo(): {
+  configuredProvider: AiProvider | 'auto';
+  resolvedProvider: AiProvider;
+  hasGeminiKey: boolean;
+  hasOpenAIKey: boolean;
+  geminiModel: string;
+  openaiModel: string;
+} {
+  const configured =
+    normalizeProvider(process.env.AI_PROVIDER) ?? 'auto';
+  const resolvedProvider = pickProvider();
+  return {
+    configuredProvider: configured === 'auto' ? 'auto' : configured,
+    resolvedProvider,
+    hasGeminiKey: Boolean(process.env.GEMINI_API_KEY),
+    hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
+    geminiModel: process.env.GEMINI_MODEL ?? 'gemini-2.0-flash',
+    openaiModel: process.env.OPENAI_MODEL ?? 'gpt-4o-mini',
+  };
+}
+
 function requireEnv(name: string, provider: AiProvider): string {
   const value = process.env[name];
   if (!value) {
@@ -107,13 +128,26 @@ export async function generateAssistantReply(input: GenerateAssistantReplyInput)
 }> {
   const provider = pickProvider();
 
-  if (provider === 'gemini') {
-    const model = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
-    const content = await generateWithGemini(input);
-    return { provider, model, content };
-  }
+  try {
+    if (provider === 'gemini') {
+      const model = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
+      const content = await generateWithGemini(input);
+      return { provider, model, content };
+    }
 
-  const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
-  const content = await generateWithOpenAI(input);
-  return { provider, model, content };
+    const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
+    const content = await generateWithOpenAI(input);
+    return { provider, model, content };
+  } catch (err: any) {
+    const model =
+      provider === 'gemini'
+        ? process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
+        : process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
+
+    if (err && typeof err === 'object') {
+      if (!('provider' in err)) err.provider = provider;
+      if (!('model' in err)) err.model = model;
+    }
+    throw err;
+  }
 }

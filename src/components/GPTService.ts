@@ -70,6 +70,8 @@ export async function obtenerRespuestaGPT(messages: Message[]): Promise<BotRespo
         hasContent: !!data.content,
         contentLength: data.content?.length || 0,
         role: data.role,
+        provider: data.provider,
+        model: data.model,
         timestamp: data.timestamp
       });
     } catch (parseError) {
