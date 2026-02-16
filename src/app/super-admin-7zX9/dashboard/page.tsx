@@ -46,6 +46,7 @@ export default function DashboardPage() {
     const router = useRouter();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
@@ -62,7 +63,12 @@ export default function DashboardPage() {
 
     const fetchLeads = async () => {
         setLoading(true);
+        setError(null);
         try {
+            if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+                throw new Error('Faltan NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY en el entorno');
+            }
+
             const { data, error } = await supabase
                 .from('leads_comerciales')
                 .select('*')
@@ -72,6 +78,9 @@ export default function DashboardPage() {
             setLeads(data || []);
         } catch (err) {
             console.error('Error fetching leads:', err);
+            setError(
+                err instanceof Error ? err.message : 'No se pudieron cargar los leads (ver consola)',
+            );
         } finally {
             setLoading(false);
         }
@@ -168,6 +177,15 @@ export default function DashboardPage() {
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-6 py-8">
+                {error && (
+                    <div className="mb-6 bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm shadow-sm">
+                        <div className="font-semibold">No se pudieron cargar los leads</div>
+                        <div className="mt-1">{error}</div>
+                        <div className="mt-2 text-red-600/80">
+                            Tip: revisa `GET /api/save-lead` para ver diagnóstico de Supabase.
+                        </div>
+                    </div>
+                )}
                 {/* Stats Row - Light Mode */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     {[

@@ -1,21 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+function getSupabaseDiagnostics() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    let hostname: string | null = null;
+    let origin: string | null = null;
+    let urlValid = false;
+    let urlLooksLikeSupabaseProjectUrl: boolean | null = null;
+
+    if (supabaseUrl) {
+        try {
+            const parsed = new URL(supabaseUrl);
+            hostname = parsed.hostname;
+            origin = parsed.origin;
+            urlValid = true;
+            urlLooksLikeSupabaseProjectUrl = /(^|\.)supabase\.(co|in)$/i.test(parsed.hostname);
+        } catch {
+            urlValid = false;
+        }
+    }
+
+    return {
+        urlDefined: !!supabaseUrl,
+        urlPrefix: supabaseUrl ? supabaseUrl.substring(0, 8) : 'N/A',
+        hostname,
+        origin,
+        urlValid,
+        urlLooksLikeSupabaseProjectUrl,
+        serviceKeyDefined: !!supabaseServiceKey,
+        anonKeyDefined: !!supabaseAnonKey,
+        pingSuccess: false,
+    };
+}
+
+export async function GET() {
+    const diagnostics = getSupabaseDiagnostics();
+    return NextResponse.json({
+        ok: true,
+        message: 'Diagnóstico de Supabase para /api/save-lead',
+        diagnostics,
+        hint:
+            diagnostics.urlDefined && diagnostics.urlValid && diagnostics.urlLooksLikeSupabaseProjectUrl === false
+                ? 'NEXT_PUBLIC_SUPABASE_URL parece NO ser la "Project URL" de Supabase. Usa la que aparece en Supabase → Settings → API → Project URL (ej: https://<project-ref>.supabase.co).'
+                : undefined,
+        timestamp: new Date().toISOString(),
+    });
+}
+
 export async function POST(request: NextRequest) {
     // 1. Logs de depuración para diagnóstico "de raíz"
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    // Diagnósticos
-    const diagnostics = {
-        urlDefined: !!supabaseUrl,
-        urlPrefix: supabaseUrl ? supabaseUrl.substring(0, 8) : 'N/A',
-        serviceKeyDefined: !!supabaseServiceKey,
-        anonKeyDefined: !!supabaseAnonKey,
-        urlValid: false,
-        pingSuccess: false
-    };
+    const diagnostics = getSupabaseDiagnostics();
 
     console.log('🔧 [API SAVE LEAD] Diagnósticos:', diagnostics);
 
@@ -52,14 +93,22 @@ export async function POST(request: NextRequest) {
 
         // Test de conectividad simple
         try {
-            await fetch(supabaseUrl, { method: 'HEAD' });
+            const parsed = new URL(supabaseUrl);
+            // Endpoint "safe" para probar reachability (si la URL es correcta).
+            await fetch(`${parsed.origin}/auth/v1/health`, { method: 'GET' });
             diagnostics.pingSuccess = true;
         } catch (pingError: any) {
+            const cause: any = pingError?.cause;
             console.error('❌ [API SAVE LEAD] Error de conectividad con Supabase:', pingError.message);
             return NextResponse.json(
                 {
                     error: 'Error de conexión con Supabase (DNS/Red)',
                     details: pingError.message,
+                    cause: cause?.code || cause?.message || null,
+                    hint:
+                        diagnostics.urlLooksLikeSupabaseProjectUrl === false
+                            ? 'Revisa NEXT_PUBLIC_SUPABASE_URL: debe ser la "Project URL" (Supabase → Settings → API), ej https://<project-ref>.supabase.co (no la URL del panel app.supabase.com).'
+                            : 'Revisa DNS/red del hosting o si el dominio de Supabase es correcto.',
                     diagnostics
                 },
                 { status: 502 }
