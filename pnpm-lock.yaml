@@ -59,6 +59,9 @@ importers:
       recharts:
         specifier: ^3.7.0
         version: 3.7.0(@types/react@19.1.13)(react-dom@19.1.0(react@19.1.0))(react-is@19.2.4)(react@19.1.0)(redux@5.0.1)
+      sileo:
+        specifier: ^0.1.0
+        version: 0.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -1289,6 +1292,12 @@ packages:
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+
+  sileo@0.1.0:
+    resolution: {integrity: sha512-QKJT6a4V0vMMs0Rd9SpDuK3I7MQVkXMv/c7jG6/LdhQIwKZNTSAWI6TKmLNeEx+Iafn3HvDYXK1v4TWrJuG+fA==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
 
   sort-asc@0.2.0:
     resolution: {integrity: sha512-umMGhjPeHAI6YjABoSTrFp2zaBtXBej1a0yKkuMUyjjqu6FJsTF+JYwCswWDg+zJfk/5npWUUbd33HH/WLzpaA==}
@@ -2541,6 +2550,11 @@ snapshots:
   shebang-regex@3.0.0: {}
 
   signal-exit@4.1.0: {}
+
+  sileo@0.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   sort-asc@0.2.0: {}
 

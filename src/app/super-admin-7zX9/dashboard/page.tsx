@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getCookie, deleteCookie } from 'cookies-next';
 import { createClient } from '@supabase/supabase-js';
 import { motion, AnimatePresence } from 'framer-motion';
+import { sileo } from 'sileo';
 import {
     ResponsiveContainer,
     LineChart,
@@ -129,6 +130,7 @@ export default function DashboardPage() {
     const [lastRefreshedAt, setLastRefreshedAt] = useState<Date | null>(null);
     const [updatingLeadId, setUpdatingLeadId] = useState<number | null>(null);
     const [isMounted, setIsMounted] = useState(false);
+    const [hasShownRealtimeToast, setHasShownRealtimeToast] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -139,7 +141,7 @@ export default function DashboardPage() {
             return;
         }
 
-        fetchLeads();
+        fetchLeads({ toast: false });
 
         // Realtime: actualizar tabla al vuelo (inserts/updates)
         const channel = supabase
@@ -156,6 +158,15 @@ export default function DashboardPage() {
                             if (prev.some((l) => l.id === newRow.id)) return prev;
                             return [newRow, ...prev];
                         });
+
+                        sileo.info({
+                            title: 'Nuevo lead',
+                            description: `${newRow.empresa || newRow.nombre || 'Nuevo registro'} • ${newRow.tipo_interes}`,
+                            button: {
+                                title: 'Ver',
+                                onClick: () => setSelectedLead(newRow),
+                            },
+                        });
                     }
 
                     if (payload?.eventType === 'UPDATE' && newRow?.id) {
@@ -171,11 +182,24 @@ export default function DashboardPage() {
                 if (status === 'SUBSCRIBED') {
                     setRealtimeStatus('subscribed');
                     console.log('✅ [DASHBOARD] Realtime suscrito a leads_comerciales');
+                    if (!hasShownRealtimeToast) {
+                        setHasShownRealtimeToast(true);
+                        sileo.success({
+                            title: 'Realtime conectado',
+                            description: 'Leads se actualizarán automáticamente.',
+                            duration: 3500,
+                        });
+                    }
                     return;
                 }
 
                 if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
                     setRealtimeStatus('error');
+                    sileo.warning({
+                        title: 'Realtime desconectado',
+                        description: 'Recarga el panel si no ves actualizaciones.',
+                        duration: 6000,
+                    });
                 }
             });
 
@@ -184,7 +208,7 @@ export default function DashboardPage() {
         };
     }, []);
 
-    const fetchLeads = async () => {
+    const fetchLeads = async ({ toast }: { toast: boolean }) => {
         setLoading(true);
         setError(null);
         try {
@@ -200,11 +224,22 @@ export default function DashboardPage() {
             if (error) throw error;
             setLeads(data || []);
             setLastRefreshedAt(new Date());
+            if (toast) {
+                sileo.success({
+                    title: 'Leads actualizados',
+                    description: `${data?.length ?? 0} registros cargados.`,
+                });
+            }
         } catch (err) {
             console.error('Error fetching leads:', err);
-            setError(
-                err instanceof Error ? err.message : 'No se pudieron cargar los leads (ver consola)',
-            );
+            const msg = err instanceof Error ? err.message : 'No se pudieron cargar los leads (ver consola)';
+            setError(msg);
+            if (toast) {
+                sileo.error({
+                    title: 'Error al cargar leads',
+                    description: msg,
+                });
+            }
         } finally {
             setLoading(false);
         }
@@ -298,17 +333,33 @@ export default function DashboardPage() {
 
         setUpdatingLeadId(leadId);
         try {
-            const { error } = await supabase
-                .from('leads_comerciales')
-                .update({ estado: statusNormalized })
-                .eq('id', leadId);
+            await sileo.promise(
+                async () => {
+                    const { error } = await supabase
+                        .from('leads_comerciales')
+                        .update({ estado: statusNormalized })
+                        .eq('id', leadId);
+                    if (error) throw error;
+                    return true;
+                },
+                {
+                    loading: { title: 'Actualizando estado…' },
+                    success: {
+                        title: 'Estado actualizado',
+                        description: `Lead #${leadId} → ${statusNormalized}`,
+                    },
+                    error: (e) => ({
+                        title: 'No se pudo actualizar',
+                        description: e instanceof Error ? e.message : 'Revisa permisos/RLS.',
+                    }),
+                },
+            );
 
-            if (error) throw error;
-
-            setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, estado: statusNormalized } : l)));
+            setLeads((prev) =>
+                prev.map((l) => (l.id === leadId ? { ...l, estado: statusNormalized } : l)),
+            );
         } catch (e) {
             console.error('❌ Error actualizando estado:', e);
-            alert('No se pudo actualizar el estado del lead (revisa permisos/RLS).');
         } finally {
             setUpdatingLeadId(null);
         }
@@ -385,7 +436,7 @@ export default function DashboardPage() {
 
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={fetchLeads}
+                            onClick={() => fetchLeads({ toast: true })}
                             className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500 hover:text-blue-600"
                             title="Recargar datos"
                         >
