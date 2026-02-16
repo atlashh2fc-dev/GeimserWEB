@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
 
     console.log('🤖 [API GEIMSER] Procesando consulta comercial...');
 
-    const { provider, model, content } = await generateAssistantReply({
+    const { provider, model, content, fallbackFrom } = await generateAssistantReply({
       systemPrompt,
       messages: sanitizedMessages,
     });
@@ -152,6 +152,7 @@ export async function POST(request: NextRequest) {
     console.log('✅ [API GEIMSER] Respuesta comercial generada:', {
       provider,
       model,
+      fallbackFrom,
       length: content.length,
       hasNumbers: /\d+%/.test(content),
       hasEmail: /email|correo/i.test(content),
@@ -163,6 +164,7 @@ export async function POST(request: NextRequest) {
       content,
       provider,
       model,
+      fallbackFrom: fallbackFrom ?? null,
       timestamp: new Date().toISOString(),
     });
 

@@ -15,12 +15,27 @@ type GenerateAssistantReplyInput = {
   messages: ChatMessage[];
 };
 
+type GenerateAssistantReplyOutput = {
+  provider: AiProvider;
+  model: string;
+  content: string;
+  fallbackFrom?: AiProvider;
+};
+
 function normalizeProvider(value: string | undefined | null): AiProvider | 'auto' | null {
   if (!value) return null;
   const v = value.trim().toLowerCase();
   if (v === 'auto') return 'auto';
   if (v === 'openai') return 'openai';
   if (v === 'gemini') return 'gemini';
+  return null;
+}
+
+function pickFallbackProvider(): AiProvider | null {
+  const raw = (process.env.AI_FALLBACK_PROVIDER ?? '').trim().toLowerCase();
+  if (!raw || raw === 'none' || raw === 'false' || raw === '0') return null;
+  if (raw === 'openai') return 'openai';
+  if (raw === 'gemini') return 'gemini';
   return null;
 }
 
@@ -65,6 +80,19 @@ function requireEnv(name: string, provider: AiProvider): string {
 
 function toGeminiRole(role: ChatMessage['role']): 'user' | 'model' {
   return role === 'assistant' ? 'model' : 'user';
+}
+
+function isQuotaOrRateLimitError(err: any): boolean {
+  const status = err?.status;
+  const code = err?.code;
+  const message = String(err?.message ?? '');
+  return (
+    status === 429 ||
+    code === 'insufficient_quota' ||
+    /quota/i.test(message) ||
+    /rate limit/i.test(message) ||
+    /resource_exhausted/i.test(message)
+  );
 }
 
 async function generateWithOpenAI(input: GenerateAssistantReplyInput): Promise<string> {
@@ -121,12 +149,11 @@ async function generateWithGemini(input: GenerateAssistantReplyInput): Promise<s
   return text;
 }
 
-export async function generateAssistantReply(input: GenerateAssistantReplyInput): Promise<{
-  provider: AiProvider;
-  model: string;
-  content: string;
-}> {
+export async function generateAssistantReply(
+  input: GenerateAssistantReplyInput,
+): Promise<GenerateAssistantReplyOutput> {
   const provider = pickProvider();
+  const fallback = pickFallbackProvider();
 
   try {
     if (provider === 'gemini') {
@@ -139,6 +166,24 @@ export async function generateAssistantReply(input: GenerateAssistantReplyInput)
     const content = await generateWithOpenAI(input);
     return { provider, model, content };
   } catch (err: any) {
+    if (
+      fallback &&
+      fallback !== provider &&
+      isQuotaOrRateLimitError(err) &&
+      ((fallback === 'openai' && process.env.OPENAI_API_KEY) ||
+        (fallback === 'gemini' && process.env.GEMINI_API_KEY))
+    ) {
+      if (fallback === 'openai') {
+        const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
+        const content = await generateWithOpenAI(input);
+        return { provider: 'openai', model, content, fallbackFrom: provider };
+      }
+
+      const model = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
+      const content = await generateWithGemini(input);
+      return { provider: 'gemini', model, content, fallbackFrom: provider };
+    }
+
     const model =
       provider === 'gemini'
         ? process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
