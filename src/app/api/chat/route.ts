@@ -1,12 +1,7 @@
 // src/app/api/chat/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { generateAssistantReply } from '@/lib/ai/generateAssistantReply';
 import { extractLeadFromMessages } from '@/lib/leadExtraction';
-
-// Configuración de OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 const GEIMSER_SYSTEM_PROMPT = `Eres **GeimserBot 🚀**, el consultor comercial digital de Geimser360, la empresa líder en soluciones integrales de contact center, tecnología e innovación en Chile.
 
@@ -105,18 +100,6 @@ export async function POST(request: NextRequest) {
   console.log('🚀 [API GEIMSER] Nueva consulta comercial recibida');
   
   try {
-    // Verificar configuración
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('❌ [API GEIMSER] OPENAI_API_KEY no configurado');
-      return NextResponse.json(
-        { 
-          error: 'Configuración del servidor incompleta',
-          code: 'MISSING_API_KEY'
-        },
-        { status: 500 }
-      );
-    }
-
     // Parsear request
     const body = await request.json();
     
@@ -127,19 +110,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Preparar mensajes con el prompt profesional de Geimser
-    const leadInfo = extractLeadFromMessages(
-      body.messages.map((m: any) => ({
-        role: String(m?.role || ''),
-        content: String(m?.content || ''),
-      })),
-    );
+    // Sanitizar mensajes entrantes (evitar roles inesperados o contenido no-string)
+    const sanitizedMessages = body.messages
+      .filter((msg: any) => msg && (msg.role === 'user' || msg.role === 'assistant'))
+      .map((msg: any) => ({
+        role: msg.role,
+        content: String(msg.content ?? ''),
+      }));
+
+    const leadInfo = extractLeadFromMessages(sanitizedMessages);
     const missingLeadFields: string[] = [];
     if (!leadInfo.correo) missingLeadFields.push('email corporativo');
     if (!leadInfo.telefono) missingLeadFields.push('teléfono / WhatsApp');
 
-    const userTurns = body.messages.filter((m: any) => m.role === 'user').length;
-    const userText = body.messages
+    const userTurns = sanitizedMessages.filter((m: any) => m.role === 'user').length;
+    const userText = sanitizedMessages
       .filter((m: any) => m.role === 'user')
       .map((m: any) => String(m.content || ''))
       .join('\n')
@@ -153,57 +138,31 @@ export async function POST(request: NextRequest) {
     const shouldRequestLeadNow =
       missingLeadFields.length > 0 && (showsCommercialIntent || userTurns >= 2);
 
-    const messages = [
-      {
-        role: 'system',
-        content: GEIMSER_SYSTEM_PROMPT
-      },
-      ...(shouldRequestLeadNow
-        ? [
-            {
-              role: 'system',
-              content: LEAD_CAPTURE_ENFORCER(missingLeadFields),
-            },
-          ]
-        : []),
-      ...body.messages.map((msg: any) => ({
-        role: msg.role,
-        content: msg.content
-      }))
-    ];
+    const systemPrompt = shouldRequestLeadNow
+      ? `${GEIMSER_SYSTEM_PROMPT}\n\n${LEAD_CAPTURE_ENFORCER(missingLeadFields)}`
+      : GEIMSER_SYSTEM_PROMPT;
 
     console.log('🤖 [API GEIMSER] Procesando consulta comercial...');
 
-    // Llamada a OpenAI optimizada para ventas
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: messages as any,
-      temperature: 0.8, // Más creativo para ventas
-      max_tokens: 600, // Más espacio para respuestas comerciales
-      presence_penalty: 0.2, // Evitar repetición
-      frequency_penalty: 0.1,
+    const { provider, model, content } = await generateAssistantReply({
+      systemPrompt,
+      messages: sanitizedMessages,
     });
 
-    const assistantMessage = completion.choices[0]?.message;
-    
-    if (!assistantMessage?.content) {
-      console.error('❌ [API GEIMSER] Respuesta vacía de OpenAI');
-      return NextResponse.json(
-        { error: 'No se recibió respuesta del consultor' },
-        { status: 500 }
-      );
-    }
-
     console.log('✅ [API GEIMSER] Respuesta comercial generada:', {
-      length: assistantMessage.content.length,
-      hasNumbers: /\d+%/.test(assistantMessage.content),
-      hasEmail: /email|correo/i.test(assistantMessage.content),
-      hasCall: /llamada|reunión|cita/i.test(assistantMessage.content)
+      provider,
+      model,
+      length: content.length,
+      hasNumbers: /\d+%/.test(content),
+      hasEmail: /email|correo/i.test(content),
+      hasCall: /llamada|reunión|cita/i.test(content),
     });
 
     return NextResponse.json({
       role: 'assistant',
-      content: assistantMessage.content,
+      content,
+      provider,
+      model,
       timestamp: new Date().toISOString(),
     });
 
@@ -211,6 +170,8 @@ export async function POST(request: NextRequest) {
     console.error('❌ [API GEIMSER] Error en consulta comercial:', {
       message: error.message,
       stack: error.stack,
+      code: error.code,
+      provider: error.provider,
     });
 
     // Respuestas específicas de error
@@ -224,13 +185,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (error.code === 'insufficient_quota') {
+    if (error.code === 'insufficient_quota' || error.status === 429) {
       return NextResponse.json(
         { 
           error: 'Servicio temporalmente no disponible. Contacta directamente a contacto@geimser.cl',
           code: 'QUOTA_EXCEEDED'
         },
         { status: 503 }
+      );
+    }
+
+    if (error.code === 'MISSING_API_KEY') {
+      return NextResponse.json(
+        {
+          error: 'Configuración del servidor incompleta',
+          code: 'MISSING_API_KEY',
+        },
+        { status: 500 }
+      );
+    }
+
+    if (error.status === 401 || error.status === 403) {
+      return NextResponse.json(
+        {
+          error: 'Error de autenticación del servicio. Contacta al administrador del sitio.',
+          code: 'AUTH_ERROR',
+        },
+        { status: 500 }
       );
     }
 

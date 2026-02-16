@@ -20,6 +20,16 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## GeimserBot (IA)
+
+Create `.env.local` (recommended: copy from `.env.example`) and set your keys:
+
+- `AI_PROVIDER=gemini` (default auto-detects `GEMINI_API_KEY` first)
+- `GEMINI_API_KEY=...` (primary)
+- `OPENAI_API_KEY=...` (optional fallback)
+
+Chat endpoint: `POST /api/chat`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
