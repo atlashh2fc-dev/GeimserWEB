@@ -3,6 +3,8 @@ import { getSupabaseAdmin } from '@/lib/server/supabaseAdmin';
 import { rateLimit } from '@/lib/server/rateLimit';
 import { createHash } from 'crypto';
 
+export const runtime = 'nodejs';
+
 function getClientIp(req: NextRequest): string {
   const xff = req.headers.get('x-forwarded-for');
   if (xff) return xff.split(',')[0].trim();
@@ -29,6 +31,10 @@ function sha256Hex(value: string): string {
 
 function badRequest(error: string, details?: unknown) {
   return NextResponse.json({ ok: false, error, details }, { status: 400 });
+}
+
+export async function GET() {
+  return NextResponse.json({ ok: true, service: 'leads_ingest', timestamp: new Date().toISOString() });
 }
 
 export async function POST(req: NextRequest) {
