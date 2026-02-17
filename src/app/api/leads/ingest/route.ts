@@ -25,6 +25,18 @@ function bearerToken(req: NextRequest): string | null {
   return parts.slice(1).join(' ').trim() || null;
 }
 
+function normalizeToken(raw: string): string {
+  const t = raw.trim();
+  if (t.length >= 2) {
+    const first = t[0];
+    const last = t[t.length - 1];
+    if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+      return t.slice(1, -1).trim();
+    }
+  }
+  return t;
+}
+
 function sha256Hex(value: string): string {
   return createHash('sha256').update(value, 'utf8').digest('hex');
 }
@@ -39,11 +51,16 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const token = bearerToken(req);
+  const tokenRaw = bearerToken(req);
 
-  if (!token) {
+  if (!tokenRaw) {
     console.log('[INGEST] missing_token', { ip });
     return NextResponse.json({ ok: false, error: 'missing_token' }, { status: 401 });
+  }
+
+  const token = normalizeToken(tokenRaw);
+  if (token !== tokenRaw) {
+    console.log('[INGEST] token_normalized', { ip, rawLen: tokenRaw.length, normalizedLen: token.length });
   }
 
   const ipLimit = rateLimit(`ingest:ip:${ip}`, { limit: 60, windowMs: 5 * 60_000 });
