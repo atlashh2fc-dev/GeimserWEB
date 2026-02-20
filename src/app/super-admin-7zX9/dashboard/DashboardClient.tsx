@@ -381,7 +381,15 @@ export default function DashboardClient() {
                         </td>
                       )}
                       <td className="py-3 pr-4 text-gray-900 font-medium">{l.nombre}</td>
-                      <td className="py-3 pr-4 text-gray-700">{l.tipo_interes}</td>
+                      <td className="py-3 pr-4">
+                        {l.tipo_interes === 'Abogado - Sistema Xel' || l.fuente?.includes('LexChile') ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            🏢 {l.tipo_interes}
+                          </span>
+                        ) : (
+                          <span className="text-gray-700">{l.tipo_interes}</span>
+                        )}
+                      </td>
                       <td className="py-3 pr-4 text-gray-700">{l.estado}</td>
                       <td className="py-3 pr-4 text-gray-700">
                         <div className="flex items-center gap-3">
