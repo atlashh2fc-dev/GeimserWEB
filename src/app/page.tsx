@@ -3,6 +3,7 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
+import ClientsShowcase from '@/components/ClientsShowcase';
 import Solutions from '@/components/Solutions';
 import Infrastructure from '@/components/Infrastructure';
 import Offices from '@/components/Offices';
@@ -21,6 +22,9 @@ const HomePage: React.FC = () => {
       <Hero />
       <ScrollReveal delay={0.1} className="relative z-20 bg-white" width="100%">
         <div id="about"><About /></div>
+      </ScrollReveal>
+      <ScrollReveal delay={0.1} className="relative z-20" width="100%">
+        <div id="clients"><ClientsShowcase /></div>
       </ScrollReveal>
       <ScrollReveal delay={0.1} className="relative z-20 bg-white" width="100%">
         <div id="solutions"><Solutions /></div>

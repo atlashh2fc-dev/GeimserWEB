@@ -1,13 +1,19 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Configuración de Supabase (opcional)
+// Lazy singleton — evita crash en SSR cuando las env vars no están disponibles
+let _supabase: SupabaseClient | null = null;
+
+function getSupabase(): SupabaseClient | null {
+  if (typeof window === 'undefined') return null; // No ejecutar en SSR
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  if (!_supabase) _supabase = createClient(url, key);
+  return _supabase;
+}
+
 const hasSupabaseConfig = Boolean(
   process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 );
 
 export interface LeadData {

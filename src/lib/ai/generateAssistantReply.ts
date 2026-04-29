@@ -40,10 +40,7 @@ function pickFallbackProvider(): AiProvider | null {
 }
 
 function pickProvider(): AiProvider {
-  const forced = normalizeProvider(process.env.AI_PROVIDER);
-  if (forced && forced !== 'auto') return forced;
-  if (process.env.GEMINI_API_KEY) return 'gemini';
-  return 'openai';
+  return 'openai'; // Enforced to use InceptionLabs mercury-2
 }
 
 export function getAiProviderInfo(): {
@@ -96,10 +93,14 @@ function isQuotaOrRateLimitError(err: any): boolean {
 }
 
 async function generateWithOpenAI(input: GenerateAssistantReplyInput): Promise<string> {
-  const apiKey = requireEnv('OPENAI_API_KEY', 'openai');
-  const openai = new OpenAI({ apiKey });
+  // Use InceptionLabs API via OpenAI SDK
+  const apiKey = process.env.INCEPTION_API_KEY || process.env.OPENAI_API_KEY || '';
+  const openai = new OpenAI({ 
+    apiKey, 
+    baseURL: "https://api.inceptionlabs.ai/v1" 
+  });
 
-  const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
+  const model = "mercury-2";
 
   const completion = await openai.chat.completions.create({
     model,
@@ -109,8 +110,6 @@ async function generateWithOpenAI(input: GenerateAssistantReplyInput): Promise<s
     ],
     temperature: 0.8,
     max_tokens: 600,
-    presence_penalty: 0.2,
-    frequency_penalty: 0.1,
   });
 
   const content = completion.choices[0]?.message?.content?.trim();
@@ -152,46 +151,14 @@ async function generateWithGemini(input: GenerateAssistantReplyInput): Promise<s
 export async function generateAssistantReply(
   input: GenerateAssistantReplyInput,
 ): Promise<GenerateAssistantReplyOutput> {
-  const provider = pickProvider();
-  const fallback = pickFallbackProvider();
-
   try {
-    if (provider === 'gemini') {
-      const model = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
-      const content = await generateWithGemini(input);
-      return { provider, model, content };
-    }
-
-    const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
+    const model = "mercury-2";
     const content = await generateWithOpenAI(input);
-    return { provider, model, content };
+    return { provider: 'openai', model, content };
   } catch (err: any) {
-    if (
-      fallback &&
-      fallback !== provider &&
-      isQuotaOrRateLimitError(err) &&
-      ((fallback === 'openai' && process.env.OPENAI_API_KEY) ||
-        (fallback === 'gemini' && process.env.GEMINI_API_KEY))
-    ) {
-      if (fallback === 'openai') {
-        const model = process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
-        const content = await generateWithOpenAI(input);
-        return { provider: 'openai', model, content, fallbackFrom: provider };
-      }
-
-      const model = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
-      const content = await generateWithGemini(input);
-      return { provider: 'gemini', model, content, fallbackFrom: provider };
-    }
-
-    const model =
-      provider === 'gemini'
-        ? process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
-        : process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
-
     if (err && typeof err === 'object') {
-      if (!('provider' in err)) err.provider = provider;
-      if (!('model' in err)) err.model = model;
+      if (!('provider' in err)) err.provider = 'openai';
+      if (!('model' in err)) err.model = 'mercury-2';
     }
     throw err;
   }
