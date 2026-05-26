@@ -5,6 +5,8 @@ import Image from 'next/image';
 import {
   Mail,
   Phone,
+  Smartphone,
+  Clock,
   MapPin,
   Linkedin,
   Instagram,
@@ -137,13 +139,35 @@ export default function Footer() {
                   </a>
                 </li>
                 <li className="flex items-start">
+                  <Smartphone className="w-4 h-4 mr-3 mt-1 flex-shrink-0 text-[var(--text-muted)]" />
+                  <div>
+                    <span className="text-[var(--text-muted)] block text-xs">Celular:</span>
+                    <a
+                      href="tel:+56974159166"
+                      className="hover:text-[var(--accent)] transition-colors font-medium"
+                    >
+                      +56 9 7415 9166
+                    </a>
+                  </div>
+                </li>
+                <li className="flex items-start">
                   <Phone className="w-4 h-4 mr-3 mt-1 flex-shrink-0 text-[var(--text-muted)]" />
-                  <a
-                    href="tel:+56227121164"
-                    className="hover:text-[var(--accent)] transition-colors"
-                  >
-                    +56 2 27121164
-                  </a>
+                  <div>
+                    <span className="text-[var(--text-muted)] block text-xs">Teléfono:</span>
+                    <a
+                      href="tel:+56227121164"
+                      className="hover:text-[var(--accent)] transition-colors font-medium"
+                    >
+                      +56 2 2712 1164
+                    </a>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <Clock className="w-4 h-4 mr-3 mt-1 flex-shrink-0 text-[var(--text-muted)]" />
+                  <div>
+                    <span className="text-[var(--text-muted)] block text-xs">Horario de Atención:</span>
+                    <span className="font-medium">Lunes a Viernes 9:00 a 18:00 hrs</span>
+                  </div>
                 </li>
               </ul>
             </div>
