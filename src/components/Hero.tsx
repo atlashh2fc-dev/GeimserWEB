@@ -140,6 +140,15 @@ export default function Hero() {
     setActiveVideo(current => (current === 1 ? 2 : 1));
   };
 
+  const handleDemoClick = () => {
+    const msg = 'Hola, quiero agendar una demostración con Geimser.';
+    window.open(`https://wa.me/56974159166?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
+  const handleServicesClick = () => {
+    window.location.href = '/servicios';
+  };
+
   useEffect(() => {
     const v1 = video1Ref.current;
     const v2 = video2Ref.current;
@@ -231,7 +240,10 @@ export default function Hero() {
               transition={{ delay: 1.4, duration: 0.8 }}
               className={`mt-10 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-6`}
             >
-              <MagneticButton className="group relative px-8 py-4 bg-[#00B8F1] text-black font-bold rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,184,241,0.3)] hover:shadow-[0_0_30px_rgba(0,184,241,0.5)] transition-shadow">
+              <MagneticButton
+                onClick={handleDemoClick}
+                className="group relative px-8 py-4 bg-[#00B8F1] text-black font-bold rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,184,241,0.3)] hover:shadow-[0_0_30px_rgba(0,184,241,0.5)] transition-shadow"
+              >
                 {/* Shine Effect */}
                 <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine" />
 
@@ -241,8 +253,11 @@ export default function Hero() {
                 </span>
               </MagneticButton>
 
-              <MagneticButton className="px-8 py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-200 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                Explorar Soluciones
+              <MagneticButton
+                onClick={handleServicesClick}
+                className="px-8 py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-200 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+              >
+                Explorar Servicios
               </MagneticButton>
             </motion.div>
           </div>

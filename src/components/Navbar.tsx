@@ -12,10 +12,10 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
-  { name: 'Nosotros', href: '#about' },
-  { name: 'Soluciones', href: '#solutions' },
-  { name: 'Infraestructura', href: '#infrastructure' },
-  { name: 'Casos de Éxito', href: '#success' },
+  { name: 'Nosotros', href: '/nosotros' },
+  { name: 'Servicios', href: '/servicios' },
+  { name: 'Soluciones', href: '/#solutions' },
+  { name: 'Casos de Éxito', href: '/#success' },
 ];
 
 const Navbar: FC = () => {
@@ -29,7 +29,7 @@ const Navbar: FC = () => {
 
   const handleContactClick = () => {
     const phone = '+56974159166';
-    const msg = 'Hola, me interesa conocer más sobre sus soluciones tecnológicas.';
+    const msg = 'Hola, me interesa conocer más sobre los servicios de Geimser.';
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 

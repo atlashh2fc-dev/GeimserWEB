@@ -19,11 +19,11 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { label: 'Sobre Nosotros', href: '#' },
-    { label: 'Soluciones', href: '#' },
-    { label: 'Casos de Éxito', href: '#' },
-    { label: 'Carreras', href: '#' },
-    { label: 'Blog', href: '#' },
+    { label: 'Sobre Nosotros', href: '/nosotros' },
+    { label: 'Servicios', href: '/servicios' },
+    { label: 'Soluciones', href: '/#solutions' },
+    { label: 'Casos de Éxito', href: '/#success' },
+    { label: 'Contacto', href: '/#contact' },
   ];
 
   const legalLinks = [
