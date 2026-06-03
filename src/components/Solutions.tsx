@@ -70,7 +70,7 @@ const solutions: Solution[] = [
     title: "Experiencia de Cliente y Contact Center",
     description: "Diseñamos y operamos canales de atención, soporte y ventas para que cada interacción tenga continuidad, criterio y seguimiento.",
     keyPoints: ["Atención omnicanal", "Soporte especializado", "Ventas y retención", "Gestión de leads"],
-    bgImage: "/assets/images/customer-service.jpg",
+    bgImage: "/assets/images/service-cx-contact-center.png",
     modalContent: {
       description: "Transformamos tu centro de contacto en un centro de experiencia. No solo respondemos llamadas o mensajes; diseñamos viajes de cliente fluidos que aumentan la lealtad y el valor de vida del cliente.",
       benefits: [
@@ -106,7 +106,7 @@ const solutions: Solution[] = [
     title: "Tecnología, Automatización e IA",
     description: "Construimos sistemas, sitios, integraciones y automatizaciones que ordenan procesos, reducen fricción y aceleran decisiones.",
     keyPoints: ["Webs y apps", "CRM y flujos", "Integraciones", "Automatización con IA"],
-    bgImage: "/assets/images/digital-transformation.jpg",
+    bgImage: "/assets/images/service-software-ai.png",
     modalContent: {
       description: "La tecnología no debe ser una barrera, sino un acelerador. Creamos ecosistemas digitales que automatizan lo rutinario y potencian lo estratégico, adaptándonos 100% a tu lógica de negocio.",
       benefits: [
@@ -142,7 +142,7 @@ const solutions: Solution[] = [
     title: "Talento, BPO y Operación",
     description: "Aportamos equipos y soporte operativo para escalar atención, administración y procesos críticos sin sobredimensionar estructura.",
     keyPoints: ["Staffing especializado", "BPO operativo", "Gestión administrativa", "Escalabilidad"],
-    bgImage: "/assets/images/modern-office.jpg",
+    bgImage: "/assets/images/service-talent-ti.png",
     modalContent: {
       description: "El talento es el motor de cualquier empresa. Te ayudamos a encontrar, gestionar y retener a los mejores profesionales, absorbiendo la carga administrativa para que tú te enfoques en crecer.",
       benefits: [
@@ -178,7 +178,7 @@ const solutions: Solution[] = [
     title: "Seguridad Integral y Continuidad",
     description: "Integramos vigilancia, monitoreo y protección física para resguardar activos críticos y mantener la operación disponible.",
     keyPoints: ["CCTV inteligente", "Monitoreo 24/7", "Seguridad física", "Protección 360"],
-    bgImage: "/assets/images/data-center-blue.jpg",
+    bgImage: "/assets/images/service-security.png",
     modalContent: {
       description: "La continuidad exige anticiparse. Diseñamos capas de seguridad electrónica y física para reducir exposición, monitorear eventos y responder antes de que un riesgo afecte la operación.",
       benefits: [
@@ -208,7 +208,7 @@ const solutions: Solution[] = [
     title: "Data Intelligence y Crecimiento",
     description: "Usamos scoring, georreferenciación y modelos propios para priorizar oportunidades comerciales y acelerar el funnel.",
     keyPoints: ["Scoring predictivo", "Georreferenciación", "Big Data", "Modelos propios"],
-    bgImage: "/assets/images/ai-technology.jpg",
+    bgImage: "/assets/images/service-data-intelligence.png",
     modalContent: {
       description: "No se trata de acumular bases de datos, sino de encontrar el lead correcto en menos tiempo. Convertimos datos crudos en señales comerciales accionables.",
       benefits: [
