@@ -53,6 +53,9 @@ const solutionPillars = [
     image: '/assets/images/service-software-ai.png',
     metric: 'Procesos inteligentes',
     impact: 'Menos fricción operativa y decisiones con datos en tiempo real.',
+    problem: 'La operación depende de planillas, sistemas que no conversan entre sí y tareas manuales que consumen tiempo del equipo.',
+    solution: 'Diseñamos software, automatizaciones e integraciones a medida para ordenar el flujo completo: captura, operación, seguimiento y reportería.',
+    result: 'Procesos más rápidos, menos errores, mejor control y equipos enfocados en decisiones, no en tareas repetitivas.',
   },
   {
     icon: Camera,
@@ -62,15 +65,21 @@ const solutionPillars = [
     image: '/assets/images/service-security.png',
     metric: 'Protección 360',
     impact: 'Mitigación de riesgos antes de que impacten la continuidad del negocio.',
+    problem: 'Los riesgos físicos, electrónicos y operacionales suelen gestionarse por separado, generando puntos ciegos y respuestas tardías.',
+    solution: 'Integramos vigilancia, control, protección física y monitoreo centralizado para que la seguridad funcione como una operación coordinada.',
+    result: 'Más visibilidad, respuesta oportuna y menor exposición para instalaciones, activos críticos y continuidad operacional.',
   },
   {
     icon: Users,
     title: 'Talento TI y equipos gestionados',
-    promise: 'Disponibilizamos células expertas para acelerar proyectos críticos con alcance regional.',
-    services: ['Front-end experts', 'Back-end devs', 'Mobile specialists', 'QA & security'],
+    promise: 'Disponibilizamos células expertas y capacidad de despliegue tecnológico para acelerar proyectos críticos con alcance regional.',
+    services: ['Front-end experts', 'Back-end devs', 'Mobile specialists', 'QA & security', 'Masterización de equipos', 'Rollout y despliegue TI'],
     image: '/assets/images/service-talent-ti.png',
     metric: 'Células expertas',
-    impact: 'Escalabilidad técnica sin fricción de contratación.',
+    impact: 'Escalabilidad técnica, soporte en terreno y despliegues masivos sin fricción de contratación.',
+    problem: 'Los proyectos TI se frenan por falta de perfiles, presión de soporte interno o despliegues físicos que el equipo no puede absorber.',
+    solution: 'Aportamos células técnicas, perfiles especializados y capacidad operativa para masterizar, preparar y desplegar equipos en terreno.',
+    result: 'Proyectos más rápidos, continuidad del equipo interno y rollouts ordenados con control de avance.',
   },
   {
     icon: BarChart3,
@@ -80,6 +89,9 @@ const solutionPillars = [
     image: '/assets/images/service-data-intelligence.png',
     metric: 'Leads mejor priorizados',
     impact: 'Funnel comercial optimizado con ciencia de datos.',
+    problem: 'Los equipos comerciales pierden tiempo contactando bases frías, mal priorizadas o sin contexto territorial.',
+    solution: 'Aplicamos scoring, georreferenciación y modelos de inteligencia para priorizar oportunidades con mayor probabilidad de conversión.',
+    result: 'Menor ciclo de adquisición, mejor foco de ventas y mayor retorno sobre campañas y fuerza comercial.',
   },
   {
     icon: SunMedium,
@@ -89,6 +101,9 @@ const solutionPillars = [
     image: '/assets/images/energy-efficiency-real.png',
     metric: 'ROI energético',
     impact: 'Ahorro operativo y avance en metas de descarbonización.',
+    problem: 'El costo energético sube y muchas empresas no tienen una ruta clara para ahorrar sin comprometer continuidad.',
+    solution: 'Evaluamos consumo, diseñamos soluciones solares o de eficiencia y construimos una hoja de ruta energética viable.',
+    result: 'Ahorro medible, mejor desempeño operacional y avances concretos en metas ESG.',
   },
   {
     icon: MessageSquare,
@@ -98,6 +113,9 @@ const solutionPillars = [
     image: '/assets/images/service-cx-contact-center.png',
     metric: 'Fidelización',
     impact: 'Clientes más satisfechos, retenidos y conectados con la marca.',
+    problem: 'Los clientes se frustran cuando deben repetir información, esperar demasiado o reciben respuestas distintas según el canal.',
+    solution: 'Diseñamos y operamos una experiencia omnicanal con soporte, seguimiento, CRM y criterios de resolución claros.',
+    result: 'Mejor satisfacción, mayor retención y una relación de cliente más consistente y medible.',
   },
 ];
 
@@ -525,18 +543,38 @@ export default function ServiciosPage() {
                 <p className="text-lg leading-relaxed text-slate-200">{selectedSolution.impact}</p>
               </div>
             </div>
-            <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[0.8fr_1.2fr]">
-              <div>
-                <h4 className="text-xl font-extrabold text-slate-950">Qué resolvemos</h4>
-                <p className="mt-3 leading-relaxed text-slate-600">{selectedSolution.promise}</p>
+            <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_0.95fr]">
+              <div className="grid gap-4">
+                {[
+                  ['El problema', selectedSolution.problem],
+                  ['Cómo lo resolvemos', selectedSolution.solution],
+                  ['Qué obtiene el cliente', selectedSolution.result],
+                ].map(([title, text]) => (
+                  <div key={title} className="rounded-lg border border-slate-200 bg-slate-50 p-5">
+                    <p className="text-sm font-bold uppercase tracking-[0.14em] text-cyan-700">{title}</p>
+                    <p className="mt-2 leading-relaxed text-slate-700">{text}</p>
+                  </div>
+                ))}
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <h4 className="mb-4 text-xl font-extrabold text-slate-950">Qué incluye</h4>
+                <div className="grid gap-3">
                 {selectedSolution.services.map((service) => (
                   <div key={service} className="flex items-center rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-800">
                     <CheckCircle2 className="mr-3 h-5 w-5 flex-none text-cyan-600" />
                     {service}
                   </div>
                 ))}
+                </div>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-slate-950 px-5 py-3 font-bold text-white transition hover:bg-slate-800"
+                >
+                  Conversar esta solución
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
               </div>
             </div>
           </motion.div>
