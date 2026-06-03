@@ -295,7 +295,7 @@ export default function ServiciosPage() {
                     <p className="mb-5 leading-relaxed text-slate-200">{pillar.promise}</p>
                     <div className="mb-5 flex flex-wrap gap-2">
                       {pillar.services.slice(0, 3).map((service) => (
-                        <span key={service} className="rounded-lg bg-white/10 px-3 py-1 text-xs font-bold text-slate-100 backdrop-blur">
+                        <span key={service} className="rounded-lg border border-cyan-300/25 bg-[#07101f]/85 px-3 py-1 text-xs font-bold text-cyan-100 shadow-sm backdrop-blur">
                           {service}
                         </span>
                       ))}
@@ -303,7 +303,7 @@ export default function ServiciosPage() {
                     <button
                       type="button"
                       onClick={() => setSelectedSolution(pillar)}
-                      className="inline-flex w-full items-center justify-center rounded-lg bg-white px-4 py-3 text-sm font-extrabold text-slate-950 transition hover:bg-cyan-100"
+                      className="inline-flex w-full items-center justify-center rounded-lg border border-cyan-300/35 bg-[#00B8F1] px-4 py-3 text-sm font-extrabold text-black shadow-[0_0_18px_rgba(0,184,241,0.22)] transition hover:bg-cyan-300"
                     >
                       Explorar solución
                       <ArrowRight className="ml-2 h-4 w-4" />
