@@ -11,8 +11,8 @@ import {
   Eye,
   Handshake,
   HeartHandshake,
+  Info,
   ShieldCheck,
-  Sparkles,
   Target,
   Users,
 } from 'lucide-react';
@@ -82,7 +82,7 @@ export default function NosotrosPage() {
           className="object-cover opacity-45"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/30" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-[linear-gradient(to_top,#fff_0%,rgba(255,255,255,0.92)_18%,rgba(255,255,255,0.62)_44%,rgba(255,255,255,0.22)_72%,transparent_100%)]" />
 
         <div className="relative z-10 mx-auto flex min-h-[86vh] max-w-7xl items-center px-6 pb-20 pt-32 lg:px-8">
           <motion.div
@@ -98,7 +98,7 @@ export default function NosotrosPage() {
               variants={fadeUp}
               className="mb-6 inline-flex items-center rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm font-bold text-cyan-200"
             >
-              <Sparkles className="mr-2 h-4 w-4" />
+              <Info className="mr-2 h-4 w-4" />
               Quiénes somos
             </motion.div>
             <motion.h1

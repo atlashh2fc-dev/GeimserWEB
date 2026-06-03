@@ -23,7 +23,6 @@ import {
   Network,
   PhoneCall,
   ShieldCheck,
-  Sparkles,
   Users,
   Workflow,
 } from 'lucide-react';
@@ -120,12 +119,12 @@ export default function ServiciosPage() {
           className="object-cover opacity-[0.42]"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-slate-950/85 to-slate-950/35" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-[linear-gradient(to_top,#fff_0%,rgba(255,255,255,0.92)_18%,rgba(255,255,255,0.62)_44%,rgba(255,255,255,0.22)_72%,transparent_100%)]" />
 
         <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-7xl items-center px-6 pb-20 pt-32 lg:px-8">
           <div className="max-w-4xl">
             <div className="mb-6 inline-flex items-center rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm font-bold text-cyan-200">
-              <Sparkles className="mr-2 h-4 w-4" />
+              <BriefcaseBusiness className="mr-2 h-4 w-4" />
               Servicios & Soluciones Geimser
             </div>
             <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-normal sm:text-5xl lg:text-6xl">
@@ -247,7 +246,7 @@ export default function ServiciosPage() {
       </section>
 
       <section id="pack-emprendedor" className="bg-[#050b18] px-6 py-20 text-white lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={fadeUp}>
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-300">
               Oferta paquetizada
@@ -273,25 +272,56 @@ export default function ServiciosPage() {
                 </div>
               ))}
             </div>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center justify-center rounded-lg bg-[#00B8F1] px-6 py-3 font-bold text-black shadow-[0_0_24px_rgba(0,184,241,0.28)] transition hover:bg-cyan-300"
+            >
+              Diseñar mi pack
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </a>
           </motion.div>
 
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
-            variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut', staggerChildren: 0.05 } } }}
-            className="rounded-lg border border-cyan-400/15 bg-[#0d1728] p-5 text-white shadow-2xl shadow-black/30"
+            variants={fadeUp}
+            className="relative overflow-hidden rounded-lg border border-cyan-400/20 bg-[#0b1424] shadow-2xl shadow-black/35"
           >
-            <div className="grid gap-3 sm:grid-cols-2">
-              {packIncludes.map((item) => {
+            <div className="relative aspect-[16/10] min-h-[360px]">
+              <Image
+                src="/assets/images/pack-emprendedor-real.png"
+                alt="Pack Emprendedor con sitio web, pagos, agenda y atención profesional"
+                fill
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#050b18]/35 via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#050b18] via-[#050b18]/72 to-transparent p-5 pt-28">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {[
+                    ['Web + pagos', 'Presencia lista para vender'],
+                    ['Agenda + teléfono', 'Clientes atendidos con orden'],
+                    ['Oficina + reportes', 'Imagen y seguimiento real'],
+                  ].map(([title, text]) => (
+                    <div key={title} className="rounded-lg border border-white/10 bg-[#07101f]/90 p-4 backdrop-blur">
+                      <p className="text-sm font-bold text-white">{title}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-300">{text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-2 border-t border-white/10 bg-[#07101f] p-4 sm:grid-cols-2 lg:grid-cols-4">
+              {packIncludes.slice(0, 8).map((item) => {
                 const Icon = item.icon;
                 return (
-                  <motion.div key={item.label} variants={fadeUp} className="flex items-center rounded-lg border border-white/10 bg-[#111d31] p-4">
-                    <div className="mr-3 flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-cyan-400/15 text-cyan-300">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-100">{item.label}</span>
-                  </motion.div>
+                  <div key={item.label} className="flex items-center gap-2 rounded-lg bg-white/[0.04] px-3 py-2">
+                    <Icon className="h-4 w-4 flex-none text-cyan-300" />
+                    <span className="text-xs font-semibold text-slate-200">{item.label}</span>
+                  </div>
                 );
               })}
             </div>
