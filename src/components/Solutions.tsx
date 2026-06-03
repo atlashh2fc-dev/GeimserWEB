@@ -8,10 +8,11 @@ import {
   Users,
   Code,
   ArrowRight,
-  Sparkles,
   Zap,
   Shield,
-  Clock,
+  Camera,
+  BarChart3,
+  SunMedium,
   CheckCircle,
   X,
   TrendingUp,
@@ -170,6 +171,96 @@ const solutions: Solution[] = [
         ]
       }
     }
+  },
+  {
+    id: 'security',
+    icon: Camera,
+    title: "Seguridad Integral y Continuidad",
+    description: "Integramos vigilancia, monitoreo y protección física para resguardar activos críticos y mantener la operación disponible.",
+    keyPoints: ["CCTV inteligente", "Monitoreo 24/7", "Seguridad física", "Protección 360"],
+    bgImage: "/assets/images/data-center-blue.jpg",
+    modalContent: {
+      description: "La continuidad exige anticiparse. Diseñamos capas de seguridad electrónica y física para reducir exposición, monitorear eventos y responder antes de que un riesgo afecte la operación.",
+      benefits: [
+        { icon: Shield, title: "Resiliencia Operacional", text: "Protección para activos, instalaciones y procesos críticos." },
+        { icon: Camera, title: "Vigilancia Inteligente", text: "CCTV y analítica para mejorar cobertura, trazabilidad y respuesta." },
+        { icon: Target, title: "Respuesta Centralizada", text: "Monitoreo y gestión de eventos con criterios claros de escalamiento." }
+      ],
+      tabs: {
+        services: ["CCTV con analítica", "Monitoreo centralizado 24/7", "Seguridad física", "Protección electrónica y perimetral"],
+        methodology: [
+          { step: "Levantamiento", description: "Identificamos activos críticos, puntos vulnerables y prioridades operativas." },
+          { step: "Diseño", description: "Definimos arquitectura de seguridad física y electrónica." },
+          { step: "Implementación", description: "Instalamos y conectamos sistemas con protocolos de monitoreo." },
+          { step: "Operación", description: "Mantenemos seguimiento y mejora continua de la protección." }
+        ],
+        impact: [
+          { metric: "24/7", value: "Monitoreo", description: "Cobertura operativa permanente." },
+          { metric: "360", value: "Protección", description: "Capas físicas y electrónicas integradas." },
+          { metric: "Menos", value: "Riesgo", description: "Detección temprana y respuesta ordenada." }
+        ]
+      }
+    }
+  },
+  {
+    id: 'data',
+    icon: BarChart3,
+    title: "Data Intelligence y Crecimiento",
+    description: "Usamos scoring, georreferenciación y modelos propios para priorizar oportunidades comerciales y acelerar el funnel.",
+    keyPoints: ["Scoring predictivo", "Georreferenciación", "Big Data", "Modelos propios"],
+    bgImage: "/assets/images/ai-technology.jpg",
+    modalContent: {
+      description: "No se trata de acumular bases de datos, sino de encontrar el lead correcto en menos tiempo. Convertimos datos crudos en señales comerciales accionables.",
+      benefits: [
+        { icon: Target, title: "Mejor Priorización", text: "Segmentos y leads ordenados por probabilidad de conversión." },
+        { icon: TrendingUp, title: "Mayor ROI Comercial", text: "Menos tiempo perdido y mejor foco de la fuerza de ventas." },
+        { icon: Layers, title: "Datos Accionables", text: "Modelos adaptados al negocio, territorio y objetivo comercial." }
+      ],
+      tabs: {
+        services: ["Scoring de BDD predictivo", "Georreferenciación avanzada", "Modelos de inteligencia propios", "Big Data con partners"],
+        methodology: [
+          { step: "Datos", description: "Revisamos fuentes, calidad, cobertura y variables disponibles." },
+          { step: "Modelo", description: "Diseñamos scoring y segmentación según intención comercial." },
+          { step: "Activación", description: "Entregamos priorización usable para ventas y operación." },
+          { step: "Optimización", description: "Ajustamos el modelo con resultados reales." }
+        ],
+        impact: [
+          { metric: "Mejor", value: "Lead", description: "Priorización por potencial real." },
+          { metric: "Menor", value: "Ciclo", description: "Reducción del tiempo de adquisición." },
+          { metric: "Más", value: "ROI", description: "Foco comercial basado en datos." }
+        ]
+      }
+    }
+  },
+  {
+    id: 'energy',
+    icon: SunMedium,
+    title: "Eficiencia Energética y ESG",
+    description: "Diseñamos soluciones solares, eficiencia eléctrica y rutas energéticas para reducir costos y avanzar en sostenibilidad.",
+    keyPoints: ["Plantas solares", "Eficiencia eléctrica", "Consultoría energética", "Metas ESG"],
+    bgImage: "/assets/images/energy-efficiency-real.png",
+    modalContent: {
+      description: "La energía también es una palanca de rentabilidad. Apoyamos a empresas que quieren reducir costos operativos y avanzar hacia una matriz más eficiente y sostenible.",
+      benefits: [
+        { icon: SunMedium, title: "Ahorro Energético", text: "Soluciones fotovoltaicas y eficiencia para reducir consumo y costos." },
+        { icon: TrendingUp, title: "ROI Operacional", text: "Proyectos diseñados con foco en retorno e impacto medible." },
+        { icon: Shield, title: "Ruta ESG", text: "Avance concreto hacia metas ambientales y descarbonización." }
+      ],
+      tabs: {
+        services: ["Plantas solares industriales", "Ingeniería de eficiencia", "Consultoría energética", "Roadmaps renovables"],
+        methodology: [
+          { step: "Auditoría", description: "Medimos consumo, oportunidades y restricciones técnicas." },
+          { step: "Diseño", description: "Proponemos una solución energética ajustada al sitio y demanda." },
+          { step: "Implementación", description: "Coordinamos ejecución con foco en continuidad operativa." },
+          { step: "Seguimiento", description: "Medimos ahorro, desempeño y avance ESG." }
+        ],
+        impact: [
+          { metric: "Menos", value: "Costo", description: "Reducción de gasto energético." },
+          { metric: "Más", value: "ESG", description: "Avance ambiental concreto." },
+          { metric: "ROI", value: "Medible", description: "Evaluación económica del proyecto." }
+        ]
+      }
+    }
   }
 ];
 
@@ -297,7 +388,7 @@ const SolutionModal: React.FC<SolutionModalProps> = ({ solution, onClose }) => {
                     </div>
                     <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100">
                       <p className="text-blue-800 text-sm font-medium flex gap-2">
-                        <Sparkles className="w-5 h-5" />
+                        <Layers className="w-5 h-5" />
                         ¿No encuentras lo que buscas? Personalizamos cada solución a la medida de tu desafío.
                       </p>
                     </div>
@@ -407,7 +498,7 @@ export default function Solutions() {
             variants={containerVariants}
           >
             <motion.div variants={cardVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-cyan-600 text-sm font-bold mb-6 shadow-sm">
-              <Sparkles className="w-4 h-4 mr-2" />
+              <Layers className="w-4 h-4 mr-2" />
               Servicios & Soluciones
             </motion.div>
             <motion.h2 variants={cardVariants} className="text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 mb-6">

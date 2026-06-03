@@ -7,9 +7,10 @@ import { motion, Variants } from 'framer-motion';
 import {
   ArrowRight,
   BadgeCheck,
+  BarChart3,
   BriefcaseBusiness,
-  Building2,
   CalendarDays,
+  Camera,
   CheckCircle2,
   ClipboardCheck,
   Code2,
@@ -23,8 +24,10 @@ import {
   Network,
   PhoneCall,
   ShieldCheck,
+  SunMedium,
   Users,
   Workflow,
+  X,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -43,28 +46,58 @@ const fadeUp: Variants = {
 
 const solutionPillars = [
   {
-    icon: MessageSquare,
-    title: 'Experiencia de cliente y contact center',
-    promise: 'Atención, soporte, ventas y seguimiento por los canales que tus clientes ya usan.',
-    services: ['Atención inbound/outbound', 'Soporte especializado', 'Gestión de leads', 'Encuestas NPS/CSAT'],
+    icon: Code2,
+    title: 'Software, IA y automatización',
+    promise: 'Convertimos procesos manuales en flujos inteligentes, integrados y escalables.',
+    services: ['Full custom dev', 'IA generativa y bots', 'RPA & automation', 'Integración total'],
+    image: '/assets/images/digital-transformation.jpg',
+    metric: 'Procesos inteligentes',
+    impact: 'Menos fricción operativa y decisiones con datos en tiempo real.',
   },
   {
-    icon: Code2,
-    title: 'Tecnología, automatización e IA',
-    promise: 'Sistemas y flujos digitales que ordenan la operación y reducen tareas manuales.',
-    services: ['Sitios y apps a medida', 'CRM y tableros', 'Integración de APIs', 'Automatizaciones con IA'],
+    icon: Camera,
+    title: 'Seguridad integral y continuidad',
+    promise: 'Protegemos activos críticos con seguridad electrónica, física y monitoreo centralizado.',
+    services: ['CCTV con analítica', 'Monitoreo central 24/7', 'Seguridad física', 'Protección 360 grados'],
+    image: '/assets/images/data-center-blue.jpg',
+    metric: 'Protección 360',
+    impact: 'Mitigación de riesgos antes de que impacten la continuidad del negocio.',
   },
   {
     icon: Users,
-    title: 'Talento, BPO y soporte operativo',
-    promise: 'Equipos y procesos para escalar sin cargar estructura fija ni perder control.',
-    services: ['Staffing especializado', 'BPO administrativo', 'Backoffice comercial', 'Gestión de procesos'],
+    title: 'Talento TI y equipos gestionados',
+    promise: 'Disponibilizamos células expertas para acelerar proyectos críticos con alcance regional.',
+    services: ['Front-end experts', 'Back-end devs', 'Mobile specialists', 'QA & security'],
+    image: '/assets/images/modern-office.jpg',
+    metric: 'Células expertas',
+    impact: 'Escalabilidad técnica sin fricción de contratación.',
   },
   {
-    icon: Building2,
-    title: 'Infraestructura flexible y presencia profesional',
-    promise: 'Oficina, teléfono, recepción y soporte administrativo para operar con imagen sólida.',
-    services: ['Oficina por horas', 'Secretaria virtual', 'Número dedicado', 'Recepción de clientes'],
+    icon: BarChart3,
+    title: 'Data intelligence y crecimiento comercial',
+    promise: 'Ayudamos a encontrar mejores leads en menos tiempo usando datos, scoring y georreferenciación.',
+    services: ['Scoring predictivo', 'Georreferenciación', 'Modelos propios', 'Big Data con partners'],
+    image: '/assets/images/ai-technology.jpg',
+    metric: 'Leads mejor priorizados',
+    impact: 'Funnel comercial optimizado con ciencia de datos.',
+  },
+  {
+    icon: SunMedium,
+    title: 'Eficiencia energética y sostenibilidad',
+    promise: 'Reducimos costos operativos y apoyamos metas ESG con soluciones energéticas concretas.',
+    services: ['Plantas solares', 'Ingeniería de eficiencia', 'Consultoría energética', 'Roadmaps renovables'],
+    image: '/assets/images/energy-efficiency-real.png',
+    metric: 'ROI energético',
+    impact: 'Ahorro operativo y avance en metas de descarbonización.',
+  },
+  {
+    icon: MessageSquare,
+    title: 'CX y contact center',
+    promise: 'Diseñamos experiencias omnicanal que transforman contactos en fidelización y crecimiento.',
+    services: ['Gestión omnicanal', 'Soporte crítico 24/7', 'Resolución primer contacto', 'Integración CRM'],
+    image: '/assets/images/customer-service.jpg',
+    metric: 'Fidelización',
+    impact: 'Clientes más satisfechos, retenidos y conectados con la marca.',
   },
 ];
 
@@ -104,7 +137,18 @@ const journey = [
   ['04', 'Operación y mejora', 'Medimos, ajustamos y acompañamos la evolución con foco en continuidad y resultado.'],
 ];
 
+const ecosystem = [
+  ['Siptel', 'Infraestructura core'],
+  ['Vocalcom', 'Experiencia cliente'],
+  ['Neotel', 'Integración CRM'],
+  ['Infobusiness', 'Data & analytics'],
+  ['GG Electrics', 'Energía sostenible'],
+  ['Altius', 'Automatización, IA y BPO'],
+];
+
 export default function ServiciosPage() {
+  const [selectedSolution, setSelectedSolution] = React.useState<(typeof solutionPillars)[number] | null>(null);
+
   return (
     <main className="bg-white text-slate-950">
       <Navbar />
@@ -201,16 +245,21 @@ export default function ServiciosPage() {
 
       <section id="catalogo" className="bg-slate-50 px-6 py-20 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="mb-12 max-w-3xl">
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
-              Catálogo estratégico
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="mb-12 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+            <div>
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
+                Catálogo estratégico
+              </p>
+              <h2 className="text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
+                Seis líneas de solución, una sola operación integrada
+              </h2>
+            </div>
+            <p className="text-lg leading-relaxed text-slate-600">
+              El catálogo actualizado combina transformación digital, protección operacional, datos, talento, energía y experiencia de cliente. Cada línea puede operar de forma independiente o como parte de una hoja de ruta mayor.
             </p>
-            <h2 className="text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
-              Cuatro líneas de solución, una sola operación integrada
-            </h2>
           </motion.div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {solutionPillars.map((pillar, index) => {
               const Icon = pillar.icon;
               return (
@@ -223,25 +272,77 @@ export default function ServiciosPage() {
                     hidden: { opacity: 0, y: 24 },
                     visible: { opacity: 1, y: 0, transition: { delay: index * 0.06, duration: 0.45 } },
                   }}
-                  className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-cyan-200 hover:shadow-xl hover:shadow-slate-200/70"
+                  className="group relative min-h-[430px] overflow-hidden rounded-lg border border-slate-200 bg-slate-950 text-white shadow-sm transition hover:-translate-y-1 hover:border-cyan-200 hover:shadow-xl hover:shadow-slate-300/80"
                 >
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-slate-950 text-cyan-300">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mb-3 text-2xl font-bold leading-tight text-slate-950">{pillar.title}</h3>
-                  <p className="mb-6 leading-relaxed text-slate-600">{pillar.promise}</p>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {pillar.services.map((service) => (
-                      <div key={service} className="flex items-center rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">
-                        <CheckCircle2 className="mr-2 h-4 w-4 flex-none text-cyan-600" />
-                        {service}
+                  <Image
+                    src={pillar.image}
+                    alt={pillar.title}
+                    fill
+                    sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover opacity-60 transition duration-700 group-hover:scale-105 group-hover:opacity-78"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-slate-950/72 to-slate-950/12" />
+                  <div className="relative flex min-h-[430px] flex-col justify-end p-5">
+                    <div className="mb-auto flex items-center justify-between">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-400/15 text-cyan-300 ring-1 ring-cyan-300/20 backdrop-blur">
+                      <Icon className="h-6 w-6" />
                       </div>
-                    ))}
+                      <span className="rounded-lg border border-white/10 bg-black/35 px-3 py-1 text-xs font-bold text-cyan-100 backdrop-blur">
+                        {pillar.metric}
+                      </span>
+                    </div>
+                    <h3 className="mb-3 text-2xl font-extrabold leading-tight">{pillar.title}</h3>
+                    <p className="mb-5 leading-relaxed text-slate-200">{pillar.promise}</p>
+                    <div className="mb-5 flex flex-wrap gap-2">
+                      {pillar.services.slice(0, 3).map((service) => (
+                        <span key={service} className="rounded-lg bg-white/10 px-3 py-1 text-xs font-bold text-slate-100 backdrop-blur">
+                          {service}
+                        </span>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSolution(pillar)}
+                      className="inline-flex w-full items-center justify-center rounded-lg bg-white px-4 py-3 text-sm font-extrabold text-slate-950 transition hover:bg-cyan-100"
+                    >
+                      Explorar solución
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </button>
                   </div>
                 </motion.article>
               );
             })}
           </div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
+            variants={fadeUp}
+            className="mt-10 rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
+          >
+            <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
+                  Ecosistema de respaldo
+                </p>
+                <h3 className="mt-2 text-2xl font-extrabold text-slate-950">
+                  Partners y capacidades que sostienen la operación
+                </h3>
+              </div>
+              <p className="max-w-xl text-sm leading-relaxed text-slate-600">
+                La propuesta se apoya en infraestructura, data, CRM, energía, automatización y CX para dar continuidad real a cada solución.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {ecosystem.map(([name, area]) => (
+                <div key={name} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                  <p className="font-bold text-slate-950">{name}</p>
+                  <p className="mt-1 text-sm text-slate-600">{area}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -397,6 +498,50 @@ export default function ServiciosPage() {
       </section>
 
       <Footer />
+
+      {selectedSolution && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md" onClick={() => setSelectedSolution(null)}>
+          <motion.div
+            initial={{ opacity: 0, y: 28, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-lg bg-white shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="relative min-h-[260px] overflow-hidden bg-slate-950 text-white">
+              <Image src={selectedSolution.image} alt={selectedSolution.title} fill sizes="100vw" className="object-cover opacity-55" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-slate-950/80 to-slate-950/20" />
+              <button
+                type="button"
+                onClick={() => setSelectedSolution(null)}
+                className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-black/35 text-white backdrop-blur transition hover:bg-black/55"
+                aria-label="Cerrar detalle"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              <div className="relative z-10 max-w-3xl p-6 sm:p-8">
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-300">{selectedSolution.metric}</p>
+                <h3 className="mb-4 text-3xl font-extrabold sm:text-5xl">{selectedSolution.title}</h3>
+                <p className="text-lg leading-relaxed text-slate-200">{selectedSolution.impact}</p>
+              </div>
+            </div>
+            <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[0.8fr_1.2fr]">
+              <div>
+                <h4 className="text-xl font-extrabold text-slate-950">Qué resolvemos</h4>
+                <p className="mt-3 leading-relaxed text-slate-600">{selectedSolution.promise}</p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {selectedSolution.services.map((service) => (
+                  <div key={service} className="flex items-center rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-800">
+                    <CheckCircle2 className="mr-3 h-5 w-5 flex-none text-cyan-600" />
+                    {service}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </main>
   );
 }
