@@ -39,8 +39,7 @@ export default function Footer() {
         borderColor: 'var(--border)',
       }}
     >
-      {/* Fondo sutil */}
-      <div className="absolute inset-0 z-0 bg-[url('/grid.svg')] bg-center opacity-20" />
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:48px_48px] opacity-20" />
 
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">

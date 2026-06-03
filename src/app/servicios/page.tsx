@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion, Variants } from 'framer-motion';
 import {
   ArrowRight,
+  BadgeCheck,
   BriefcaseBusiness,
   Building2,
   CalendarDays,
@@ -13,10 +14,13 @@ import {
   ClipboardCheck,
   Code2,
   CreditCard,
+  DatabaseZap,
   Globe2,
   Headphones,
+  Layers3,
   MapPin,
   MessageSquare,
+  Network,
   PhoneCall,
   ShieldCheck,
   Sparkles,
@@ -27,7 +31,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const whatsappUrl =
-  'https://wa.me/56974159166?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20Pack%20Emprendedor%20de%20Geimser.';
+  'https://wa.me/56974159166?text=Hola%2C%20quiero%20conocer%20las%20soluciones%20de%20Geimser%20para%20mi%20negocio.';
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -38,30 +42,48 @@ const fadeUp: Variants = {
   },
 };
 
-const services = [
+const solutionPillars = [
   {
     icon: MessageSquare,
-    title: 'Experiencia de Cliente',
-    text: 'Atención omnicanal, soporte, ventas y gestión de conversaciones con foco en continuidad y calidad.',
-    points: ['Atención inbound/outbound', 'Soporte especializado', 'Gestión de leads'],
+    title: 'Experiencia de cliente y contact center',
+    promise: 'Atención, soporte, ventas y seguimiento por los canales que tus clientes ya usan.',
+    services: ['Atención inbound/outbound', 'Soporte especializado', 'Gestión de leads', 'Encuestas NPS/CSAT'],
   },
   {
     icon: Code2,
-    title: 'Tecnología y Soluciones Digitales',
-    text: 'Desarrollo web, automatización, integraciones y sistemas a medida para ordenar la operación.',
-    points: ['Webs y apps custom', 'CRM y automatización', 'Integración de pagos'],
+    title: 'Tecnología, automatización e IA',
+    promise: 'Sistemas y flujos digitales que ordenan la operación y reducen tareas manuales.',
+    services: ['Sitios y apps a medida', 'CRM y tableros', 'Integración de APIs', 'Automatizaciones con IA'],
   },
   {
     icon: Users,
-    title: 'Talento y Gestión de Personas',
-    text: 'Perfiles especializados y soporte operativo para equipos que necesitan escalar sin sobrecargarse.',
-    points: ['Staffing especializado', 'BPO operativo', 'Gestión administrativa'],
+    title: 'Talento, BPO y soporte operativo',
+    promise: 'Equipos y procesos para escalar sin cargar estructura fija ni perder control.',
+    services: ['Staffing especializado', 'BPO administrativo', 'Backoffice comercial', 'Gestión de procesos'],
   },
   {
     icon: Building2,
-    title: 'Oficina y Soporte Administrativo',
-    text: 'Infraestructura flexible, secretaria virtual y recepción profesional para negocios en crecimiento.',
-    points: ['Oficina por horas', 'Secretaria virtual', 'Número dedicado'],
+    title: 'Infraestructura flexible y presencia profesional',
+    promise: 'Oficina, teléfono, recepción y soporte administrativo para operar con imagen sólida.',
+    services: ['Oficina por horas', 'Secretaria virtual', 'Número dedicado', 'Recepción de clientes'],
+  },
+];
+
+const outcomes = [
+  {
+    icon: ShieldCheck,
+    title: 'Continuidad operacional',
+    text: 'Canales, personas y sistemas alineados para responder sin improvisar.',
+  },
+  {
+    icon: DatabaseZap,
+    title: 'Gestión con datos',
+    text: 'Indicadores simples para medir atención, avance comercial y desempeño operativo.',
+  },
+  {
+    icon: Network,
+    title: 'Integración real',
+    text: 'Unimos herramientas digitales, equipo humano e infraestructura en una misma ruta.',
   },
 ];
 
@@ -76,34 +98,11 @@ const packIncludes = [
   { icon: Workflow, label: 'Flujos digitales a medida' },
 ];
 
-const audiences = [
-  'Emprendedores que están formalizando su negocio.',
-  'Profesionales independientes que necesitan imagen corporativa.',
-  'Tiendas y servicios que quieren vender o agendar en línea.',
-  'Pymes que requieren apoyo administrativo sin contratar equipo interno.',
-];
-
-const process = [
-  {
-    step: '01',
-    title: 'Diagnóstico',
-    text: 'Revisamos qué vendes, cómo atiendes y qué necesitas activar primero.',
-  },
-  {
-    step: '02',
-    title: 'Definición del pack',
-    text: 'Armamos la combinación correcta de web, oficina, teléfono y soporte.',
-  },
-  {
-    step: '03',
-    title: 'Implementación',
-    text: 'Diseñamos los canales digitales y dejamos configurada la operación base.',
-  },
-  {
-    step: '04',
-    title: 'Operación y mejora',
-    text: 'Te acompañamos con soporte, ajustes y reportes para seguir creciendo.',
-  },
+const journey = [
+  ['01', 'Diagnóstico', 'Entendemos tu etapa, dolores operativos, canales actuales y metas comerciales.'],
+  ['02', 'Diseño de solución', 'Priorizamos servicios y definimos una ruta accionable, sin sobredimensionar costos.'],
+  ['03', 'Implementación', 'Configuramos canales, herramientas, equipo y procesos con responsables claros.'],
+  ['04', 'Operación y mejora', 'Medimos, ajustamos y acompañamos la evolución con foco en continuidad y resultado.'],
 ];
 
 export default function ServiciosPage() {
@@ -118,110 +117,128 @@ export default function ServiciosPage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-45"
+          className="object-cover opacity-[0.42]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-slate-950/85 to-slate-950/35" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
 
         <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-7xl items-center px-6 pb-20 pt-32 lg:px-8">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.12 } },
-            }}
-            className="max-w-3xl"
-          >
-            <motion.div
-              variants={fadeUp}
-              className="mb-6 inline-flex items-center rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm font-bold text-cyan-200"
-            >
+          <div className="max-w-4xl">
+            <div className="mb-6 inline-flex items-center rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm font-bold text-cyan-200">
               <Sparkles className="mr-2 h-4 w-4" />
-              Servicios Geimser
-            </motion.div>
-            <motion.h1
-              variants={fadeUp}
-              className="mb-6 text-4xl font-extrabold leading-tight tracking-normal sm:text-5xl lg:text-6xl"
-            >
-              Servicios para operar, vender y crecer con respaldo profesional
-            </motion.h1>
-            <motion.p
-              variants={fadeUp}
-              className="max-w-2xl text-lg leading-relaxed text-slate-200 sm:text-xl"
-            >
-              Tecnología, atención, talento e infraestructura flexible para que tu negocio avance sin armar todo desde cero.
-            </motion.p>
-            <motion.div variants={fadeUp} className="mt-9 flex flex-col gap-4 sm:flex-row">
+              Servicios & Soluciones Geimser
+            </div>
+            <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-normal sm:text-5xl lg:text-6xl">
+              Tecnología, personas e infraestructura para que tu negocio opere mejor
+            </h1>
+            <p className="max-w-2xl text-lg leading-relaxed text-slate-200 sm:text-xl">
+              Diseñamos, implementamos y operamos soluciones que conectan atención al cliente, automatización, talento especializado y presencia profesional.
+            </p>
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-[#00B8F1] px-6 py-3 font-bold text-black shadow-[0_0_24px_rgba(0,184,241,0.35)] transition hover:bg-cyan-300"
               >
-                Hablar por WhatsApp
+                Agendar diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
               <a
-                href="#pack-emprendedor"
+                href="#catalogo"
                 className="inline-flex items-center justify-center rounded-lg border border-cyan-200/25 bg-slate-950/70 px-6 py-3 font-bold text-white backdrop-blur transition hover:bg-slate-900"
               >
-                Ver Pack Emprendedor
+                Ver catálogo
               </a>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="px-6 py-20 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <motion.div
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
+              Relato de oferta
+            </p>
+            <h2 className="text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
+              No vendemos piezas sueltas: armamos capacidad para resolver problemas reales
+            </h2>
+          </motion.div>
+          <motion.p
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={fadeUp}
-            className="mb-12 max-w-3xl"
+            className="text-lg leading-relaxed text-slate-600"
           >
+            La diferencia está en combinar consultoría práctica, ejecución tecnológica, equipo humano e infraestructura. Así cada servicio queda conectado a un resultado: atender mejor, vender más ordenado, operar con continuidad y escalar sin perder control.
+          </motion.p>
+        </div>
+
+        <div className="mx-auto mt-10 grid max-w-7xl gap-4 md:grid-cols-3">
+          {outcomes.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.article
+                key={item.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.25 }}
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: { opacity: 1, y: 0, transition: { delay: index * 0.08, duration: 0.45 } },
+                }}
+                className="rounded-lg border border-slate-200 bg-slate-50 p-6"
+              >
+                <Icon className="mb-5 h-8 w-8 text-cyan-600" />
+                <h3 className="text-xl font-bold text-slate-950">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.text}</p>
+              </motion.article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="catalogo" className="bg-slate-50 px-6 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="mb-12 max-w-3xl">
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
-              Catálogo de servicios
+              Catálogo estratégico
             </p>
             <h2 className="text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
-              Todo lo que tu operación necesita, ordenado en una sola mirada
+              Cuatro líneas de solución, una sola operación integrada
             </h2>
           </motion.div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {services.map((service, index) => {
-              const Icon = service.icon;
+          <div className="grid gap-5 md:grid-cols-2">
+            {solutionPillars.map((pillar, index) => {
+              const Icon = pillar.icon;
               return (
                 <motion.article
-                  key={service.title}
+                  key={pillar.title}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true, amount: 0.25 }}
+                  viewport={{ once: true, amount: 0.22 }}
                   variants={{
                     hidden: { opacity: 0, y: 24 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: index * 0.08, duration: 0.45 },
-                    },
+                    visible: { opacity: 1, y: 0, transition: { delay: index * 0.06, duration: 0.45 } },
                   }}
                   className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-cyan-200 hover:shadow-xl hover:shadow-slate-200/70"
                 >
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-slate-950 text-cyan-300">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-slate-950 text-cyan-300">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mb-3 text-xl font-bold text-slate-950">{service.title}</h3>
-                  <p className="mb-6 text-sm leading-relaxed text-slate-600">{service.text}</p>
-                  <ul className="space-y-2">
-                    {service.points.map((point) => (
-                      <li key={point} className="flex items-center text-sm font-medium text-slate-700">
+                  <h3 className="mb-3 text-2xl font-bold leading-tight text-slate-950">{pillar.title}</h3>
+                  <p className="mb-6 leading-relaxed text-slate-600">{pillar.promise}</p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {pillar.services.map((service) => (
+                      <div key={service} className="flex items-center rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">
                         <CheckCircle2 className="mr-2 h-4 w-4 flex-none text-cyan-600" />
-                        {point}
-                      </li>
+                        {service}
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </motion.article>
               );
             })}
@@ -230,30 +247,25 @@ export default function ServiciosPage() {
       </section>
 
       <section id="pack-emprendedor" className="bg-[#050b18] px-6 py-20 text-white lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            variants={fadeUp}
-          >
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={fadeUp}>
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-300">
-              Oferta destacada
+              Oferta paquetizada
             </p>
             <h2 className="mb-6 text-3xl font-extrabold tracking-normal sm:text-5xl">
               Pack Emprendedor
             </h2>
             <p className="mb-6 text-xl font-semibold text-white">
-              La base digital y operativa para que tu emprendimiento se vea profesional desde el primer día.
+              Una base digital y operativa para negocios que necesitan imagen, atención y presencia comercial desde el primer día.
             </p>
             <p className="mb-8 max-w-xl leading-relaxed text-slate-300">
-              Combinamos presencia web a medida, soporte administrativo virtual y acceso a oficina física para que puedas vender, atender y reunirte con clientes con una imagen sólida desde el inicio.
+              Es una entrada concreta al ecosistema Geimser: web, pagos, agenda, teléfono, atención, reportes y oficina flexible, ajustado según rubro y urgencia comercial.
             </p>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                ['Web custom', 'Sin plantillas genéricas'],
-                ['Oficina flexible', 'Santiago Centro'],
-                ['Secretaria virtual', 'Atención profesional'],
+                ['Activar', 'Presencia digital y canales base'],
+                ['Atender', 'Recados, teléfono y soporte'],
+                ['Crecer', 'Reportes y mejoras por etapa'],
               ].map(([title, text]) => (
                 <div key={title} className="rounded-lg border border-cyan-400/20 bg-[#0d1728] p-4">
                   <p className="font-bold text-white">{title}</p>
@@ -267,25 +279,14 @@ export default function ServiciosPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
-            variants={{
-              hidden: { opacity: 0, y: 24 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.5, ease: 'easeOut', staggerChildren: 0.05 },
-              },
-            }}
+            variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut', staggerChildren: 0.05 } } }}
             className="rounded-lg border border-cyan-400/15 bg-[#0d1728] p-5 text-white shadow-2xl shadow-black/30"
           >
             <div className="grid gap-3 sm:grid-cols-2">
               {packIncludes.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <motion.div
-                    key={item.label}
-                    variants={fadeUp}
-                    className="flex items-center rounded-lg border border-white/10 bg-[#111d31] p-4"
-                  >
+                  <motion.div key={item.label} variants={fadeUp} className="flex items-center rounded-lg border border-white/10 bg-[#111d31] p-4">
                     <div className="mr-3 flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-cyan-400/15 text-cyan-300">
                       <Icon className="h-5 w-5" />
                     </div>
@@ -294,61 +295,34 @@ export default function ServiciosPage() {
                 );
               })}
             </div>
-            <div className="mt-5 rounded-lg border border-cyan-400/15 bg-[#050b18] p-5 text-white">
-              <div className="flex items-start gap-3">
-                <ShieldCheck className="mt-1 h-5 w-5 flex-none text-cyan-300" />
-                <p className="text-sm leading-relaxed text-slate-200">
-                  El pack se ajusta según etapa, rubro y urgencia comercial. La idea es partir ordenado, sin sobredimensionar costos.
-                </p>
-              </div>
-            </div>
           </motion.div>
         </div>
       </section>
 
       <section className="px-6 py-20 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            variants={fadeUp}
-          >
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={fadeUp}>
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
-              Para quién es
+              Cómo trabajamos
             </p>
-            <h2 className="mb-8 text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
-              Pensado para negocios que necesitan verse más grandes sin cargar estructura pesada
+            <h2 className="mb-5 text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
+              Del diagnóstico a la operación, con una ruta clara
             </h2>
-            <div className="space-y-3">
-              {audiences.map((item) => (
-                <div key={item} className="flex rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-                  <CheckCircle2 className="mr-3 mt-0.5 h-5 w-5 flex-none text-cyan-600" />
-                  <p className="font-medium text-slate-700">{item}</p>
-                </div>
-              ))}
-            </div>
+            <p className="text-lg leading-relaxed text-slate-600">
+              Cada solución se arma según el momento del cliente. Podemos partir pequeño, ordenar lo urgente y escalar hacia automatización, equipo o infraestructura cuando el negocio lo necesita.
+            </p>
           </motion.div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            variants={fadeUp}
-            className="rounded-lg bg-slate-100 p-6"
-          >
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
-              Cómo funciona
-            </p>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={fadeUp} className="rounded-lg bg-slate-100 p-6">
             <div className="space-y-4">
-              {process.map((item) => (
-                <div key={item.step} className="grid grid-cols-[56px_1fr] gap-4 rounded-lg bg-white p-5 shadow-sm">
+              {journey.map(([step, title, text]) => (
+                <div key={step} className="grid grid-cols-[56px_1fr] gap-4 rounded-lg bg-white p-5 shadow-sm">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-950 font-black text-cyan-300">
-                    {item.step}
+                    {step}
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-950">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{item.text}</p>
+                    <h3 className="font-bold text-slate-950">{title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
                   </div>
                 </div>
               ))}
@@ -360,12 +334,16 @@ export default function ServiciosPage() {
       <section className="bg-slate-950 px-6 py-16 text-white lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl">
-            <BriefcaseBusiness className="mb-4 h-9 w-9 text-cyan-300" />
+            <div className="mb-4 flex gap-3">
+              <BriefcaseBusiness className="h-9 w-9 text-cyan-300" />
+              <Layers3 className="h-9 w-9 text-slate-300" />
+              <BadgeCheck className="h-9 w-9 text-cyan-300" />
+            </div>
             <h2 className="text-3xl font-extrabold tracking-normal">
-              Cuéntanos que estás armando y te proponemos el pack correcto
+              Cuéntanos qué necesitas resolver y armamos la solución correcta
             </h2>
             <p className="mt-3 text-slate-300">
-              Partimos por entender tu negocio y dejamos una ruta clara para activar presencia digital, atención y soporte.
+              Partimos por entender tu operación y te proponemos una combinación realista de servicios, tecnología y soporte.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -375,14 +353,14 @@ export default function ServiciosPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-lg bg-[#00B8F1] px-6 py-3 font-bold text-black transition hover:bg-cyan-300"
             >
-              Quiero mi Pack Emprendedor
+              Hablar con Geimser
               <ArrowRight className="ml-2 h-5 w-5" />
             </a>
             <Link
-              href="/"
+              href="/nosotros"
               className="inline-flex items-center justify-center rounded-lg border border-white/15 px-6 py-3 font-bold text-white transition hover:bg-white/10"
             >
-              Volver al inicio
+              Conocer respaldo
             </Link>
           </div>
         </div>

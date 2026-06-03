@@ -66,9 +66,9 @@ const solutions: Solution[] = [
   {
     id: 'cx',
     icon: MessageSquare,
-    title: "Experiencia de Cliente (CX)",
-    description: "Creamos conexiones reales. Gestionamos cada conversación con tus clientes para que se sientan escuchados y atendidos, sin importar el canal.",
-    keyPoints: ["Atención Omnicanal", "Soporte 24/7", "Resolución Rápida", "Calidez Humana"],
+    title: "Experiencia de Cliente y Contact Center",
+    description: "Diseñamos y operamos canales de atención, soporte y ventas para que cada interacción tenga continuidad, criterio y seguimiento.",
+    keyPoints: ["Atención omnicanal", "Soporte especializado", "Ventas y retención", "Gestión de leads"],
     bgImage: "/assets/images/customer-service.jpg",
     modalContent: {
       description: "Transformamos tu centro de contacto en un centro de experiencia. No solo respondemos llamadas o mensajes; diseñamos viajes de cliente fluidos que aumentan la lealtad y el valor de vida del cliente.",
@@ -102,9 +102,9 @@ const solutions: Solution[] = [
   {
     id: 'tech',
     icon: Code,
-    title: "Tecnología y Soluciones Digitales",
-    description: "Herramientas que impulsan tu negocio. Desarrollamos webs, apps y sistemas a medida que facilitan tu trabajo y el de tu equipo.",
-    keyPoints: ["Desarrollo Web y Apps", "Automatización Simple", "CRM a Tu Medida", "Innovación Práctica"],
+    title: "Tecnología, Automatización e IA",
+    description: "Construimos sistemas, sitios, integraciones y automatizaciones que ordenan procesos, reducen fricción y aceleran decisiones.",
+    keyPoints: ["Webs y apps", "CRM y flujos", "Integraciones", "Automatización con IA"],
     bgImage: "/assets/images/digital-transformation.jpg",
     modalContent: {
       description: "La tecnología no debe ser una barrera, sino un acelerador. Creamos ecosistemas digitales que automatizan lo rutinario y potencian lo estratégico, adaptándonos 100% a tu lógica de negocio.",
@@ -138,9 +138,9 @@ const solutions: Solution[] = [
   {
     id: 'bpo',
     icon: Users,
-    title: "Talento y Gestión de Personas",
-    description: "El equipo que necesitas, cuando lo necesitas. Te apoyamos con talento especializado y gestionamos tus procesos de RRHH.",
-    keyPoints: ["Perfiles Especializados", "Flexibilidad Operativa", "Gestión de RRHH", "Apoyo Estratégico"],
+    title: "Talento, BPO y Operación",
+    description: "Aportamos equipos y soporte operativo para escalar atención, administración y procesos críticos sin sobredimensionar estructura.",
+    keyPoints: ["Staffing especializado", "BPO operativo", "Gestión administrativa", "Escalabilidad"],
     bgImage: "/assets/images/modern-office.jpg",
     modalContent: {
       description: "El talento es el motor de cualquier empresa. Te ayudamos a encontrar, gestionar y retener a los mejores profesionales, absorbiendo la carga administrativa para que tú te enfoques en crecer.",
@@ -396,8 +396,6 @@ export default function Solutions() {
         {/* Fondo sutil para mantener limpieza visual */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-gray-50/50 to-transparent"></div>
-          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-blue-100/20 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -410,13 +408,13 @@ export default function Solutions() {
           >
             <motion.div variants={cardVariants} className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-cyan-600 text-sm font-bold mb-6 shadow-sm">
               <Sparkles className="w-4 h-4 mr-2" />
-              Nuestras Verticales
+              Servicios & Soluciones
             </motion.div>
             <motion.h2 variants={cardVariants} className="text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 mb-6">
-              Soluciones Integrales para <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">Tu Negocio</span>
+              Un catálogo claro para <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">resolver y escalar</span>
             </motion.h2>
             <motion.p variants={cardVariants} className="text-xl text-gray-500 max-w-3xl mx-auto leading-relaxed">
-              Simplificamos lo complejo. Unimos tecnología, personas y estrategia para ayudarte a crecer de forma sólida y sostenible.
+              Separamos el relato institucional de la oferta: aquí están las capacidades que activamos para mejorar atención, operación, tecnología y presencia profesional.
             </motion.p>
           </motion.div>
 
@@ -436,9 +434,12 @@ export default function Solutions() {
                   variants={cardVariants}
                   whileHover="hover"
                   className="group relative h-full"
-                  onClick={() => setSelectedSolution(solution)}
                 >
-                  <div className="relative h-full bg-white rounded-3xl p-8 shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => handleOpenModal(solution)}
+                    className="relative h-full w-full cursor-pointer overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 text-left shadow-xl shadow-gray-200/50"
+                  >
 
                     {/* Efecto de gradiente sutil en el fondo al hacer hover */}
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -467,13 +468,13 @@ export default function Solutions() {
                       </ul>
 
                       <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between text-cyan-600 font-bold text-sm">
-                        <span>Explorar Vertical</span>
+                        <span>Explorar solución</span>
                         <div className="w-8 h-8 rounded-full bg-cyan-50 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all">
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 </motion.div>
               );
             })}
@@ -492,8 +493,8 @@ export default function Solutions() {
 
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="text-left">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4">¿Listo para escalar tu negocio?</h3>
-                  <p className="text-gray-300 text-lg">Agenda una sesión estratégica gratuita con nuestros expertos.</p>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4">Armemos la combinación correcta para tu etapa</h3>
+                  <p className="text-gray-300 text-lg">Partimos con diagnóstico y bajamos una ruta concreta de servicios, tecnología y operación.</p>
                 </div>
                 <a
                   href="https://wa.me/56974159166"

@@ -130,10 +130,10 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0.5]);
 
   const stats = [
-    { value: 95, prefix: "+", suffix: "%", label: "Índice de Satisfacción (CSAT)", icon: Award },
-    { value: 99.9, prefix: "", suffix: "%", label: "Disponibilidad de Plataforma", icon: GaugeCircle },
-    { value: 85, prefix: "+", suffix: "%", label: "Resolución en Primer Contacto", icon: Target },
-    { value: 0, prefix: "ROI", suffix: "", label: "Monitorizado en Tiempo Real", icon: Landmark, isText: true } // Special case
+    { value: 4, prefix: "", suffix: "", label: "Líneas de servicios integradas", icon: Award },
+    { value: 99.9, prefix: "", suffix: "%", label: "Continuidad operacional", icon: GaugeCircle },
+    { value: 85, prefix: "+", suffix: "%", label: "Resolución en primer contacto", icon: Target },
+    { value: 0, prefix: "", suffix: "", label: "Gestión con indicadores", icon: Landmark, isText: true, textValue: "ROI" }
   ];
 
   const handleVideoEnd = () => {
@@ -178,7 +178,7 @@ export default function Hero() {
           playsInline
           onEnded={handleVideoEnd}
           className="w-full h-full object-cover transition-opacity duration-1000"
-          poster="/assets/images/team-hero-poster.jpg"
+          poster="/assets/images/team-hero.jpg"
           src="/G1.mp4"
         />
         <video
@@ -204,7 +204,7 @@ export default function Hero() {
             {/* TITULO CON REVEAL */}
             <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-bold tracking-tighter text-white mb-6 drop-shadow-2xl">
               <StaggeredText
-                text="La Evolución de la"
+                text="Servicios y soluciones"
                 className="justify-center md:justify-start"
               />
               <motion.div
@@ -214,11 +214,11 @@ export default function Hero() {
                 className="inline-block"
               >
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C6FF] to-[#0072FF] drop-shadow-[0_0_15px_rgba(0,198,255,0.5)]">
-                  Interacción
+                  para operar
                 </span>
               </motion.div>
               <StaggeredText
-                text="Humana y Digital."
+                text="vender y crecer."
                 className="justify-center md:justify-start"
                 delay={0.4}
               />
@@ -230,7 +230,7 @@ export default function Hero() {
               transition={{ delay: 1, duration: 0.8 }}
               className="mt-6 text-xl leading-relaxed text-gray-300 max-w-2xl mx-auto md:mx-0 font-light"
             >
-              Diseñamos experiencias de cliente excepcionales a gran escala, fusionando el talento de nuestros expertos con la potencia de la inteligencia artificial.
+              Integramos tecnología, experiencia de cliente, talento especializado e infraestructura flexible para transformar desafíos operativos en crecimiento medible.
             </motion.p>
 
             {/* BOTONES MAGNETICOS */}
@@ -248,7 +248,7 @@ export default function Hero() {
                 <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine" />
 
                 <span className="relative z-10 flex items-center gap-2">
-                  Agendar Demostración
+                  Agendar diagnóstico
                   <ChevronRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
               </MagneticButton>
@@ -257,7 +257,7 @@ export default function Hero() {
                 onClick={handleServicesClick}
                 className="px-8 py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-200 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
               >
-                Explorar Servicios
+                Ver soluciones
               </MagneticButton>
             </motion.div>
           </div>
@@ -292,7 +292,7 @@ export default function Hero() {
                       {!stat.isText ? (
                         <Counter from={0} to={stat.value} duration={2.5} />
                       ) : (
-                        <span>High</span>
+                        <span>{stat.textValue}</span>
                       )}
                       {stat.suffix}
                     </p>
