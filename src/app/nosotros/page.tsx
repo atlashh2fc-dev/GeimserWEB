@@ -7,16 +7,16 @@ import { motion, Variants } from 'framer-motion';
 import {
   ArrowRight,
   Award,
-  BrainCircuit,
   CheckCircle2,
+  Eye,
   Handshake,
+  HeartHandshake,
   ShieldCheck,
   Sparkles,
   Target,
   Users,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
-import About from '@/components/About';
 import Footer from '@/components/Footer';
 
 const fadeUp: Variants = {
@@ -31,25 +31,40 @@ const fadeUp: Variants = {
 const pillars = [
   {
     icon: Users,
-    title: 'Talento humano',
-    text: 'Equipos preparados para atender, operar y resolver con criterio.',
+    title: 'Cercanía',
+    text: 'Escuchamos antes de proponer y cuidamos que cada relación tenga seguimiento real.',
   },
   {
-    icon: BrainCircuit,
-    title: 'Tecnología aplicada',
-    text: 'Automatización, IA y sistemas que mejoran la experiencia sin perder cercanía.',
+    icon: Eye,
+    title: 'Claridad',
+    text: 'Trabajamos con conversaciones simples, responsables visibles y criterios compartidos.',
   },
   {
     icon: Target,
-    title: 'Resultados medibles',
-    text: 'Gestionamos con indicadores claros para que cada avance se pueda evaluar.',
+    title: 'Compromiso',
+    text: 'Nos hacemos cargo de avanzar con orden, medición y responsabilidad sobre lo acordado.',
   },
 ];
 
 const trustItems = [
-  'Operamos con foco en experiencia de cliente, tecnología y continuidad operaciónal.',
-  'Integramos soluciones digitales con equipos humanos especializados.',
-  'Acompañamos desde el diagnóstico hasta la mejora continua.',
+  'Somos un equipo multidisciplinario con experiencia en operación, tecnología y gestión de clientes.',
+  'Trabajamos con procesos claros para mantener continuidad, trazabilidad y calidad en la ejecución.',
+  'Construimos relaciones de largo plazo, con acompañamiento cercano y foco en confianza.',
+];
+
+const identityBlocks = [
+  {
+    title: 'Qué nos mueve',
+    text: 'Ayudar a que las organizaciones avancen con más orden, mejor comunicación y una operación capaz de sostener el crecimiento.',
+  },
+  {
+    title: 'Cómo nos relacionamos',
+    text: 'Con una mirada práctica: entender el contexto, alinear expectativas y trabajar con transparencia en cada etapa.',
+  },
+  {
+    title: 'Qué cuidamos',
+    text: 'La continuidad, la calidad del servicio, la confianza de los equipos y la experiencia de las personas que interactúan con cada operación.',
+  },
 ];
 
 export default function NosotrosPage() {
@@ -93,21 +108,21 @@ export default function NosotrosPage() {
               Un equipo que conecta personas, tecnología y operación para hacer crecer negocios
             </motion.h1>
             <motion.p variants={fadeUp} className="max-w-2xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-              En Geimser combinamos experiencia de cliente, soluciones digitales y talento especializado para resolver desafíos reales con una operación clara, medible y escalable.
+              En Geimser creemos que el crecimiento se sostiene con confianza, criterio operativo y equipos capaces de convertir decisiones en ejecución.
             </motion.p>
             <motion.div variants={fadeUp} className="mt-9 flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/servicios"
+                href="/#success"
                 className="inline-flex items-center justify-center rounded-lg bg-[#00B8F1] px-6 py-3 font-bold text-black shadow-[0_0_24px_rgba(0,184,241,0.35)] transition hover:bg-cyan-300"
               >
-                Ver servicios
+                Ver trayectoria
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <Link
-                href="/#success"
+                href="/servicios"
                 className="inline-flex items-center justify-center rounded-lg border border-cyan-200/25 bg-slate-950/70 px-6 py-3 font-bold text-white backdrop-blur transition hover:bg-slate-900"
               >
-                Ver casos de éxito
+                Servicios & soluciones
               </Link>
             </motion.div>
           </motion.div>
@@ -124,10 +139,10 @@ export default function NosotrosPage() {
             className="mb-12 max-w-3xl"
           >
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
-              Nuestra forma de trabajar
+              Nuestra identidad
             </p>
             <h2 className="text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
-              No vendemos solo herramientas: armamos capacidad operativa para que las cosas pasen
+              Una compañía construida sobre confianza, criterio y ejecución responsable
             </h2>
           </motion.div>
 
@@ -167,10 +182,10 @@ export default function NosotrosPage() {
           <div>
             <Award className="mb-4 h-9 w-9 text-cyan-300" />
             <h2 className="text-3xl font-extrabold tracking-normal">
-              Por qué Geimser
+              Por qué confiar en Geimser
             </h2>
             <p className="mt-4 max-w-xl leading-relaxed text-slate-300">
-              Porque entendemos que crecer no depende solo de tecnología ni solo de personas. Depende de integrar ambas con procesos simples, seguimiento y responsabilidad sobre el resultado.
+              Porque entendemos que una buena relación no se sostiene con promesas grandes, sino con cumplimiento, comunicación clara y capacidad de acompañar cuando el negocio se mueve.
             </p>
           </div>
           <div className="grid gap-3">
@@ -184,7 +199,48 @@ export default function NosotrosPage() {
         </div>
       </section>
 
-      <About />
+      <section className="px-6 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
+            className="mb-12 max-w-3xl"
+          >
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-600">
+              Lo que cuidamos
+            </p>
+            <h2 className="text-3xl font-extrabold tracking-normal text-slate-950 sm:text-4xl">
+              Antes que una oferta, somos una forma de trabajar
+            </h2>
+          </motion.div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {identityBlocks.map((block, index) => (
+              <motion.article
+                key={block.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.25 }}
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { delay: index * 0.08, duration: 0.45 },
+                  },
+                }}
+                className="rounded-lg border border-slate-200 bg-slate-50 p-6"
+              >
+                <HeartHandshake className="mb-5 h-8 w-8 text-cyan-600" />
+                <h3 className="mb-3 text-xl font-bold text-slate-950">{block.title}</h3>
+                <p className="text-sm leading-relaxed text-slate-600">{block.text}</p>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="px-6 py-16 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 rounded-lg border border-slate-200 bg-slate-50 p-6 md:flex-row md:items-center md:justify-between">
@@ -194,10 +250,10 @@ export default function NosotrosPage() {
               <ShieldCheck className="h-7 w-7 text-slate-700" />
             </div>
             <h2 className="text-3xl font-extrabold tracking-normal text-slate-950">
-              Hablemos de cómo Geimser puede apoyar tu siguiente etapa
+              Conversemos sobre tu contexto y el momento de tu organización
             </h2>
             <p className="mt-3 text-slate-600">
-              Revisamos tu contexto y te recomendamos una ruta realista entre servicios, tecnología y operación.
+              Si quieres conocer la oferta concreta, la dejamos separada en Servicios & Soluciones para que el recorrido sea claro.
             </p>
           </div>
           <a
