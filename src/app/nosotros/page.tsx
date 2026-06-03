@@ -175,7 +175,7 @@ export default function NosotrosPage() {
           </div>
           <div className="grid gap-3">
             {trustItems.map((item) => (
-              <div key={item} className="flex rounded-lg border border-white/10 bg-white/5 p-4">
+              <div key={item} className="flex rounded-lg border border-cyan-400/15 bg-[#0d1728] p-4">
                 <CheckCircle2 className="mr-3 mt-0.5 h-5 w-5 flex-none text-cyan-300" />
                 <p className="font-medium text-slate-200">{item}</p>
               </div>

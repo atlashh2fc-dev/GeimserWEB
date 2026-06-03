@@ -229,7 +229,7 @@ export default function ServiciosPage() {
         </div>
       </section>
 
-      <section id="pack-emprendedor" className="bg-slate-950 px-6 py-20 text-white lg:px-8">
+      <section id="pack-emprendedor" className="bg-[#050b18] px-6 py-20 text-white lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <motion.div
             initial="hidden"
@@ -255,8 +255,8 @@ export default function ServiciosPage() {
                 ['Oficina flexible', 'Santiago Centro'],
                 ['Secretaria virtual', 'Atención profesional'],
               ].map(([title, text]) => (
-                <div key={title} className="rounded-lg border border-white/10 bg-white/5 p-4">
-                  <p className="font-bold text-cyan-200">{title}</p>
+                <div key={title} className="rounded-lg border border-cyan-400/20 bg-[#0d1728] p-4">
+                  <p className="font-bold text-white">{title}</p>
                   <p className="mt-1 text-sm text-slate-300">{text}</p>
                 </div>
               ))}
@@ -275,7 +275,7 @@ export default function ServiciosPage() {
                 transition: { duration: 0.5, ease: 'easeOut', staggerChildren: 0.05 },
               },
             }}
-            className="rounded-lg border border-white/10 bg-white p-5 text-slate-950 shadow-2xl"
+            className="rounded-lg border border-cyan-400/15 bg-[#0d1728] p-5 text-white shadow-2xl shadow-black/30"
           >
             <div className="grid gap-3 sm:grid-cols-2">
               {packIncludes.map((item) => {
@@ -284,17 +284,17 @@ export default function ServiciosPage() {
                   <motion.div
                     key={item.label}
                     variants={fadeUp}
-                    className="flex items-center rounded-lg border border-slate-200 bg-slate-50 p-4"
+                    className="flex items-center rounded-lg border border-white/10 bg-[#111d31] p-4"
                   >
-                    <div className="mr-3 flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-cyan-100 text-cyan-700">
+                    <div className="mr-3 flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-cyan-400/15 text-cyan-300">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-sm font-bold text-slate-800">{item.label}</span>
+                    <span className="text-sm font-bold text-slate-100">{item.label}</span>
                   </motion.div>
                 );
               })}
             </div>
-            <div className="mt-5 rounded-lg bg-slate-950 p-5 text-white">
+            <div className="mt-5 rounded-lg border border-cyan-400/15 bg-[#050b18] p-5 text-white">
               <div className="flex items-start gap-3">
                 <ShieldCheck className="mt-1 h-5 w-5 flex-none text-cyan-300" />
                 <p className="text-sm leading-relaxed text-slate-200">
@@ -379,10 +379,10 @@ export default function ServiciosPage() {
               <ArrowRight className="ml-2 h-5 w-5" />
             </a>
             <Link
-              href="/#solutions"
+              href="/"
               className="inline-flex items-center justify-center rounded-lg border border-white/15 px-6 py-3 font-bold text-white transition hover:bg-white/10"
             >
-              Ver soluciones
+              Volver al inicio
             </Link>
           </div>
         </div>
