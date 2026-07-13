@@ -13,10 +13,10 @@ type SceneProps = {
 };
 
 const positions: [number, number, number][] = [
-  [-2.55, 1.35, 0.05],
-  [2.45, 1.25, -0.25],
-  [-2.3, -1.55, -0.15],
-  [2.55, -1.45, 0.1],
+  [-1.9, 1.12, 0.05],
+  [1.78, 1.04, -0.18],
+  [-1.72, -1.08, -0.12],
+  [1.86, -1.02, 0.08],
 ];
 
 function ImageMark({ src, scale = [1.1, 1.1] }: { src: string; scale?: [number, number] }) {
@@ -65,7 +65,7 @@ function AprendeMark() {
 
   return (
     <mesh position={[0, 0, 0.135]}>
-      <planeGeometry args={[1.08, 1.08]} />
+      <planeGeometry args={[0.74, 0.74]} />
       <meshBasicMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
     </mesh>
   );
@@ -81,7 +81,7 @@ function BrandedEmblem({ product, selected }: { product: ExperienceProduct; sele
   return (
     <group>
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.88, 0.88, 0.18, 72, 1, false]} />
+        <cylinderGeometry args={[0.66, 0.66, 0.14, 72, 1, false]} />
         <meshPhysicalMaterial
           color="#07101d"
           metalness={0.82}
@@ -94,7 +94,7 @@ function BrandedEmblem({ product, selected }: { product: ExperienceProduct; sele
       </mesh>
 
       <mesh position={[0, 0, 0.105]}>
-        <circleGeometry args={[0.76, 72]} />
+        <circleGeometry args={[0.57, 72]} />
         <meshPhysicalMaterial
           color="#0b1524"
           metalness={0.38}
@@ -106,7 +106,7 @@ function BrandedEmblem({ product, selected }: { product: ExperienceProduct; sele
       </mesh>
 
       <mesh ref={halo} position={[0, 0, 0.12]}>
-        <torusGeometry args={[0.82, selected ? 0.015 : 0.009, 10, 120]} />
+        <torusGeometry args={[0.62, selected ? 0.012 : 0.007, 10, 120]} />
         <meshBasicMaterial color={product.color} transparent opacity={selected ? 0.95 : 0.32} toneMapped={false} />
       </mesh>
 
@@ -117,7 +117,7 @@ function BrandedEmblem({ product, selected }: { product: ExperienceProduct; sele
       )}
 
       <mesh position={[0, 0, -0.1]}>
-        <torusGeometry args={[0.68, 0.018, 12, 96]} />
+        <torusGeometry args={[0.5, 0.012, 12, 96]} />
         <meshBasicMaterial color={product.color} transparent opacity={0.22} toneMapped={false} />
       </mesh>
     </group>
@@ -140,12 +140,12 @@ function ProductNode({
 
   useFrame((state, delta) => {
     if (!group.current) return;
-    const targetScale = selected ? 1.34 : hovered ? 1.1 : 0.9;
+    const targetScale = selected ? 1.15 : hovered ? 1 : 0.84;
     const scale = THREE.MathUtils.damp(group.current.scale.x, targetScale, 5, delta);
     group.current.scale.setScalar(scale);
     group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, state.pointer.x * 0.12, 3, delta);
     group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, -state.pointer.y * 0.08, 3, delta);
-    group.current.position.z = THREE.MathUtils.damp(group.current.position.z, selected ? 0.72 : positions[index][2], 4, delta);
+    group.current.position.z = THREE.MathUtils.damp(group.current.position.z, selected ? 0.38 : positions[index][2], 4, delta);
   });
 
   const handlePointer = (active: boolean) => {
@@ -169,7 +169,7 @@ function ProductNode({
       >
         <pointLight color={product.color} intensity={selected ? 4.5 : 1.1} distance={4} decay={2} />
         <BrandedEmblem product={product} selected={selected} />
-        <Html center position={[0, -1.22, 0]} distanceFactor={7.2} style={{ pointerEvents: 'none' }}>
+        <Html center position={[0, -0.94, 0]} distanceFactor={8.2} style={{ pointerEvents: 'none' }}>
           <div
             style={{
               color: selected ? '#ffffff' : 'rgba(255,255,255,.58)',
@@ -209,22 +209,22 @@ function Universe({ products, selectedIndex, onSelect }: SceneProps) {
     <group ref={universe} position={[0.45, 0, 0]}>
       <group>
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.12, 0.008, 8, 128]} />
+          <torusGeometry args={[0.82, 0.006, 8, 128]} />
           <meshBasicMaterial color="#69def5" transparent opacity={0.14} toneMapped={false} />
         </mesh>
         <mesh rotation={[Math.PI / 2.25, 0.5, 0.2]}>
-          <torusGeometry args={[1.42, 0.005, 8, 128]} />
+          <torusGeometry args={[1.02, 0.004, 8, 128]} />
           <meshBasicMaterial color="#a990ff" transparent opacity={0.1} toneMapped={false} />
         </mesh>
         <mesh>
-          <icosahedronGeometry args={[0.56, 3]} />
+          <icosahedronGeometry args={[0.39, 3]} />
           <meshPhysicalMaterial color="#06101c" metalness={0.88} roughness={0.06} clearcoat={1} emissive="#47dfff" emissiveIntensity={0.1} transparent opacity={0.72} />
         </mesh>
         <mesh scale={1.08}>
-          <icosahedronGeometry args={[0.56, 2]} />
+          <icosahedronGeometry args={[0.39, 2]} />
           <meshBasicMaterial color="#71e8ff" wireframe transparent opacity={0.18} toneMapped={false} />
         </mesh>
-        <Sparkles count={24} scale={2.4} size={1.8} speed={0.2} color="#82edff" opacity={0.38} />
+        <Sparkles count={18} scale={1.8} size={1.5} speed={0.2} color="#82edff" opacity={0.34} />
       </group>
 
       {positions.map((position, index) => (
@@ -240,7 +240,7 @@ function Universe({ products, selectedIndex, onSelect }: SceneProps) {
 
 export default function ExperienceScene(props: SceneProps) {
   return (
-    <Canvas camera={{ position: [0, 0, 7.8], fov: 43 }} dpr={[1, 1.65]} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
+    <Canvas camera={{ position: [0, 0, 9.8], fov: 42 }} dpr={[1, 1.65]} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
       <ambientLight intensity={0.38} />
       <directionalLight position={[2, 4, 6]} intensity={1.8} color="#c9f7ff" />
       <directionalLight position={[-5, -3, 2]} intensity={0.9} color="#8c72ff" />

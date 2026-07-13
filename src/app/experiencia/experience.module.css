@@ -140,7 +140,10 @@
 
 .scene {
   position: absolute;
-  inset: 0;
+  top: 82px;
+  right: clamp(210px, 14vw, 290px);
+  bottom: 138px;
+  left: clamp(390px, 29vw, 610px);
   z-index: 1;
 }
 
@@ -149,7 +152,7 @@
   z-index: 5;
   top: clamp(118px, 16vh, 170px);
   left: var(--edge);
-  width: min(36vw, 550px);
+  width: min(29vw, 510px);
   pointer-events: none;
 }
 
@@ -169,7 +172,7 @@
 .intro h1 {
   margin: 0;
   color: #f7f9fd;
-  font-size: clamp(3rem, 5vw, 5.6rem);
+  font-size: clamp(2.75rem, 3.65vw, 4.35rem);
   font-weight: 530;
   line-height: .92;
   letter-spacing: -.065em;
@@ -182,10 +185,10 @@
 }
 
 .intro p {
-  max-width: 470px;
-  margin: 26px 0 0;
+  max-width: 430px;
+  margin: 22px 0 0;
   color: rgba(235,242,255,.5);
-  font-size: clamp(14px, 1.16vw, 17px);
+  font-size: clamp(13px, .92vw, 15px);
   line-height: 1.65;
 }
 
@@ -309,10 +312,10 @@
   left: var(--edge);
   display: grid;
   grid-template-columns: minmax(250px, .72fr) minmax(270px, 1fr) minmax(300px, 1.1fr) auto;
-  min-height: 106px;
+  min-height: 92px;
   align-items: center;
   gap: clamp(20px, 2.8vw, 52px);
-  padding: 18px 20px;
+  padding: 14px 18px;
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 18px;
   background: linear-gradient(105deg, rgba(11,18,31,.88), rgba(8,13,25,.7));
@@ -391,11 +394,11 @@
 
 .launchButton {
   display: inline-flex;
-  min-width: 168px;
+  min-width: 152px;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 13px 17px;
+  padding: 11px 15px;
   border-radius: 11px;
   color: #041014;
   background: var(--product-color);
@@ -471,7 +474,8 @@
 }
 
 @media (max-width: 1050px) {
-  .intro { width: 42vw; }
+  .intro { width: 38vw; }
+  .scene { left: 34vw; right: 165px; }
   .productRail { top: 43%; width: 175px; }
   .interactionHint { display: none; }
   .productPanel { grid-template-columns: 1fr 1.2fr auto; }
@@ -485,7 +489,7 @@
   .presentationButton span { display: none; }
   .presentationButton { width: 38px; height: 38px; justify-content: center; padding: 0; }
   .stage { min-height: 920px; }
-  .scene { top: 155px; bottom: auto; height: 470px; }
+  .scene { top: 155px; right: -20px; bottom: auto; left: -20px; height: 470px; }
   .intro { top: 92px; left: 20px; width: calc(100% - 40px); }
   .kicker { margin-bottom: 12px; font-size: 8px; }
   .intro h1 { font-size: clamp(2.8rem, 13vw, 4.2rem); }

@@ -26,7 +26,7 @@ export const experienceProducts: ExperienceProduct[] = [
     url: process.env.NEXT_PUBLIC_ITSM_URL || 'https://itsm.geimser.cl/',
     capabilities: ['Mesa de ayuda', 'SLA en tiempo real', 'Gestión de activos'],
     mark: '/assets/experience/itsm-mark.png',
-    markScale: [0.78, 0.9],
+    markScale: [0.5, 0.58],
   },
   {
     id: 'learning',
@@ -52,7 +52,7 @@ export const experienceProducts: ExperienceProduct[] = [
     url: process.env.NEXT_PUBLIC_SUITS_LEGAL_URL || 'https://suits.altiusignite.com/',
     capabilities: ['Expedientes', 'Plazos críticos', 'Trazabilidad documental'],
     mark: '/assets/experience/suits-mark.png',
-    markScale: [1.55, 1.55],
+    markScale: [1, 1],
   },
   {
     id: 'crm',
@@ -66,6 +66,6 @@ export const experienceProducts: ExperienceProduct[] = [
     url: process.env.NEXT_PUBLIC_CRM_URL || 'https://atlas.geimser.cl/login',
     capabilities: ['Pipeline vivo', 'Vista 360°', 'Seguimiento comercial'],
     mark: '/assets/experience/atlas-mark.png',
-    markScale: [1.12, 1.12],
+    markScale: [0.76, 0.76],
   },
 ];
