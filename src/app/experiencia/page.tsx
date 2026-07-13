@@ -7,14 +7,17 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowRight,
-  ExternalLink,
+  CheckCircle2,
+  Eye,
   Maximize2,
   Pause,
   Play,
   Sparkles,
+  X,
 } from 'lucide-react';
 import styles from './experience.module.css';
 import { experienceProducts } from '@/components/experience/experienceData';
+import ProductDemo from '@/components/experience/ProductDemo';
 
 const ExperienceScene = dynamic(
   () => import('@/components/experience/ExperienceScene'),
@@ -24,21 +27,44 @@ const ExperienceScene = dynamic(
 export default function ExperiencePage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(false);
+  const [detailsIndex, setDetailsIndex] = useState<number | null>(null);
+  const [demoIndex, setDemoIndex] = useState<number | null>(null);
   const selected = experienceProducts[selectedIndex];
+  const detailsProduct = detailsIndex === null ? null : experienceProducts[detailsIndex];
+  const demoProduct = demoIndex === null ? null : experienceProducts[demoIndex];
 
   const goTo = useCallback((index: number) => {
     setSelectedIndex((index + experienceProducts.length) % experienceProducts.length);
   }, []);
 
+  const openDetails = useCallback((index: number) => {
+    const normalized = (index + experienceProducts.length) % experienceProducts.length;
+    setSelectedIndex(normalized);
+    setAutoPlay(false);
+    setDetailsIndex(normalized);
+  }, []);
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setDetailsIndex(null);
+        setDemoIndex(null);
+        return;
+      }
+      if (detailsIndex !== null || demoIndex !== null) return;
       if (event.key === 'ArrowRight') goTo(selectedIndex + 1);
       if (event.key === 'ArrowLeft') goTo(selectedIndex - 1);
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [goTo, selectedIndex]);
+  }, [demoIndex, detailsIndex, goTo, selectedIndex]);
+
+  useEffect(() => {
+    const locked = detailsIndex !== null || demoIndex !== null;
+    document.body.style.overflow = locked ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [demoIndex, detailsIndex]);
 
   useEffect(() => {
     if (!autoPlay) return;
@@ -88,7 +114,7 @@ export default function ExperiencePage() {
           <ExperienceScene
             products={experienceProducts}
             selectedIndex={selectedIndex}
-            onSelect={goTo}
+            onSelect={openDetails}
           />
         </div>
 
@@ -126,7 +152,7 @@ export default function ExperiencePage() {
               <button
                 key={product.id}
                 className={`${styles.railItem} ${active ? styles.railItemActive : ''}`}
-                onClick={() => goTo(index)}
+                onClick={() => openDetails(index)}
                 aria-current={active ? 'true' : undefined}
               >
                 <span className={styles.railNumber}>{product.number}</span>
@@ -174,10 +200,10 @@ export default function ExperiencePage() {
               ))}
             </div>
 
-            <a className={styles.launchButton} href={selected.url} target="_blank" rel="noreferrer">
-              Entrar a {selected.shortName}
-              <ExternalLink size={17} />
-            </a>
+            <button className={styles.launchButton} onClick={() => openDetails(selectedIndex)}>
+              Conocer {selected.shortName}
+              <Eye size={17} />
+            </button>
           </motion.article>
         </AnimatePresence>
 
@@ -201,6 +227,46 @@ export default function ExperiencePage() {
           </div>
         </div>
       </section>
+
+      <AnimatePresence>
+        {detailsProduct && (
+          <motion.div className={styles.detailsOverlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDetailsIndex(null)}>
+            <motion.article
+              className={styles.detailsModal}
+              initial={{ opacity: 0, scale: .94, y: 28 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: .97, y: 16 }}
+              transition={{ duration: .42, ease: [0.22, 1, 0.36, 1] }}
+              style={{ '--product-color': detailsProduct.color } as React.CSSProperties}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button className={styles.modalClose} onClick={() => setDetailsIndex(null)} aria-label="Cerrar"><X size={18} /></button>
+              <div className={styles.modalVisual}>
+                <div className={styles.modalGlow} />
+                <div className={styles.modalMark}>
+                  {detailsProduct.mark ? <img src={detailsProduct.mark} alt="" /> : <span>A</span>}
+                </div>
+                <small>{detailsProduct.number} · {detailsProduct.category}</small>
+                <strong>{detailsProduct.shortName}</strong>
+              </div>
+              <div className={styles.modalContent}>
+                <span className={styles.modalEyebrow}>Qué encontrarás dentro</span>
+                <h2>{detailsProduct.name}</h2>
+                <p>{detailsProduct.description}</p>
+                <ul>
+                  {detailsProduct.demoFeatures.map((feature) => <li key={feature}><CheckCircle2 size={16} /><span>{feature}</span></li>)}
+                </ul>
+                <div className={styles.modalActions}>
+                  <button className={styles.secondaryAction} onClick={() => setDetailsIndex(null)}>Seguir explorando</button>
+                  <button className={styles.primaryAction} onClick={() => { setDemoIndex(detailsIndex); setDetailsIndex(null); }}><Play size={15} fill="currentColor" /> Entrar al demo</button>
+                </div>
+                <small className={styles.demoDisclaimer}>Entorno comercial interactivo · Datos simulados · Sin credenciales</small>
+              </div>
+            </motion.article>
+          </motion.div>
+        )}
+        {demoProduct && <ProductDemo product={demoProduct} onClose={() => setDemoIndex(null)} />}
+      </AnimatePresence>
     </main>
   );
 }
