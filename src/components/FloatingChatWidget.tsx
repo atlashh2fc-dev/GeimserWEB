@@ -12,9 +12,6 @@ const FloatingChatWidget: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const pathname = usePathname();
 
-  // No mostrar el chatbot en el panel privado
-  if (pathname.startsWith('/super-admin-7zX9')) return null;
-
   // Mostrar tooltip con mensaje de neuromarketing
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -33,6 +30,9 @@ const FloatingChatWidget: React.FC = () => {
       }
     };
   }, [isHovered, isOpen]);
+
+  // El hub usa una composición inmersiva a pantalla completa.
+  if (pathname.startsWith('/super-admin-7zX9') || pathname.startsWith('/experiencia')) return null;
 
   const handleToggleChat = () => {
     console.log('🚀 [GEIMSER WIDGET] Iniciando consulta comercial:', !isOpen);

@@ -10,8 +10,20 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://geimser.cl"),
   title: "Geimser",
   description: "Automatización real, impacto industrial.",
+  openGraph: {
+    title: "Geimser Product Universe",
+    description: "Explora el ecosistema de productos digitales de Geimser.",
+    images: [{ url: "/og.jpg", width: 1731, height: 909, alt: "Geimser Product Universe" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Geimser Product Universe",
+    description: "Explora el ecosistema de productos digitales de Geimser.",
+    images: ["/og.jpg"],
+  },
 };
 
 export default function RootLayout({
