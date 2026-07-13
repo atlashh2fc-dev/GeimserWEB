@@ -9,7 +9,8 @@ export type ExperienceProduct = {
   color: string;
   url: string;
   capabilities: string[];
-  object: 'server' | 'learning' | 'legal' | 'network';
+  mark?: string;
+  markScale?: [number, number];
 };
 
 export const experienceProducts: ExperienceProduct[] = [
@@ -21,10 +22,11 @@ export const experienceProducts: ExperienceProduct[] = [
     category: 'Operaciones TI',
     statement: 'De ticket a resolución, sin perder contexto.',
     description: 'Una torre de control para solicitudes, activos, acuerdos de servicio e incidentes.',
-    color: '#5DE7FF',
+    color: '#08A8D8',
     url: process.env.NEXT_PUBLIC_ITSM_URL || 'https://itsm.geimser.cl/',
     capabilities: ['Mesa de ayuda', 'SLA en tiempo real', 'Gestión de activos'],
-    object: 'server',
+    mark: '/assets/experience/itsm-mark.png',
+    markScale: [0.78, 0.9],
   },
   {
     id: 'learning',
@@ -34,10 +36,9 @@ export const experienceProducts: ExperienceProduct[] = [
     category: 'Talento y aprendizaje',
     statement: 'Aprendizaje que avanza al ritmo de cada equipo.',
     description: 'Rutas, contenidos y progreso en una experiencia continua de desarrollo.',
-    color: '#B79AFF',
+    color: '#DEA66D',
     url: process.env.NEXT_PUBLIC_LEARNING_SUITE_URL || 'https://aprende.geimser.cl/login',
     capabilities: ['Rutas personalizadas', 'Biblioteca viva', 'Certificación'],
-    object: 'learning',
   },
   {
     id: 'legal',
@@ -47,10 +48,11 @@ export const experienceProducts: ExperienceProduct[] = [
     category: 'Legal operations',
     statement: 'Cada caso bajo control. Cada decisión a tiempo.',
     description: 'Expedientes, documentos, plazos y trazabilidad jurídica conectados.',
-    color: '#55F2B0',
+    color: '#28D4F2',
     url: process.env.NEXT_PUBLIC_SUITS_LEGAL_URL || 'https://suits.altiusignite.com/',
     capabilities: ['Expedientes', 'Plazos críticos', 'Trazabilidad documental'],
-    object: 'legal',
+    mark: '/assets/experience/suits-mark.png',
+    markScale: [1.55, 1.55],
   },
   {
     id: 'crm',
@@ -60,9 +62,10 @@ export const experienceProducts: ExperienceProduct[] = [
     category: 'Crecimiento comercial',
     statement: 'Cada relación comercial, siempre en movimiento.',
     description: 'Contactos, oportunidades y conversaciones reunidos en una visión accionable.',
-    color: '#FFBE68',
+    color: '#2B8CFF',
     url: process.env.NEXT_PUBLIC_CRM_URL || 'https://atlas.geimser.cl/login',
     capabilities: ['Pipeline vivo', 'Vista 360°', 'Seguimiento comercial'],
-    object: 'network',
+    mark: '/assets/experience/atlas-mark.png',
+    markScale: [1.12, 1.12],
   },
 ];
