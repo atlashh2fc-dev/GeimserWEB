@@ -65,6 +65,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Experience Hub intentionally lives in a dark presentation mode. */
+html.force-light main.experience-hub {
+  background: #070b16 !important;
+  color: #ffffff !important;
+}
+
 /* Helpers */
 .text-muted { color: var(--text-muted); }
 .surface    { background: var(--surface); }

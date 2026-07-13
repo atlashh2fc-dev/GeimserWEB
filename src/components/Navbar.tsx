@@ -12,6 +12,7 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
+  { name: 'Experience Hub', href: '/experiencia' },
   { name: 'Nosotros', href: '/nosotros' },
   { name: 'Servicios', href: '/servicios' },
   { name: 'Casos de Éxito', href: '/#success' },
