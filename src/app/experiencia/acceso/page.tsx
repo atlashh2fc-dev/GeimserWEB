@@ -1,7 +1,9 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { ArrowRight, Eye, EyeOff, LoaderCircle, LockKeyhole, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight, Eye, EyeOff, LoaderCircle, ShieldCheck } from 'lucide-react';
 import styles from './access.module.css';
 
 export default function ExperienceAccessPage() {
@@ -33,20 +35,29 @@ export default function ExperienceAccessPage() {
   };
 
   return (
-    <main className={styles.access}>
-      <div className={styles.aurora} aria-hidden="true" />
+    <main className={`${styles.access} experience-access`}>
+      <video className={styles.backgroundVideo} autoPlay muted loop playsInline poster="/assets/images/team-hero.jpg" aria-hidden="true">
+        <source src="/G1.mp4" type="video/mp4" />
+      </video>
+      <div className={styles.backdrop} aria-hidden="true" />
       <div className={styles.grid} aria-hidden="true" />
 
-      <header className={styles.brand}>
-        <span>G</span>
-        <div><strong>GEIMSER</strong><small>PRODUCT UNIVERSE</small></div>
-      </header>
+      <Link href="/" className={styles.brand} aria-label="Volver a Geimser">
+        <span className={styles.logoCrop}><Image src="/G2.png" alt="Geimser" width={500} height={500} priority /></span>
+      </Link>
+
+      <div className={styles.context}>
+        <span>GEIMSER · PRODUCT UNIVERSE</span>
+        <strong>Cuatro plataformas.<br />Una experiencia conectada.</strong>
+      </div>
 
       <section className={styles.panel}>
-        <div className={styles.lock}><LockKeyhole size={25} /></div>
-        <span className={styles.eyebrow}><ShieldCheck size={13} /> Acceso comercial protegido</span>
-        <h1>Ingresa al universo<br /><em>de productos Geimser.</em></h1>
-        <p>Este entorno conecta con demostraciones reales. Identifícate para iniciar una sesión privada.</p>
+        <div className={styles.panelHeader}>
+          <span className={styles.eyebrow}><ShieldCheck size={12} /> Acceso privado</span>
+          <small>Sesión comercial</small>
+        </div>
+        <h1>Experience Hub</h1>
+        <p>Ingresa con tu credencial para explorar los productos Geimser.</p>
 
         <form onSubmit={submit}>
           <label>
@@ -84,7 +95,7 @@ export default function ExperienceAccessPage() {
           </button>
         </form>
 
-        <footer><i /> Sesión cifrada · Expiración automática · Uso interno</footer>
+        <footer><i /> Sesión protegida · 12 horas</footer>
       </section>
     </main>
   );

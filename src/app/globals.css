@@ -71,6 +71,11 @@ html.force-light main.experience-hub {
   color: #ffffff !important;
 }
 
+html.force-light main.experience-access {
+  background: #02060c !important;
+  color: #ffffff !important;
+}
+
 /* Helpers */
 .text-muted { color: var(--text-muted); }
 .surface    { background: var(--surface); }
