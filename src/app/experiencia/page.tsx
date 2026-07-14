@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Eye,
   Maximize2,
+  LogOut,
   Pause,
   Play,
   Sparkles,
@@ -82,6 +83,11 @@ export default function ExperiencePage() {
     }
   };
 
+  const closeExperienceSession = async () => {
+    await fetch('/api/experience/auth', { method: 'DELETE', credentials: 'same-origin' });
+    window.location.replace('/experiencia/acceso');
+  };
+
   return (
     <main className={`${styles.experience} experience-hub`}>
       <div className={styles.aurora} aria-hidden="true" />
@@ -103,10 +109,15 @@ export default function ExperiencePage() {
           <span>04 experiencias</span>
         </div>
 
-        <button className={styles.presentationButton} onClick={requestPresentationMode}>
-          <Maximize2 size={15} />
-          <span>Modo presentación</span>
-        </button>
+        <div className={styles.headerActions}>
+          <button className={styles.presentationButton} onClick={requestPresentationMode}>
+            <Maximize2 size={15} />
+            <span>Modo presentación</span>
+          </button>
+          <button className={styles.logoutButton} onClick={closeExperienceSession} aria-label="Cerrar sesión comercial" title="Cerrar sesión">
+            <LogOut size={15} />
+          </button>
+        </div>
       </header>
 
       <section className={styles.stage} aria-label="Universo interactivo de productos Geimser">
@@ -260,7 +271,7 @@ export default function ExperiencePage() {
                   <button className={styles.secondaryAction} onClick={() => setDetailsIndex(null)}>Seguir explorando</button>
                   <button className={styles.primaryAction} onClick={() => { setDemoIndex(detailsIndex); setDetailsIndex(null); }}><Play size={15} fill="currentColor" /> Entrar al demo</button>
                 </div>
-                <small className={styles.demoDisclaimer}>Entorno comercial interactivo · Datos simulados · Sin credenciales</small>
+                <small className={styles.demoDisclaimer}>Entorno comercial protegido · Sesión temporal · Acceso controlado</small>
               </div>
             </motion.article>
           </motion.div>
