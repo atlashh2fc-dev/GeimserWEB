@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -95,10 +96,8 @@ export default function ExperiencePage() {
 
       <header className={styles.header}>
         <Link href="/" className={styles.brand} aria-label="Volver a Geimser">
-          <span className={styles.brandMark}>G</span>
-          <span>
-            <strong>GEIMSER</strong>
-            <small>PRODUCT UNIVERSE</small>
+          <span className={styles.brandLogo}>
+            <Image src="/G2.png" alt="Geimser" width={500} height={500} priority />
           </span>
         </Link>
 
