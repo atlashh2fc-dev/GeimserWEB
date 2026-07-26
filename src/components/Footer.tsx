@@ -7,13 +7,13 @@ import {
   Phone,
   Smartphone,
   Clock,
-  MapPin,
   Linkedin,
   Instagram,
   MessageSquare,
-  ArrowRight,
   Shield,
 } from 'lucide-react';
+import ContactForm from './ContactForm';
+import { company } from '@/lib/company';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -105,16 +105,15 @@ export default function Footer() {
               <h4 className="font-semibold text-lg mb-4">Contacto</h4>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
-                  <MapPin className="mr-3 mt-1 h-4 w-4 flex-shrink-0 text-slate-400" />
-                  <span>Merced 838, Santiago Centro, Chile</span>
+                  <span>Ubicación: {company.location}</span>
                 </li>
                 <li className="flex items-start">
                   <Mail className="mr-3 mt-1 h-4 w-4 flex-shrink-0 text-slate-400" />
                   <a
-                    href="mailto:contacto@geimser.cl"
+                    href={`mailto:${company.email}`}
                     className="transition-colors hover:text-[#00B8F1]"
                   >
-                    contacto@geimser.cl
+                    {company.email}
                   </a>
                 </li>
                 <li className="flex items-start">
@@ -122,10 +121,10 @@ export default function Footer() {
                   <div>
                     <span className="block text-xs text-slate-400">Celular:</span>
                     <a
-                      href="tel:+56974159166"
+                      href={`tel:${company.mobile.replace(/\s/g, '')}`}
                       className="font-medium transition-colors hover:text-[#00B8F1]"
                     >
-                      +56 9 7415 9166
+                      {company.mobile}
                     </a>
                   </div>
                 </li>
@@ -134,10 +133,10 @@ export default function Footer() {
                   <div>
                     <span className="block text-xs text-slate-400">Teléfono:</span>
                     <a
-                      href="tel:+56227121164"
+                      href={`tel:${company.phone.replace(/\s/g, '')}`}
                       className="font-medium transition-colors hover:text-[#00B8F1]"
                     >
-                      +56 2 2712 1164
+                      {company.phone}
                     </a>
                   </div>
                 </li>
@@ -145,38 +144,23 @@ export default function Footer() {
                   <Clock className="mr-3 mt-1 h-4 w-4 flex-shrink-0 text-slate-400" />
                   <div>
                     <span className="block text-xs text-slate-400">Horario de Atención:</span>
-                    <span className="font-medium">Lunes a Viernes 9:00 a 18:00 hrs</span>
+                    <span className="font-medium">{company.openingHours}</span>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Columna 3: Newsletter + Sello Mujer */}
+          {/* Columna 3: Contacto + Sello Mujer */}
           <div className="lg:col-span-3 flex flex-col gap-6">
             <div>
               <h4 className="font-semibold text-lg mb-4">
-                Mantente Actualizado
+                Solicita un diagnóstico
               </h4>
               <p className="mb-4 text-sm text-slate-300">
-                Recibe insights sobre tecnología, IA y experiencia de cliente
-                directamente en tu correo.
+                Cuéntanos tu desafío y te contactaremos por el canal que indiques.
               </p>
-              <form className="flex">
-                <input
-                  type="email"
-                  placeholder="tu@email.com"
-                  className="flex-grow rounded-l-md border border-white/10 bg-[#07101f] px-4 py-2 text-sm text-white transition-colors placeholder:text-slate-500 focus:outline-none"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="rounded-r-md bg-[#00B8F1] px-4 py-2 text-black transition-colors duration-200 hover:bg-cyan-300"
-                  aria-label="Suscribirse al newsletter"
-                >
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </form>
+              <ContactForm />
             </div>
 
             <div
